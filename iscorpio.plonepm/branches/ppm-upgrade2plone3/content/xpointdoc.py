@@ -11,6 +11,9 @@ from Products.Archetypes.public import Schema
 from Products.Archetypes.public import DisplayList
 from Products.Archetypes.public import TextField
 from Products.Archetypes.public import RichWidget
+from Products.Archetypes.public import StringField
+from Products.Archetypes.public import SelectionWidget
+from Products.Archetypes.public import DisplayList
 
 from Products.ATContentTypes.interfaces import IATDocument
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
@@ -20,10 +23,7 @@ from Products.ATContentTypes.configuration import zconf
 
 from Products.CMFCore.permissions import View
 
-# the configruation info for this project.
-from Products.XPointProjectManagement.config import *
-
-# the XPointBuildJournal Schema.
+# the XPointDocument Schema.
 XPointDocumentSchema = ATCTContent.schema.copy() + Schema((
 
         # The body of the build journal.
@@ -37,21 +37,44 @@ XPointDocumentSchema = ATCTContent.schema.copy() + Schema((
                 rows = 22
                 ),
             ),
+
+        # the status for this issue.
+        StringField(
+            'xpproject_document_status',
+            searchable = False,
+            required = False,
+            index = "FieldIndex:schema",
+            default = '',
+            vocabulary = 'vocabulary_documentStatus',
+            widget = SelectionWidget(
+                label = 'Document Status',
+                descrpiton = 'Set status for this issue.',
+                format = 'select',
+                ),
+            ),
+
         ),
     )
 
+# Plone 3 will re-organize all fields' shemata by using this method.
 finalizeATCTSchema(XPointDocumentSchema)
 
-# the XPointBuildJournal class.
+# xpproject document status is invisible by default.
+XPointDocumentSchema['xpproject_document_status'].widget.visible = False
+
+# move the related items to the default shemata.
+XPointDocumentSchema['relatedItems'].widget.visible = True
+XPointDocumentSchema['relatedItems'].widget.description = \
+    "Select related items"
+XPointDocumentSchema['relatedItems'].schemata = 'default'
+XPointDocumentSchema.moveField('relatedItems', pos='bottom')
+
+# the XPointDocument class.
 class XPointDocument(ATCTContent, HistoryAwareMixin):
 
     schema = XPointDocumentSchema
 
-    #meta_type = 'XPointBuildJournal'
-    #portal_type = 'XPointBuildJournal'
-    #archetype_name = 'Build Journal'
-    #
-    #content_icon = 'XPBuildJournal_icon.gif'
+    # type, name, icon should be set by sub class.
 
     __implements__ = (ATCTContent.__implements__,
                       IATDocument,
@@ -71,3 +94,16 @@ class XPointDocument(ATCTContent, HistoryAwareMixin):
         """CMF compatibility method
         """
         return self.getXpproject_text()
+
+    def initializeArchetype(self, **kwargs):
+        ATCTContent.initializeArchetype(self, **kwargs)
+
+    # the default vocabulary.
+    def vocabulary_documentStatus(self):
+        """ return a list of tuple (status, status desc) for the
+        document status select.
+        """
+        return DisplayList([('open', 'Open'),
+                            ('close', 'Close'),
+                            ]
+                           )

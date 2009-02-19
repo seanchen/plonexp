@@ -179,15 +179,19 @@ class XPointProject(ATFolder):
     def getProjectPublishedReleaseIds(self):
         """ returns a list of published release ids.
         """
-        wtool = getToolByName(self, 'portal_workflow')
-        releaseIds = []
-        for release in self.getProjectReleases():
-            if wtool.getInfoFor(release, 'review_state') == 'published':
-                releaseIds.append(release.id)
-
-        releaseIds.sort()
-        releaseIds.reverse()
-        return releaseIds
+        projectReleases = self.getProjectReleases()
+        if projectReleases:
+            wtool = getToolByName(self, 'portal_workflow')
+            releaseIds = []
+            for release in self.getProjectReleases():
+                if wtool.getInfoFor(release, 'review_state') == 'published':
+                    releaseIds.append(release.id)
+    
+            releaseIds.sort()
+            releaseIds.reverse()
+            return releaseIds
+        else:
+            return None
 
     security.declarePublic('getProjectStories')
     def getProjectStories(self):

@@ -110,7 +110,9 @@ class XPointStory(ATFolder):
     allowed_content_types = ('XPointTask', 'XPointMemo',
                              'XPointIssue', 'XPointProposal')
 
-    allow_discussion = True
+    # comment out for Plone 3, it is just doesn't work.  Need figure
+    # out the new approach for Plone 3.
+    #allow_discussion = True
 
     # for logging.
     log = logging.getLogger("XPointProjectManagement Story")

@@ -148,7 +148,9 @@ class XPointTask(ATFolder):
     global_allow = False
 
     # allow discuss on the task.
-    allow_discussion = True
+    # comment out for Plone 3, it is just doesn't work.  Need figure
+    # out the new approach for Plone 3.
+    #allow_discussion = True
 
     filter_content_types = True
     allowed_content_types = ('XPointMemo', 'XPointIssue', 'XPointProposal', )

@@ -69,16 +69,17 @@ XPointIssueSchema = ATContentTypeSchema.copy() + Schema((
         )
     )
 
+# have to finalize for Plone 3
+finalizeATCTSchema(XPointIssueSchema)
+
 # make description invisible.
 XPointIssueSchema['description'].widget.visible = False
-
-# move the related items to the buttom.
+# move the related items to the bottom.
 XPointIssueSchema['relatedItems'].widget.visible = True
 XPointIssueSchema['relatedItems'].widget.description = \
-    "Select related tasks"
+    "Select related items"
+XPointIssueSchema.changeSchemataForField('relatedItems', 'default')
 XPointIssueSchema.moveField('relatedItems', pos='bottom')
-
-finalizeATCTSchema(XPointIssueSchema)
 
 # the class.
 class XPointIssue(ATCTContent):

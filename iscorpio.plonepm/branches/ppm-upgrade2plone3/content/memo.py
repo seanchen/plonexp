@@ -13,6 +13,7 @@ from Products.Archetypes.public import TextField
 from Products.Archetypes.public import RichWidget
 from Products.Archetypes.public import registerType
 # from ATContentType
+from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 from Products.ATContentTypes.interfaces import IATDocument
 from Products.ATContentTypes.content.base import ATCTContent
@@ -51,13 +52,16 @@ XPointMemoSchema = ATContentTypeSchema.copy() + Schema((
         )
     )
 
+# have to finalize for Plone 3.
+finalizeATCTSchema(XPointMemoSchema)
+
 # we don't need descrpiton field for a memo.
 XPointMemoSchema['description'].widget.visible = False
-
 # move the related items field to the bottom.
 XPointMemoSchema['relatedItems'].widget.visible = True
 XPointMemoSchema['relatedItems'].widget.description = \
-    "Select related tasks"
+    "Select related items"
+XPointMemoSchema.changeSchemataForField('relatedItems', 'default')
 XPointMemoSchema.moveField('relatedItems', pos='bottom')
 
 # XPointMemo class.
@@ -104,6 +108,14 @@ class XPointMemo(ATCTContent):
         },)
 
     security = ClassSecurityInfo()
+
+
+def modify_fti(fti):
+    # Hide unnecessary tabs (usability enhancement)
+    for a in fti['actions']:
+        if a['id'] in ['metadata']:
+            a['visible'] = 0
+    return fti
 
 # register this type to plone add-on product.
 registerType(XPointMemo, PROJECTNAME)

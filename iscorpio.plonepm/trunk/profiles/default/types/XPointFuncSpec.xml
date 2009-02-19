@@ -18,6 +18,7 @@
     <element value="XPointSysReq"/>
     <element value="XPointUseCase"/>
     <element value="XPointStory"/>
+    <element value="XPointArtifact"/>
   </property>
   <property name="allow_discussion">True</property>
   <property name="default_view">folder_listing</property>

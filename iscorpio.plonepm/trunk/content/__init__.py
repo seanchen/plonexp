@@ -5,3 +5,4 @@ import XPointFuncSpec
 import XPointStory
 import XPointSysReq
 import XPointUseCase
+import XPointArtifact

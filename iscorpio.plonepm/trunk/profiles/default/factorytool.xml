@@ -7,5 +7,6 @@
     <type portal_type="XPointFuncReq"/>
     <type portal_type="XPointSysReq"/>
     <type portal_type="XPointUseCase"/>
+    <type portal_type="XPointArtifact"/>
   </factorytypes>
 </object>

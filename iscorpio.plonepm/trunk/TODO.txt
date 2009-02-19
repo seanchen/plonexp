@@ -11,12 +11,12 @@ Project
   |     |-- Story
   |           |-- Estimation
   |           |-- Tech Specification
-  |                 |-- <Review Artifact> Design Review
+  |           |     |-- <Review Artifact> Design Review
   |           |-- <Review Artifact> Code Review
-  |           |-- Issue
-  |           |-- Comments
+  |           |-- <Artifact> Issue
+  |           |-- <Response?>Comments
   |           |-- Test Case
-  |                 |-- <Review Artifact> Test Case Review
+  |           |     |-- <Review Artifact> Test Case Review
   |           |-- Task
   |
   |-- Track (Available man days)
@@ -27,7 +27,7 @@ Project
   |     |-- Iteration 2
   |     |-- Iteration 3
   |
-  |-- Artifact
+  |-- Artifact <folder>
   |     |-- Response
   |
   |-- Review Artifact (extends Artifact)
@@ -35,7 +35,17 @@ Project
   |     |-- Response
   |
   |-- <View> Tracker view for the artifacts status
+  |-- <View> Card version for print out, those cards are very convenient
+  |   for planning and discussion.
 
+Artifact
+  |-- Title
+  |-- Description
+  |-- <selection> Status
+  |-- <selection> Category (issue, comment, defect, proposal)
+  |-- <selection> Priority
+  |-- <selection> StroyId
+  |-- <file> attachement
 
 A short memo for upgrading XPointProjectManagement to Plone 3.
 ====================================================================

@@ -1,0 +1,27 @@
+
+A short memo for upgrading XPointProjectManagement to Plone 3.
+
+0. It is very good chance to rename the field and re-organize the 
+class hierache.
+
+1. declare index for all fields need a index and metadata, DONE.
+
+2. manage and organize the shemata properly!
+Method finalizeATCTSchema will re-organize the shemata for Plone 3.0
+Bascially, after this method, we can move/reorganize any fields.
+
+3. how to remove properties tab (metadata), since we got new look/feel 
+from Plone 3.0.  the method finalizeATCTSchema.
+Here is a sample from PoiResponse.py:
+
+def modify_fti(fti):
+    # Hide unnecessary tabs (usability enhancement)
+    for a in fti['actions']:
+        if a['id'] in ['metadata', 'sharing']:
+            a['visible'] = 0
+    return fti
+
+4, how to migrate the skin (view.pt) from macro to viewlet.  viewlet is 
+the standard start from Plone 3.
+
+5. notification email for content change.

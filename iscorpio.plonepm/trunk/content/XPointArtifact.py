@@ -9,6 +9,7 @@ import logging
 
 from AccessControl import ClassSecurityInfo
 # from Archetypes
+from Products.Archetypes.public import AttributeStorage
 from Products.Archetypes.public import Schema
 from Products.Archetypes.public import TextField
 from Products.Archetypes.public import TextAreaWidget
@@ -16,6 +17,8 @@ from Products.Archetypes.public import RichWidget
 from Products.Archetypes.public import StringField
 from Products.Archetypes.public import SelectionWidget
 from Products.Archetypes.public import LinesWidget
+from Products.Archetypes.public import FileField
+from Products.Archetypes.public import FileWidget
 from Products.Archetypes.public import DisplayList
 from Products.Archetypes.public import registerType
 # from ATContentTypes
@@ -100,7 +103,14 @@ XPointArtifactSchema = ATFolderSchema.copy() + Schema((
             ),
 
         # attachment
-        
+        FileField(
+            'xppm_artifact_attachment',
+            widget = FileWidget(
+                label = "Attachment",
+                description = "You may upload a file here:",
+                ),
+            storage = AttributeStorage(),
+            ),
         )
     )
 
@@ -127,6 +137,10 @@ class XPointArtifact(XPPMBase, ATFolder, HistoryAwareMixin):
     xppm_id_prefix = 'xpa'
     # the logger.
     log = logging.getLogger("XPointProjectManagement XPointArtifact")
+
+    # the artifact change log.
+    _artifactChangeLog = []
+
     # preparing class security info for methods.
     security = ClassSecurityInfo()
 

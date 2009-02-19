@@ -28,7 +28,7 @@
   <tal:block metal:define-macro="xpoint_developers_list">
     <tal:block repeat="member membersList">
       <a href="#"
-				 tal:define="memberInfo python: mtool.getMemberInfo(member)"
+         tal:define="memberInfo python: mtool.getMemberInfo(member)"
          tal:attributes="href string:${portal_url}/author/${member}"
          tal:content="python: memberInfo['fullname']" >
         Tom
@@ -37,13 +37,47 @@
   </tal:block>
 
   <!-- mocro to show a list of project view, we need pass the project url -->
-  <!-- param: projectURL -->
+  <!-- param: projectURL, developersList -->
   <tal:block metal:define-macro="xpoint_project_views_list">
-    <a tal:attributes="href python: portal_url + projectURL + '/xpointproject_view'">
-      Stories List
-    </a> | <a tal:attributes="href python: portal_url + projectURL + '/xpointproject_member_view'">
-      By Developer
-    </a>
+    <table width="100%" cellpadding="2" border="0" cellspacing="0"><tbody><tr><td>
+    <div style="float: right;">
+    <!-- create the menu here. -->
+<ul id="qm0" class="qmmc">
+
+  <!-- stories -->
+  <li><a class="qmparent" href="#">Stories</a>
+
+    <ul style="width:141px;">
+      <li><a class="qmparent" href="#"
+             tal:attributes="href python: portal_url + projectURL + '/xpointproject_view'">
+          All Stories
+      </a></li>
+    </ul></li>
+
+  <!-- milestone -->
+
+  <!-- Modules -->
+
+  <!-- Developers -->
+  <li tal:condition="developersList">
+    <a class="qmparent" href="#">Developers</a>
+
+    <ul style="width:141px;">
+      <tal:block tal:repeat="developer python:developersList">
+        <li tal:define="developerInfo python: mtool.getMemberInfo(developer);">
+          <a tal:attributes="href python: portal_url + projectURL + '/xpointproject_member_view?developerId=' + developer"
+             tal:content="python: developerInfo['fullname']">
+            full name
+          </a>
+        </li>
+      </tal:block>
+    </ul></li>
+
+<li class="qmclear">&nbsp;</li></ul>
+<script type="text/javascript">qm_create(0,false,0,500,false,false,false,false,false);</script>
+    </div>
+    </td></tr></tbody></table>
+
   </tal:block>
 </body>
 </html>

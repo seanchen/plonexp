@@ -7,6 +7,10 @@
 <metal:block fill-slot="css_slot">
   <LINK href="xpointtaskstyle.css" type="text/css" rel="stylesheet"
         tal:attributes="href string:xpprogressbar.css"/>
+  <LINK href="xpmenu.css" type="text/css" rel="stylesheet"
+        tal:attributes="href string:xpmenu.css"/>
+  <script type="text/javascript" src="xpmenu.js" 
+        tal:attributes="src string:xpmenu.js"></script>
 </metal:block>
 
 <metal:main fill-slot="main">
@@ -46,7 +50,8 @@
     <!-- find all tasks for this story and list all of them as a table, -->
     <!-- each task will be a row in this table. -->
     <div tal:define="storiesList python: here.getProjectStories();
-                     issuesList python: here.getOutstandingIssues();">
+                     issuesList python: here.getOutstandingIssues();
+                     developersList python: here.portal_catalog.uniqueValuesFor('getTask_owners');">
 
       <!-- outstanding issues -->
       <div tal:condition="issuesList">
@@ -86,8 +91,7 @@
       </div>
 
       <!-- the views list. -->
-      <div tal:define="projectURL python: '/'.join(here.getPhysicalPath());"
-           style="text-align: right">
+      <div tal:define="projectURL python: '/'.join(here.getPhysicalPath());">
         <tal:block
            metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_project_views_list"
         />

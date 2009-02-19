@@ -5,8 +5,10 @@
 <body>
 
 <metal:block fill-slot="css_slot">
-  <LINK href="xpointtaskstyle.css" type="text/css" rel="stylesheet"
+  <LINK href="xpprogressbar.css" type="text/css" rel="stylesheet"
         tal:attributes="href string:xpprogressbar.css"/>
+  <LINK href="xpmenu.css" type="text/css" rel="stylesheet"
+        tal:attributes="href string:xpmenu.css"/>
   <!-- NOTE: order is important for these CSS style sheets. -->
   <LINK href="tabber.css" type=text/css rel=stylesheet 
         tal:attributes="href string:tabber.css"/>
@@ -14,6 +16,8 @@
         tal:attributes="src string:tabber-cookies.js"></script>
   <script type="text/javascript" src="tabber.js" 
         tal:attributes="src string:tabber.js"></script>
+  <script type="text/javascript" src="xpmenu.js" 
+        tal:attributes="src string:xpmenu.js"></script>
 </metal:block>
 
 <metal:main fill-slot="main">
@@ -92,61 +96,61 @@
         </tbody></table>
       </div>
 
-			<!-- the views list. -->
-      <div tal:define="projectURL python: '/'.join(here.getPhysicalPath());"
-           style="text-align: right">
+      <!-- the views list. -->
+      <div tal:define="projectURL python: '/'.join(here.getPhysicalPath());">
         <tal:block
            metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_project_views_list"
         />
       </div>
 
-      <div tal:condition="developersList">
-        <h2>Tasks List by Developer</h2>
+      <div tal:define="developerId request/developerId;
+                       developerInfo python: mtool.getMemberInfo(developerId);">
+        <h2>Developer Activity - <span tal:content="python: developerInfo['fullname']"/></h2>
         <div class="tabber">
-          <tal:block tal:repeat="developer python: developersList">
-            <div tal:define="tasksList python: here.getTasksForMember(developer);
-                             developerInfo python: mtool.getMemberInfo(developer);"
-                 tal:condition="tasksList"
-                 class="tabbertab">
-      <!-- one tab for each developer -->
-      <h2><span tal:content="python: developerInfo['fullname']"/></h2>
-      <table class="listing" width="100%"><tbody>
-        <tr>
-          <th>Task</th>
-          <th>Owners</th>
-          <th width="458">Estimated hours / Progress Status</th>
-        </tr>
-        <!-- one row for each task. -->
-        <tal:block tal:repeat="task python: tasksList">
-          <tr tal:define="oddrow repeat/task/odd;
-                          url task/getURL|task/absolute_url;
-                          task_type task/portal_type;
-                          task_typeinfo python: here.portal_types.getTypeInfo(task_type);
-                          icon python: portal_url + '/' + task_typeinfo.getIcon();"
-              tal:attributes="class python: test(oddrow, 'odd', 'even')">
-            <td>
-              <a href="#" tal:attributes="href url">
-                <img src="#" height="16" width="16"
-                     tal:attributes="src icon"/>&nbsp;
-                <span tal:content="task/Title"/>
-              </a>
-            </td>
-            <td tal:define="membersList task/getTask_owners">
-              <tal:block
-                 metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_developers_list"
-              />
-            </td>
-            <td tal:define="estimatedHours task/getTask_estimated_hours;
-                            progressPercent task/getTask_progress_percent;">
-              <tal:block
-                 metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_progress_bar"
-              />
-            </td>
-          </tr>
-        </tal:block>
-      </tbody></table>
-            </div>
-          </tal:block>
+          <!-- XP Tasks tab. -->
+          <div tal:define="tasksList python: here.getTasksForMember(developerId);"
+               tal:condition="tasksList"
+               class="tabbertab">
+            <h2>Tasks</h2>
+            <table class="listing" width="100%"><tbody>
+              <tr>
+                <th>Task</th>
+                <th>Owners</th>
+                <th width="458">Estimated hours / Progress Status</th>
+              </tr>
+              <!-- one row for each task. -->
+              <tal:block tal:repeat="task python: tasksList">
+                <tr tal:define="oddrow repeat/task/odd;
+                                url task/getURL|task/absolute_url;
+                                task_type task/portal_type;
+                                task_typeinfo python: here.portal_types.getTypeInfo(task_type);
+                                icon python: portal_url + '/' + task_typeinfo.getIcon();"
+                    tal:attributes="class python: test(oddrow, 'odd', 'even')">
+                  <td>
+                    <a href="#" tal:attributes="href url">
+                      <img src="#" height="16" width="16"
+                           tal:attributes="src icon"/>&nbsp;
+                      <span tal:content="task/Title"/>
+                    </a>
+                  </td>
+                  <td tal:define="membersList task/getTask_owners">
+                    <tal:block
+                       metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_developers_list"
+                    />
+                  </td>
+                  <td tal:define="estimatedHours task/getTask_estimated_hours;
+                                  progressPercent task/getTask_progress_percent;">
+                    <tal:block
+                       metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_progress_bar"
+                    />
+                  </td>
+                </tr>
+              </tal:block>
+            </tbody></table>
+          </div>
+          <!-- XP Memos tab. -->
+          <!-- XP Issues tab. -->
+          <!-- XP Proposals tab. -->
         </div>
       </div>
     </div>

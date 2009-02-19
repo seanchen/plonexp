@@ -85,17 +85,7 @@ class XPointProject(ATFolder):
     portal_type = 'XPointProject'
     archetype_name = 'XP Project'
 
-    content_icon = 'XPProject_icon.gif'
-    # view.
-    immediate_view = 'xpointproject_view'
-    default_view = 'xpointproject_release_view'
-
     _at_rename_after_creation = True
-    global_allow = True
-
-    # restrict allowed content types.
-    filter_content_types = True
-    allowed_content_types = ('XPointStory', 'XPointRelease', 'Topic')
 
     __implements__ = (
         ATFolder.__implements__,

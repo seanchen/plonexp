@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<object name="portal_factory" meta_type="Plone Factory Tool">
+  <factorytypes>
+    <type portal_type="XPointBuildJournal"/>
+
+    <type portal_type="XPointProject"/>
+    <type portal_type="XPointRelease"/>
+    <type portal_type="XPointStory"/>
+    <type portal_type="XPointTask"/>
+    <type portal_type="XPointMemo"/>
+    <type portal_type="XPointIssue"/>
+    <type portal_type="XPointProposal"/>
+  </factorytypes>
+</object>

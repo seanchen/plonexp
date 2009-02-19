@@ -90,20 +90,7 @@ class XPointStory(ATFolder):
     portal_type = 'XPointStory'
     archetype_name = 'XP Story'
 
-    content_icon = 'XPStory_icon.gif'
-    immediate_view = 'xpointstory_view'
-    default_view = 'xpointstory_view'
-
     _at_rename_after_creation = True
-    global_allow = False
-
-    filter_content_types = True
-    allowed_content_types = ('XPointTask', 'XPointMemo',
-                             'XPointIssue', 'XPointProposal')
-
-    # comment out for Plone 3, it is just doesn't work.  Need figure
-    # out the new approach for Plone 3.
-    #allow_discussion = True
 
     __implements__ = (
         ATFolder.__implements__,

@@ -38,10 +38,6 @@ class XPointBuildJournal(XPointDocument):
     portal_type = 'XPointBuildJournal'
     archetype_name = 'Build Journal'
 
-    content_icon = 'XPBuildJournal_icon.gif'
-
-    global_allow = True
-
     security = ClassSecurityInfo()
 
 registerType(XPointBuildJournal, PROJECTNAME)

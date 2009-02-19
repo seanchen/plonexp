@@ -136,25 +136,12 @@ class XPointTask(ATFolder):
     # this will show on the page.
     archetype_name = 'XP Task'
 
-    content_icon = 'XPTask_icon.gif'
-    immediate_view = 'xpointtask_view'
-    default_view = 'xpointtask_view'
-
     _at_rename_after_creation = True
-    global_allow = False
-
-    # allow discuss on the task.
-    # comment out for Plone 3, it is just doesn't work.  Need figure
-    # out the new approach for Plone 3.
-    #allow_discussion = True
 
     __implements__ = (
         ATFolder.__implements__,
         IATFolder,
         )
-
-    filter_content_types = True
-    allowed_content_types = ('XPointMemo', 'XPointIssue', 'XPointProposal', )
 
     security = ClassSecurityInfo()
 

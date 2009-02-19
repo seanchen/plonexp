@@ -4,7 +4,7 @@ A short memo for upgrading XPointProjectManagement to Plone 3.
 0. It is very good chance to rename the field and re-organize the 
 class hierache.
 
-1. declare index for all fields need a index and metadata
+1. declare index for all fields need a index and metadata, DONE.
 
 2. manage and organize the shemata properly!
 Method finalizeATCTSchema will re-organize the shemata for Plone 3.0

@@ -1,4 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
       lang="en"
       metal:use-macro="here/main_template/macros/master"
       i18n:domain="plone">
@@ -17,6 +20,7 @@
             tal:define="byType python: 'stories';
                         byType request/byType | byType;">
 
+  <!-- header. -->
   <tal:block
      metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_project_view_header"
   />
@@ -26,7 +30,7 @@
 
     <!-- outstanding issues -->
     <div tal:condition="impsList"
-				 tal:define="useBatch python: False">
+         tal:define="useBatch python: False">
       <h2>Outstanding Issues</h2>
       <tal:block
          metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_imps_list"
@@ -74,11 +78,10 @@
     </div>
   </tal:block>
 
-  <!-- related items list. -->
-  <div metal:use-macro="here/document_relateditems/macros/relatedItems">
-    Show related items if they exist
-  </div>
-  <div class="visualClear" id="clear-space-after-relatedItems"></div>
+  <!-- footer. -->
+  <tal:block
+     metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_project_view_footer"
+  />
 
 </metal:main>
 

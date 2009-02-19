@@ -2,29 +2,9 @@
 <object name="portal_catalog" meta_type="Plone Catalog Tool">
 
   <!-- indexes and columns -->
-  <index name="getXptask_completion_date" meta_type="DateIndex">
-    <indexed_attr value="getXptask_completion_date"/>
-  </index>
-  <index name="getXptask_progress_percent" meta_type="FieldIndex">
-    <indexed_attr value="getXptask_progress_percent"/>
-  </index>
-  <index name="getXptask_estimated_hours" meta_type="FieldIndex">
-    <indexed_attr value="getXptask_estimated_hours"/>
-  </index>
-  <index name="getXptask_used_hours" meta_type="FieldIndex">
-    <indexed_attr value="getXptask_used_hours"/>
-  </index>
-  <index name="getXptask_owners" meta_type="KeywordIndex">
-    <indexed_attr value="getXptask_owners"/>
-  </index>
-  <index name="getXpproject_document_status" meta_type="FieldIndex">
-    <indexed_attr value="getXpproject_document_status"/>
+  <index name="getXppm_status" meta_type="FieldIndex">
+    <indexed_attr value="getXppm_status"/>
   </index>
 
-  <column value="getXptask_completion_date"/>
-  <column value="getXptask_progress_percent"/>
-  <column value="getXptask_estimated_hours"/>
-  <column value="getXptask_used_hours"/>
-  <column value="getXptask_owners"/>
-  <column value="getXpproject_document_status"/>
+  <column value="getXppm_status"/>
 </object>

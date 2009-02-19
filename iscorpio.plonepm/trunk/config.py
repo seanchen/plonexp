@@ -1,8 +1,7 @@
+
 # config.py
 
 # configuration constants for XPoint Consulting Project Management.
-
-from Products.Archetypes.public import DisplayList
 
 # project name.
 PROJECTNAME = "XPointProjectManagement"

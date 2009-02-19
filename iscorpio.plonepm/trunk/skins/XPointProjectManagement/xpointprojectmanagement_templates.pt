@@ -44,14 +44,20 @@
   <!-- macro for stories list. -->
   <!-- param: storiesList -->
   <!-- ==================================================================== -->
-  <tal:black metal:define-macro="xpoint_stories_list">
+  <tal:black metal:define-macro="xpoint_stories_list"
+             tal:define="Batch python: modules['Products.CMFPlone'].Batch;
+                         b_size python: 10;
+                         b_start python: 0;
+                         b_start request/b_start | b_start;
+                         batch python: Batch(storiesList, b_size, int(b_start), orphan=2);">
+    <div metal:use-macro="here/batch_macros/macros/navigation" />
     <table class="listing" width="100%"><tbody>
       <tr>
         <th>Story</th>
         <th width="458">Estimated hours / Progress Status</th>
       </tr>
       <!-- one row for each story. -->
-      <tal:block tal:repeat="story python: storiesList">
+      <tal:block tal:repeat="story python: batch">
         <tr tal:define="oddrow repeat/story/odd;
                         url story/getURL|story/absolute_url;
                         story_type story/portal_type;
@@ -81,7 +87,13 @@
   <!-- macro for tasks list. -->
   <!-- parm: tasksList -->
   <!-- ==================================================================== -->
-  <tal:block metal:define-macro="xpoint_tasks_list">
+  <tal:block metal:define-macro="xpoint_tasks_list"
+             tal:define="Batch python: modules['Products.CMFPlone'].Batch;
+                         b_size python: 10;
+                         tasks_b_start python: 0;
+                         tasks_b_start request/tasks_b_start | tasks_b_start;
+                         batch python: Batch(tasksList, b_size, int(tasks_b_start), orphan=2, b_start_str='tasks_b_start');">
+    <div metal:use-macro="here/batch_macros/macros/navigation" />
     <table class="listing" width="100%"><tbody>
       <tr>
         <th>Task</th>
@@ -91,12 +103,13 @@
         <th width="458">Estimated Hours / Progress Status</th>
       </tr>
       <!-- one row for each task. -->
-      <tal:block tal:repeat="task python: tasksList">
+      <tal:block tal:repeat="task python: batch">
         <tr tal:define="oddrow repeat/task/odd;
                         url task/getURL|task/absolute_url;
                         task_type task/portal_type;
                         task_typeinfo python: here.portal_types.getTypeInfo(task_type);
-                        icon python: portal_url + '/' + task_typeinfo.getIcon();"
+                        icon python: portal_url + '/' + task_typeinfo.getIcon();
+                        task_date task/getTask_completion_date;"
             tal:attributes="class python: test(oddrow, 'odd', 'even')">
           <td>
             <a href="#" tal:attributes="href url">
@@ -110,7 +123,7 @@
                metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_developers_list"
             />
           </td>
-          <td tal:content="task/getTask_completion_date">
+          <td tal:content="python: toLocalizedTime(task_date)">
           </td>
           <td>
             <span tal:content="task/getTask_used_hours"/> hours
@@ -131,19 +144,30 @@
   <!-- xpoint macro for issues/memos/proposals list -->
   <!-- param: impsList -->
   <!-- ==================================================================== -->
-  <tal:black metal:define-macro="xpoint_imps_list">
+  <tal:black metal:define-macro="xpoint_imps_list"
+             tal:define="Batch python: modules['Products.CMFPlone'].Batch;
+                         b_size python: 10;
+                         imps_b_start python: 0;
+                         imps_b_start request/imps_b_start | imps_b_start;
+                         batch python: Batch(impsList, b_size, int(imps_b_start), orphan=2, b_start_str='imps_b_start');
+                         useBatch useBatch | python: True;">
+    <tal:block tal:condition="python: useBatch">
+      <div metal:use-macro="here/batch_macros/macros/navigation" />
+    </tal:block>
     <table class="listing" width="100%"><tbody>
       <tr>
         <th>Title</th>
         <th>Creator</th>
+        <th>Date</th>
         <th>Status</th>
       </tr>
 
       <!-- memos -->
-      <tal:block tal:repeat="obj python: impsList">
+      <tal:block tal:repeat="obj python: test(useBatch, batch, impsList)">
         <tr tal:define="oddrow repeat/obj/odd;
                         url obj/getURL|obj/absolute_url;
                         obj_type obj/portal_type;
+                        obj_date obj/ModificationDate;
                         obj_typeinfo python:here.portal_types.getTypeInfo(obj_type);
                         icon python:portal_url + '/' + obj_typeinfo.getIcon();"
             tal:attributes="class python:test(oddrow, 'odd', 'even')">
@@ -157,6 +181,8 @@
           <td tal:define="creator obj/Creator;
                           author python: mtool.getMemberInfo(creator);">
             <span tal:content="python: author['fullname']" />
+          </td>
+          <td tal:content="python: toLocalizedTime(obj_date)">
           </td>
           <td>
             <div tal:condition="python: obj_type == 'XPointMemo'">N/A</div>
@@ -240,12 +266,20 @@
   </tal:block>
 
   <!-- stories -->
-  <li><a class="qmparent" href="#">Views</a>
+  <li><a class="qmparent" href="#">Views&nbsp;&nbsp;&nbsp;&nbsp;</a>
 
     <ul style="width:141px;">
       <li><a class="qmparent" href="#"
              tal:attributes="href python: portal_url + projectURL + '/xpointproject_view'">
           All Stories
+      </a></li>
+      <li><a class="qmparent" href="#"
+             tal:attributes="href python: portal_url + projectURL + '/xpointproject_view?byType=tasks'">
+          All Tasks
+      </a></li>
+      <li><a class="qmparent" href="#"
+             tal:attributes="href python: portal_url + projectURL + '/xpointproject_view?byType=imps'">
+          All Responses
       </a></li>
     </ul></li>
 

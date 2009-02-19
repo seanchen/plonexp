@@ -32,7 +32,8 @@
     <div tal:define="impsList python: here.getOutstandingIssues();">
 
       <!-- outstanding issues -->
-      <div tal:condition="impsList">
+      <div tal:condition="impsList"
+         tal:define="useBatch python: False">
         <h2>Outstanding Issues</h2>
         <tal:block
            metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_imps_list"

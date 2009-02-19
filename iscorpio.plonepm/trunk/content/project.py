@@ -219,6 +219,36 @@ class XPointProject(ATFolder):
 
         return stories
 
+    security.declarePublic('getProjectTasks')
+    def getProjectTasks(self):
+        """ return all tasks of this project, order by completion date.
+        """
+        portal_catalog = getToolByName(self, 'portal_catalog')
+        cpath = '/'.join(self.getPhysicalPath())
+        query = {
+            'portal_type':['XPointTask'],
+            'sort_on':'getTask_completion_date',
+            'sort_order':'reverse',
+            'path':cpath,
+            }
+
+        return portal_catalog.searchResults(query)
+
+    security.declarePublic('getProjectImps')
+    def getProjectImps(self):
+        """ return all imps for this project, order by modification date.
+        """
+        portal_catalog = getToolByName(self, 'portal_catalog')
+        cpath = '/'.join(self.getPhysicalPath())
+        query = {
+            'portal_type':['XPointMemo', 'XPointIssue', 'XPointProposal'],
+            'sort_on':'Date',
+            'sort_order':'reverse',
+            'path':cpath,
+            }
+
+        return portal_catalog.searchResults(query)
+
     security.declarePublic('getProjectEstimatedHours')
     def getProjectEstimatedHours(self):
         """ returns the amount of hours estimated for this project.
@@ -256,6 +286,8 @@ class XPointProject(ATFolder):
         query = {
             'portal_type':['XPointIssue'],
             'getXpoint_tracking_status':['open','pending',],
+            'sort_on':'Date',
+            'sort_order':'reverse',
             'path':cpath,
             }
 
@@ -270,6 +302,8 @@ class XPointProject(ATFolder):
         query = {
             'portal_type':['XPointTask'],
             'getTask_owners':memberId,
+            'sort_on':'getTask_completion_date',
+            'sort_order':'reverse',
             'path':cpath,
             }
 

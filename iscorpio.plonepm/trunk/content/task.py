@@ -121,6 +121,9 @@ class XPointTask(ATFolder):
     _at_rename_after_creation = True
     global_allow = False
 
+    # allow discuss on the task.
+    allow_discussion = True
+
     filter_content_types = True
     allowed_content_types = ('XPointMemo',)
 

@@ -35,8 +35,8 @@
           <th>Estimated hours / Progress Status</th>
         </tr>
         <tr>
-          <td tal:define="estimatedHours python: here.getProjectEstimatedHours();
-                          progressPercent python: here.getProjectProgressPercent();">
+          <td tal:define="estimatedHours python: here.getStoryEstimatedHours();
+                          progressPercent python: here.getStoryProgressPercent();">
             <tal:block
                metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_progress_bar"
             />

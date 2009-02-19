@@ -6,7 +6,7 @@
   <property name="title" i18n:translate="">XP Response</property>
   <property name="description"
             i18n:translate="">A eXtreme Programing Artifact Response</property>
-  <property name="content_icon">XPStory_icon.gif</property>
+  <property name="content_icon">xppm_response_icon.gif</property>
   <property name="content_meta_type">XPointResponse</property>
   <property name="product">XPointProjectManagement</property>
   <property name="factory">addXPointResponse</property>

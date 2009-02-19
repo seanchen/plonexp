@@ -19,6 +19,8 @@ from Products.Archetypes.public import InAndOutWidget
 from Products.Archetypes.public import DisplayList
 from Products.Archetypes.public import registerType
 # from ATContentTypes
+from Products.ATContentTypes.content.schemata import finalizeATCTSchema
+from Products.ATContentTypes.interfaces import IATFolder
 from Products.ATContentTypes.atct import ATFolder
 from Products.ATContentTypes.atct import ATFolderSchema
 from Products.ATContentTypes.configuration import zconf
@@ -88,6 +90,8 @@ XPointStorySchema['relatedItems'].widget.description = \
     "Select related items"
 XPointStorySchema.moveField('relatedItems', pos='bottom')
 
+finalizeATCTSchema(XPointStorySchema)
+
 # the XPointStory class.
 class XPointStory(ATFolder):
     """XPoint Story for a XPointProject"""
@@ -113,6 +117,11 @@ class XPointStory(ATFolder):
     # comment out for Plone 3, it is just doesn't work.  Need figure
     # out the new approach for Plone 3.
     #allow_discussion = True
+
+    __implements__ = (
+        ATFolder.__implements__,
+        IATFolder,
+        )
 
     # for logging.
     log = logging.getLogger("XPointProjectManagement Story")

@@ -5,6 +5,8 @@ XPointProject."""
 __author__ = 'Xiang(Sean) Chen <chyxiang@gmail.com>'
 __docformat__ = 'plaintext'
 
+import logging
+
 from AccessControl import ClassSecurityInfo
 # from Archetypes
 from Products.Archetypes.public import Schema
@@ -84,6 +86,9 @@ class XPointStory(ATFolder):
     filter_content_types = True
     allowed_content_types = ('XPointTask')
 
+    # for logging.
+    log = logging.getLogger("XPointProjectManagement Story")
+
     actions = ({
         'id': 'view',
         'name': 'View',
@@ -103,9 +108,47 @@ class XPointStory(ATFolder):
 
     security = ClassSecurityInfo()
 
+    security.declarePublic('getStoryEstimatedHours')
+    def getStoryEstimatedHours(self):
+        """ returns the subtotal of the estimated hours for all tasks.
+        """
+
+        tasks = self.getStoryTasks()
+        estimatedSubtotal = 0
+        for task in tasks:
+            # calc the subtotal of estimated hours.
+            if task.getTask_estimated_hours != None:
+                self.log.debug("Estimated hours [%s] for task [%s]",
+                               task.task_estimated_hours, task.id)
+                estimatedSubtotal = estimatedSubtotal + task.task_estimated_hours
+
+        return estimatedSubtotal
+
+    security.declarePublic('getStoryProgressPercent')
+    def getStoryProgressPercent(self):
+        """ returns the progress percent for this story, it should be the
+        progress average of all its task.
+        """
+
+        tasks = self.getStoryTasks()
+        averageProgress = 0
+        if len(tasks) > 0:
+            progressSubtotal = 0
+            for task in tasks:
+                # calc the subtotal ...
+                if task.getTask_progress_percent != None:
+                    self.log.debug("Progress percent [%s] for task [%s]",
+                                   task.task_progress_percent, task.id)
+                    progressSubtotal = progressSubtotal + task.task_progress_percent
+
+            # calc the average.
+            averageProgress = progressSubtotal / len(tasks)
+
+        return averageProgress
+
     security.declarePublic('getStoryTasks')
     def getStoryTasks(self):
-      """returns all tasks in this story.
+      """ returns all tasks in this story.
       """
       return self.contentValues(filter={'portal_type':['XPointTask']})
 

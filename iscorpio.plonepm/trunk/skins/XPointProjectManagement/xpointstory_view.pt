@@ -26,20 +26,32 @@
 
     <!-- find all tasks for this story and list all of them as a table, -->
     <!-- each task will be a row in this table. -->
-<!--     <div tal:define="tasksInfo python: here.scripts.getStoryTasks(context); -->
-<!--                      tasksList python: tasksInfo['tasksList']; -->
-<!--                      estimatedSubtotal python: tasksInfo['estimatedSubtotal']; -->
-<!--                      averageProgress python: tasksInfo['averageProgress'];"> -->
-      <div tal:define="tasksList python: here.getStoryTasks();">
+    <div tal:define="tasksList python: here.getStoryTasks();">
 
       <!-- display the subtotal progress bar here? or Not? -->
+      <table class="listing" width="100%"><tbody>
+        <tr>
+          <th width="112">Estimated hours</th>
+          <th>Progress Status</th>
+        </tr>
+        <tr>
+          <td><span tal:content="python: str(here.getStoryEstimatedHours())" /></td>
+          <td>
+            <div id="XPointProgressBar">
+              <div class="fill" align="center"
+                   tal:attributes="style python: 'width: ' + str(here.getStoryProgressPercent()) + '%'">
+                <span tal:content="python: str(here.getStoryProgressPercent()) + '%'"></span>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody></table>
   
       <div>
         <span tal:content="structure here/getStory_text" />
       </div>
 
 <!--       <p> -->
-<!--         The Path: <span tal:content="python: tasksInfo['thePath']"/><br/> -->
 <!--         The Amount: <span tal:content="python: tasksInfo['tasksAmount']"/><br/> -->
 <!--        Estimated subtotal: <span tal:content="python: tasksInfo['estimatedSubtotal']"/> -->
 <!--       </p> -->
@@ -47,13 +59,14 @@
       <table class="listing" width="100%"><tbody>
         <tr>
           <th>Task</th>
-          <th>Owner(s)</th>
-          <th>Estimated hours</th>
-          <th>Progress Status</th>
+          <th width="120">Owner(s)</th>
+          <th width="112">Estimated hours</th>
+          <th width="368">Progress Status</th>
         </tr>
         <!-- one row for each task. -->
         <tal:block tal:repeat="task python: tasksList">
-          <tr>
+          <tr tal:define="oddrow repeat/task/odd;"
+              tal:attributes="class python: test(oddrow, 'odd', 'even')">
             <td><span tal:content="task/Title"/></td>
             <td>
               <strong>

@@ -82,6 +82,8 @@ XPointStorySchema = ATFolderSchema.copy() + Schema((
         ),
     )
 
+finalizeATCTSchema(XPointStorySchema)
+
 # we don't need description here.
 XPointStorySchema['description'].widget.visible = False
 # make this related items field visible and move to bottom.
@@ -89,8 +91,6 @@ XPointStorySchema['relatedItems'].widget.visible = True
 XPointStorySchema['relatedItems'].widget.description = \
     "Select related items"
 XPointStorySchema.moveField('relatedItems', pos='bottom')
-
-finalizeATCTSchema(XPointStorySchema)
 
 # the XPointStory class.
 class XPointStory(ATFolder):

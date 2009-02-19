@@ -53,7 +53,7 @@
         </p>
 
         <p>
-          <span tal:content="structure release/getRelease_text" />
+          <span tal:content="structure release/getXpproject_text" />
         </p>
 
         <!-- story list for the selected release -->

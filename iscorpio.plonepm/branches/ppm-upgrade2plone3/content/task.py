@@ -119,6 +119,8 @@ XPointTaskSchema = ATFolderSchema.copy() + Schema((
         ),
     )
 
+finalizeATCTSchema(XPointTaskSchema)
+
 # set the description field to invisible, we are not going to use it
 # for a task.
 XPointTaskSchema['description'].widget.visible = False
@@ -128,8 +130,6 @@ XPointTaskSchema['relatedItems'].widget.visible = True
 XPointTaskSchema['relatedItems'].widget.description = \
     "Select related tasks"
 XPointTaskSchema.moveField('relatedItems', pos='bottom')
-
-finalizeATCTSchema(XPointTaskSchema)
 
 # the content type class.
 class XPointTask(ATFolder):
@@ -163,23 +163,6 @@ class XPointTask(ATFolder):
 
     filter_content_types = True
     allowed_content_types = ('XPointMemo', 'XPointIssue', 'XPointProposal', )
-
-    actions = ({
-        'id': 'view',
-        'name': 'View',
-        'action': 'string:${object_url}/xpointtask_view',
-        'permissions': (CMFCorePermissions.View,)
-        },{
-        'id': 'edit',
-        'name': 'Edit',
-        'action': 'string:${object_url}/base_edit',
-        'permissions': (CMFCorePermissions.ViewManagementScreens,)
-        },{
-        'id': 'metadata',
-        'name': 'Properties',
-        'action': 'string:${object_url}/base_metadata',
-        'permissions': (CMFCorePermissions.ViewManagementScreens,)
-        },)
 
     security = ClassSecurityInfo()
 

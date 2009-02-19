@@ -51,7 +51,7 @@
                          b_start request/b_start | b_start;
                          batch python: Batch(storiesList, b_size, int(b_start), orphan=2);">
     <div metal:use-macro="here/batch_macros/macros/navigation" />
-    <table class="listing" width="100%"><tbody>
+    <table class="listing" width="98%"><tbody>
       <tr>
         <th>Story</th>
         <th width="458">Estimated hours / Progress Status</th>
@@ -94,7 +94,7 @@
                          tasks_b_start request/tasks_b_start | tasks_b_start;
                          batch python: Batch(tasksList, b_size, int(tasks_b_start), orphan=2, b_start_str='tasks_b_start');">
     <div metal:use-macro="here/batch_macros/macros/navigation" />
-    <table class="listing" width="100%"><tbody>
+    <table class="listing" width="98%"><tbody>
       <tr>
         <th>Task</th>
         <th>Owners</th>
@@ -109,7 +109,7 @@
                         task_type task/portal_type;
                         task_typeinfo python: here.portal_types.getTypeInfo(task_type);
                         icon python: portal_url + '/' + task_typeinfo.getIcon();
-                        task_date task/getTask_completion_date;"
+                        task_date task/getXptask_completion_date;"
             tal:attributes="class python: test(oddrow, 'odd', 'even')">
           <td>
             <a href="#" tal:attributes="href url">
@@ -118,7 +118,7 @@
               <span tal:content="task/Title"/>
             </a>
           </td>
-          <td tal:define="membersList task/getTask_owners">
+          <td tal:define="membersList task/getXptask_owners">
             <tal:block
                metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_developers_list"
             />
@@ -126,10 +126,10 @@
           <td tal:content="python: toLocalizedTime(task_date)">
           </td>
           <td>
-            <span tal:content="task/getTask_used_hours"/> hours
+            <span tal:content="task/getXptask_used_hours"/> hours
           </td>
-          <td tal:define="estimatedHours task/getTask_estimated_hours;
-                          progressPercent task/getTask_progress_percent;">
+          <td tal:define="estimatedHours task/getXptask_estimated_hours;
+                          progressPercent task/getXptask_progress_percent;">
             <tal:block
                metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_progress_bar"
             />
@@ -154,7 +154,7 @@
     <tal:block tal:condition="python: useBatch">
       <div metal:use-macro="here/batch_macros/macros/navigation" />
     </tal:block>
-    <table class="listing" width="100%"><tbody>
+    <table class="listing" width="98%"><tbody>
       <tr>
         <th>Title</th>
         <th>Creator</th>
@@ -187,10 +187,10 @@
           <td>
             <div tal:condition="python: obj_type == 'XPointMemo'">N/A</div>
             <div tal:condition="python: obj_type == 'XPointIssue'">
-              <span tal:content="obj/getXpoint_tracking_status"/>
+              <span tal:content="obj/getXpproject_document_status"/>
             </div>
             <div tal:condition="python: obj_type == 'XPointProposal'">
-              <span tal:content="obj/getXpoint_tracking_status"/>
+              <span tal:content="obj/getXpproject_document_status"/>
             </div>
           </td>
         </tr>
@@ -204,20 +204,27 @@
   <!-- only for the project views. -->
   <!-- ==================================================================== -->
   <tal:block metal:define-macro="xpoint_project_view_header">
-    <div metal:use-macro="here/document_actions/macros/document_actions">
-        Document actions (print, sendto etc)
-    </div>
 
-    <h1 tal:content="object_title" class="documentFirstHeading">
-      Title or id
+    <div tal:replace="structure provider:plone.abovecontenttitle"/>
+
+    <h1 class="documentFirstHeading">
+      <metal:field use-macro="python:here.widget('title', mode='view')">
+        Title or id
+      </metal:field>
     </h1>
-    
-    <div metal:use-macro="here/document_byline/macros/byline">
-      Get the byline - contains details about author and modification date.
-    </div>
+
+    <div tal:replace="structure provider:plone.belowcontenttitle" />
+
+    <p class="documentDescription">
+      <metal:field use-macro="python:here.widget('description', mode='view')">
+        Description
+      </metal:field>
+    </p>
+
+    <div tal:replace="structure provider:plone.abovecontentbody" />
 
     <!-- display the subtotal progress bar here? or Not? -->
-    <table class="listing" width="100%"><tbody>
+    <table class="listing" width="98%"><tbody>
       <tr>
         <th>Estimated hours / Progress Status</th>
       </tr>
@@ -231,10 +238,24 @@
       </tr>
     </tbody></table>
 
-    <div>
-      <span tal:content="structure here/getProject_text" />
-    </div>
+    <metal:field use-macro="python: here.widget('xpproject_text', mode='view')">
+      project body
+    </metal:field>
   </tal:block>
+  <!-- ==================================================================== -->
+
+  <!-- ==================================================================== -->
+  <!-- macro for the project footer -->
+  <!-- ==================================================================== -->
+  <tal:block metal:define-macro="xpoint_project_view_footer">
+
+    <div metal:use-macro="here/document_relateditems/macros/relatedItems">
+      Show related items if they exist
+    </div>
+
+    <div tal:replace="structure provider:plone.belowcontentbody" />
+
+  </tal:block>  
   <!-- ==================================================================== -->
 
   <!-- ==================================================================== -->
@@ -243,7 +264,7 @@
   <!-- param: projectURL  -->
   <!-- ==================================================================== -->
   <tal:block metal:define-macro="xpoint_project_views_list">
-    <table width="100%" cellpadding="2" border="0" cellspacing="0"><tbody><tr><td>
+    <table width="98%" align="center" cellpadding="2" border="0" cellspacing="0"><tbody><tr><td>
     <div style="float: right;">
     <!-- create the menu here. -->
 <ul id="qm0" class="qmmc">

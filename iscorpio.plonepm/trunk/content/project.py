@@ -14,42 +14,35 @@ from Products.Archetypes.public import RichWidget
 from Products.Archetypes.public import LinesField
 from Products.Archetypes.public import InAndOutWidget
 from Products.Archetypes.public import LinesWidget
+from Products.Archetypes.public import DisplayList
 from Products.Archetypes.public import registerType
 # from ATContentTypes
 from Products.ATContentTypes.atct import ATFolder
 from Products.ATContentTypes.atct import ATFolderSchema
 from Products.ATContentTypes.configuration import zconf
 
-try: # Plone 3.0.x
-    from Products.CMFCore import permissions as CMFCorePermissions
-except: # Old CMF
-    from Products.CMFCore import CMFCorePermissions
-from Products.CMFCore.permissions import View
 from Products.CMFCore.utils import getToolByName
 
 # the configruation info for this project.
-from Products.XPointProjectManagement.config import *
+from Products.XPointProjectManagement.config import PROJECTNAME
 
 # define a XPointProject as a folder in plone site.
 XPointProjectSchema = ATFolderSchema.copy() + Schema((
 
         # detail description for this project, it allows rich text.
         TextField(
-            'project_text',
+            'xpproject_text',
             searchable = True,
             required = True,
-            allowable_content_types = zconf.ATDocument.allowed_content_types,
-            default_content_type = zconf.ATDocument.default_content_type,
             default_output_type = 'text/x-html-safe',
             widget = RichWidget(
                 label = 'Project body',
-                description = 'Provide details description for your project',
                 rows = 22,
                 ),
             ),
         # developers for this project
         LinesField(
-            'project_developers',
+            'xpproject_developers',
             searchable = False,
             required = True,
             vocabulary = 'vocabulary_allMembersList',
@@ -60,7 +53,7 @@ XPointProjectSchema = ATFolderSchema.copy() + Schema((
             ),
         # modules
         LinesField(
-            'project_modules',
+            'xpproject_modules',
             searchable = False,
             required = True,
             widget = LinesWidget(
@@ -75,12 +68,6 @@ XPointProjectSchema = ATFolderSchema.copy() + Schema((
 # customizing the schema here, set visible of some fields, location of
 # some fields.
 
-# make this related items field visible and move to bottom.
-XPointProjectSchema['relatedItems'].widget.visible = True
-XPointProjectSchema['relatedItems'].widget.description = \
-    "Select related items"
-XPointProjectSchema.moveField('relatedItems', pos='bottom')
-
 # here is the class.
 class XPointProject(ATFolder):
     """XPointProject defines a software project following eXtreme
@@ -94,37 +81,10 @@ class XPointProject(ATFolder):
     portal_type = 'XPointProject'
     archetype_name = 'XP Project'
 
-    content_icon = 'XPProject_icon.gif'
-    # view.
-    immediate_view = 'xpointproject_view'
-    default_view = 'xpointproject_release_view'
-
     _at_rename_after_creation = True
-    global_allow = True
-
-    # restrict allowed content types.
-    filter_content_types = True
-    allowed_content_types = ('XPointStory', 'XPointRelease', 'Topic')
 
     # the logger.
     log = logging.getLogger("XPointProjectManagement Project")
-
-    actions = ({
-        'id': 'view',
-        'name': 'View',
-        'action': 'string:${object_url}/xpointproject_view',
-        'permissions': (CMFCorePermissions.View,)
-        },{
-        'id': 'edit',
-        'name': 'Edit',
-        'action': 'string:${object_url}/base_edit',
-        'permissions': (CMFCorePermissions.ViewManagementScreens,)
-        },{
-        'id': 'metadata',
-        'name': 'Properties',
-        'action': 'string:${object_url}/base_metadata',
-        'permissions': (CMFCorePermissions.ViewManagementScreens,)
-        },)
 
     # preparing class security info for methods.
     security = ClassSecurityInfo()
@@ -147,13 +107,13 @@ class XPointProject(ATFolder):
     def getProjectDevelopers(self):
         """ returns all developers for this project.
         """
-        return self.getProject_developers()
+        return self.getXpproject_developers()
 
     security.declarePublic('getProjectModules')
     def getProjectModules(self):
         """ returns all modules for this project.
         """
-        return self.getProject_modules()
+        return self.getXpproject_modules()
 
     security.declarePublic('getProjectReleases')
     def getProjectReleases(self):
@@ -203,7 +163,7 @@ class XPointProject(ATFolder):
         """
         stories = []
         for story in self.getProjectStories():
-            if story.getStory_module() == moduleName:
+            if story.getXpstory_module() == moduleName:
                 stories.append(story)
 
         return stories
@@ -214,7 +174,7 @@ class XPointProject(ATFolder):
         """
         stories = []
         for story in self.getProjectStories():
-            if releaseId in story.getStory_releases():
+            if releaseId in story.getXpstory_releases():
                 stories.append(story)
 
         return stories
@@ -227,7 +187,7 @@ class XPointProject(ATFolder):
         cpath = '/'.join(self.getPhysicalPath())
         query = {
             'portal_type':['XPointTask'],
-            'sort_on':'getTask_completion_date',
+            'sort_on':'getXptask_completion_date',
             'sort_order':'reverse',
             'path':cpath,
             }
@@ -285,7 +245,7 @@ class XPointProject(ATFolder):
         cpath = '/'.join(self.getPhysicalPath())
         query = {
             'portal_type':['XPointIssue'],
-            'getXpoint_tracking_status':['open','pending',],
+            'getXpproject_document_status':['open','pending',],
             'sort_on':'Date',
             'sort_order':'reverse',
             'path':cpath,
@@ -301,8 +261,8 @@ class XPointProject(ATFolder):
         cpath = '/'.join(self.getPhysicalPath())
         query = {
             'portal_type':['XPointTask'],
-            'getTask_owners':memberId,
-            'sort_on':'getTask_completion_date',
+            'getXptask_owners':memberId,
+            'sort_on':'getXptask_completion_date',
             'sort_order':'reverse',
             'path':cpath,
             }

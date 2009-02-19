@@ -1,4 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
       lang="en"
       metal:use-macro="here/main_template/macros/master"
       i18n:domain="plone">
@@ -16,6 +19,7 @@
 <metal:main fill-slot="main">
   <tal:main-macro metal:define-macro="main">
 
+    <!-- header -->
     <tal:block
        metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_project_view_header"
     />
@@ -53,7 +57,7 @@
         </p>
 
         <p>
-          <span tal:content="structure release/getRelease_text" />
+          <span tal:content="structure release/getXpproject_text" />
         </p>
 
         <!-- story list for the selected release -->
@@ -66,11 +70,10 @@
       </tal:block>
     </tal:block>
 
-    <!-- related items list. -->
-    <div metal:use-macro="here/document_relateditems/macros/relatedItems">
-      Show related items if they exist
-    </div>
-    <div class="visualClear" id="clear-space-after-relatedItems"></div>
+    <!-- footer. -->
+    <tal:block
+       metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_project_view_footer"
+    />
 
   </tal:main-macro>
 </metal:main>

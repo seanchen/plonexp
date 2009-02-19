@@ -17,6 +17,9 @@ Leverage on Plone Workflow
 leverage on plone workflow to let everybody can add memo, issue,
 and/or proposal to each task, story, and project.
 
+we need "Add plone content" + plone_workflow setting, and revise the 
+folder_workflow to disable list content of folder.
+
 Leverage on Smart Folder
 
 leverage on smart folder to provide a full list of memos, issues, and

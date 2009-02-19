@@ -4,3 +4,5 @@ import project
 import story
 import task
 import memo
+import issue
+import proposal

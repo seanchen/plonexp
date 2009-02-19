@@ -1,6 +1,6 @@
-# memo.py
+# issue.py
 
-__doc__ = """XPointMemo defines the memo for a XPoint Project."""
+__doc__ = """XPointMemo records issue for a XPoint Project."""
 __author__ = 'Xiang(Sean) Chen <chyxiang@gmail.com>'
 __docformat__ = 'plaintext'
 
@@ -11,6 +11,8 @@ from AccessControl import ClassSecurityInfo
 from Products.Archetypes.public import Schema
 from Products.Archetypes.public import TextField
 from Products.Archetypes.public import RichWidget
+from Products.Archetypes.public import StringField
+from Products.Archetypes.public import SelectionWidget
 from Products.Archetypes.public import registerType
 # from ATContentType
 from Products.ATContentTypes.content.base import ATCTContent
@@ -25,67 +27,82 @@ from Products.CMFCore.permissions import View
 
 from Products.XPointProjectManagement.config import *
 
-# define the schem for XPointMemo.
-XPointMemoSchema = ATContentTypeSchema.copy() + Schema((
+# the XPointIssue schema.
+XPointIssueSchema = ATContentTypeSchema.copy() + Schema((
 
-        # we need rich content for this memo.
+        # the issue details description.
         TextField(
-            'memo_text',
+            'issue_text',
             searchable = True,
             required = True,
             allowable_content_types = zconf.ATDocument.allowed_content_types,
             default_content_type = zconf.ATDocument.default_content_type,
             default_output_type = 'text/x-html-safe',
             widget = RichWidget(
-                label = 'Memo Body',
-                description = 'Provide the detail description for your memo',
+                label = 'Issue Body',
+                description = 'Provide the detail description for your issue',
                 rows = 18,
                 ),
             ),
 
-        # do we need a status field?
+        # the status for this issue.
+        StringField(
+            'xpoint_tracking_status',
+            searchable = False,
+            required = True,
+            default = 'open',
+            vocabulary = (
+                ('open', 'Open'),
+                ('pending', 'Pending'),
+                ('close', 'Close'),
+                ),
+            widget = SelectionWidget(
+                label = 'Issue Status',
+                descrpiton = 'Set status for this issue.',
+                format = 'select',
+                ),
+            ),
 
-        # do we need a type field?
         )
     )
 
-# we don't need descrpiton field for a memo.
-XPointMemoSchema['description'].widget.visible = False
+# make description invisible.
+XPointIssueSchema['description'].widget.visible = False
 
-# move the related items field to the bottom.
-XPointMemoSchema['relatedItems'].widget.visible = True
-XPointMemoSchema['relatedItems'].widget.description = \
+# move the related items to the buttom.
+XPointIssueSchema['relatedItems'].widget.visible = True
+XPointIssueSchema['relatedItems'].widget.description = \
     "Select related tasks"
-XPointMemoSchema.moveField('relatedItems', pos='bottom')
+XPointIssueSchema.moveField('relatedItems', pos='bottom')
 
-# XPointMemo class.
-class XPointMemo(ATCTContent):
-    """ XPointMemo defines the note for a XPoint Project.
+# the class.
+class XPointIssue(ATCTContent):
+    """ XPointIssue records a issue for a XPoint Project.
     """
 
-    schema = XPointMemoSchema
+    schema = XPointIssueSchema
 
-    # type, name.
-    meta_type = 'XPointMemo'
-    portal_type = 'XPointMemo'
-    archetype_name = 'XP Memo'
+    # type and name
+    meta_type = 'XPointIssue'
+    portal_type = 'XPointIssue'
+    archetype_name = "XP Issue"
 
-    content_icon = 'XPMemo_icon.gif'
-    immediate_view = 'xpointmemo_view'
-    default_view = 'xpointmemo_view'
+    content_icon = 'XPIssue_icon.gif'
+    immediate_view = 'xpointissue_view'
+    default_view = 'xpointissue_view'
 
     _at_rename_after_creation = True
     global_allow = False
     filter_content_types = False
     allowed_content_types = []
 
-    # allow discuss on memo.
+    # allow discuss on issue.
     allow_discussion = True
 
     actions = ({
         'id': 'view',
         'name': 'View',
-        'action': 'string:${object_url}/xpointmemo_view',
+        'action': 'string:${object_url}/xpointissue_view',
         'permissions': (CMFCorePermissions.View,)
         },{
         'id': 'edit',
@@ -97,4 +114,4 @@ class XPointMemo(ATCTContent):
     security = ClassSecurityInfo()
 
 # register this type to plone add-on product.
-registerType(XPointMemo, PROJECTNAME)
+registerType(XPointIssue, PROJECTNAME)

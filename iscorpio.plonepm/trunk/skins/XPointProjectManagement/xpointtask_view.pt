@@ -26,9 +26,8 @@
 
     <table class="listing" width="100%"><tbody>
       <tr>
-        <th>Owner(s)</th>
-        <th>Estimated hours</th>
-        <th>Progress Status</th>
+        <th width="120">Owner(s)</th>
+        <th>Estimated hours / Progress Status</th>
       </tr>
       <tr>
         <td>
@@ -39,12 +38,14 @@
           </tal:block>
           </strong>
         </td>
-        <td><span tal:content="here/getTask_estimated_hours" /></td>
         <td>
+          <div align="center"><strong>
+            <span tal:content="here/getTask_estimated_hours" /> hours / 
+            <span tal:content="python: str(here.getTask_progress_percent()) + '%'" />
+          </strong></div>
           <div id="XPointProgressBar">
             <div class="fill" align="center"
                  tal:attributes="style python: 'width: ' + str(here.getTask_progress_percent()) + '%'">
-              <span tal:content="python: str(here.getTask_progress_percent()) + '%'"></span>
             </div>
           </div>
         </td>
@@ -53,6 +54,51 @@
 
     <div>
       <span tal:content="structure here/getTask_text" />
+    </div>
+
+    <div tal:define="notesList python: here.getTaskMemosIssuesProposals();"
+         tal:condition="notesList">
+
+      <h2>Memos, Issues, Proposals</h2>
+
+      <table class="listing" width="100%"><tbody>
+        <tr>
+          <th>Title</th>
+          <th>Creator</th>
+          <th>Status</th>
+        </tr>
+
+        <!-- memos -->
+        <tal:block tal:repeat="obj python: notesList">
+          <tr tal:define="oddrow repeat/obj/odd;
+                          url obj/getURL|obj/absolute_url;
+                          obj_type obj/portal_type;
+                          obj_typeinfo python:here.portal_types.getTypeInfo(obj_type);
+                          icon python:portal_url + '/' + obj_typeinfo.getIcon();"
+              tal:attributes="class python:test(oddrow, 'odd', 'even')">
+            <td>
+              <a href="#" tal:attributes="href url">
+                <img src="#" height="16" width="16"
+                     tal:attributes="src icon"/>&nbsp;
+                <span tal:content="obj/Title"/>
+              </a>
+            </td>
+            <td tal:define="creator obj/Creator;
+                            author python: mtool.getMemberInfo(creator);">
+              <span tal:content="python: author['fullname']" />
+            </td>
+            <td>
+              <div tal:condition="python: obj_type == 'XPointMemo'">N/A</div>
+              <div tal:condition="python: obj_type == 'XPointIssue'">
+                <span tal:content="obj/getXpoint_tracking_status"/>
+              </div>
+              <div tal:condition="python: obj_type == 'XPointProposal'">
+                <span tal:content="obj/getXpoint_tracking_status"/>
+              </div>
+            </td>
+          </tr>
+        </tal:block>
+      </tbody></table>
     </div>
 
     <div metal:use-macro="here/document_relateditems/macros/relatedItems">

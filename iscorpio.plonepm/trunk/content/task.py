@@ -125,7 +125,7 @@ class XPointTask(ATFolder):
     allow_discussion = True
 
     filter_content_types = True
-    allowed_content_types = ('XPointMemo',)
+    allowed_content_types = ('XPointMemo', 'XPointIssue', 'XPointProposal', )
 
     actions = ({
         'id': 'view',
@@ -159,6 +159,46 @@ class XPointTask(ATFolder):
                    for member in portalMembers.listMembers()]
 
         return DisplayList(members)
+
+    security.declarePublic('getTaskMemos')
+    def getTaskMemos(self):
+        """ returns all memos about this task.
+        """
+        return self.contentValues(
+            filter = {
+                'portal_type':['XPointMemo']
+                }
+            )
+
+    security.declarePublic('getTaskIssues')
+    def getTaskIssues(self):
+        """ returns all issues of this task.
+        """
+        return self.contentValues(
+            filter = {
+                'portal_type':['XPointIssue']
+                }
+            )
+
+    security.declarePublic('getTaskProposals')
+    def getTaskProposals(self):
+        """ retruns all proposals for this task.
+        """
+        return self.contentValues(
+            filter = {
+                'portal_type':['XPointProposal']
+                }
+            )
+
+    security.declarePublic('getTaskMemosIssuesProposals')
+    def getTaskMemosIssuesProposals(self):
+        """ returns all memos, issues, proposals for this task.
+        """
+        return self.contentValues(
+            filter = {
+                'portal_type':['XPointMemo', 'XPointIssue', 'XPointProposal']
+                }
+            )
 
 # register this type.
 registerType(XPointTask, PROJECTNAME)

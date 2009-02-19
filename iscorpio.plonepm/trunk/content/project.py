@@ -22,6 +22,7 @@ try: # Plone 3.0.x
 except: # Old CMF
     from Products.CMFCore import CMFCorePermissions
 from Products.CMFCore.permissions import View
+from Products.CMFCore.utils import getToolByName
 
 # the configruation info for this project.
 from Products.XPointProjectManagement.config import *
@@ -80,7 +81,7 @@ class XPointProject(ATFolder):
 
     # restrict allowed content types.
     filter_content_types = True
-    allowed_content_types = ('XPointStory')
+    allowed_content_types = ('XPointStory', 'Topic')
 
     # the logger.
     log = logging.getLogger("XPointProjectManagement Project")
@@ -138,6 +139,20 @@ class XPointProject(ATFolder):
             progressPercent = progress / len(stories)
 
         return progressPercent
+
+    security.declarePublic('getOutstandingIssues')
+    def getOutstandingIssues(self):
+        """ returns issues with status open and pending.
+        """
+        portal_catalog = getToolByName(self, 'portal_catalog')
+        cpath = '/'.join(self.getPhysicalPath())
+        query = {
+            'portal_type':['XPointIssue'],
+            'getXpoint_tracking_status':['open','pending',],
+            'path':cpath,
+            }
+
+        return portal_catalog.searchResults(query)
 
 # register to the plone add-on product.
 registerType(XPointProject, PROJECTNAME)

@@ -23,6 +23,7 @@ try: # Plone 3.0.x
 except: # Old CMF
     from Products.CMFCore import CMFCorePermissions
 from Products.CMFCore.permissions import View
+from Products.CMFCore.utils import getToolByName
 
 # the configruation info for this project.
 from Products.XPointProjectManagement.config import *
@@ -142,6 +143,23 @@ class XPointStory(ATFolder):
     def getStoryTasks(self):
       """ returns all tasks in this story.
       """
-      return self.contentValues(filter={'portal_type':['XPointTask']})
+      return self.contentValues(
+          filter = {
+              'portal_type':['XPointTask']
+              }
+          )
+
+    security.declarePublic('getStroyMemosIssuesProposals')
+    def getStoryMemosIssuesProposals(self):
+        """ return all memos for this story, should includes all tasks' memo.
+        """
+        portal_catalog = getToolByName(self, 'portal_catalog')
+        cpath = '/'.join(self.getPhysicalPath())
+        query = {
+            'portal_type':['XPointMemo', 'XPointIssue', 'XPointProposal',],
+            'path':cpath,
+            }
+
+        return portal_catalog.searchResults(query)
 
 registerType(XPointStory, PROJECTNAME)

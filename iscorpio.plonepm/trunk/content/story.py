@@ -14,6 +14,9 @@ from Products.Archetypes.public import TextField
 from Products.Archetypes.public import RichWidget
 from Products.Archetypes.public import StringField
 from Products.Archetypes.public import SelectionWidget
+from Products.Archetypes.public import LinesField
+from Products.Archetypes.public import InAndOutWidget
+from Products.Archetypes.public import DisplayList
 from Products.Archetypes.public import registerType
 # from ATContentTypes
 from Products.ATContentTypes.atct import ATFolder
@@ -49,7 +52,7 @@ XPointStorySchema = ATFolderSchema.copy() + Schema((
                 ),
             ),
 
-        # this all we need so far.
+        # the module for this tory.
         StringField(
             'story_module',
             searchable = False,
@@ -60,6 +63,18 @@ XPointStorySchema = ATFolderSchema.copy() + Schema((
                 label = "Module",
                 description = "Select the module for this story",
                 format = 'select'
+                ),
+            ),
+
+        # select the release that this story will be included.
+        LinesField(
+            'story_releases',
+            searchable = True,
+            required = True,
+            vocabulary = 'vocabulary_releases',
+            widget = InAndOutWidget(
+                label = 'Planned Releases',
+                description = 'Select planned releases for this story',
                 ),
             ),
         ),
@@ -123,6 +138,15 @@ class XPointStory(ATFolder):
         })
 
     security = ClassSecurityInfo()
+
+    def vocabulary_releases(self):
+        """ Return all available releases for this story.
+        """
+        releases = []
+        for release in self.getProjectReleases():
+            releases.append((release.id, release.title))
+
+        return DisplayList(releases)
 
     security.declarePublic('getStoryEstimatedHours')
     def getStoryEstimatedHours(self):

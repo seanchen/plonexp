@@ -69,18 +69,6 @@ XPointProjectSchema = ATFolderSchema.copy() + Schema((
                 cols = 40,
                 ),
             ),
-        # pages
-        # milestone
-        LinesField(
-            'project_milestones',
-            searchable = False,
-            required = True,
-            widget = LinesWidget(
-                label = 'Project Milestone',
-                description = 'Please define the milestones for your project, one per line',
-                cols = 40,
-                )
-            ),
         )
     )
 
@@ -109,14 +97,14 @@ class XPointProject(ATFolder):
     content_icon = 'XPProject_icon.gif'
     # view.
     immediate_view = 'xpointproject_view'
-    default_view = 'xpointproject_view'
+    default_view = 'xpointproject_release_view'
 
     _at_rename_after_creation = True
     global_allow = True
 
     # restrict allowed content types.
     filter_content_types = True
-    allowed_content_types = ('XPointStory', 'Topic')
+    allowed_content_types = ('XPointStory', 'XPointRelease', 'Topic')
 
     # the logger.
     log = logging.getLogger("XPointProjectManagement Project")
@@ -167,17 +155,47 @@ class XPointProject(ATFolder):
         """
         return self.getProject_modules()
 
-    security.declarePublic('getProjectMilestones')
-    def getProjectMilestones(self):
-        """ returns all milestones defined in this project.
+    security.declarePublic('getProjectReleases')
+    def getProjectReleases(self):
+        """ returns all releases defined in this project.
         """
-        return self.getProject_milestones()
+        # order sub-objects by id and reverse.
+        #self.orderObjects(self.id, reverse=True)
+        return self.contentValues(
+            filter = {'portal_type':['XPointRelease']}
+            )
+
+    security.declarePublic('getProjectRelease')
+    def getProjectRelease(self, releaseId):
+        """ return the release notes for the specified release id.
+        """
+        for release in self.getProjectReleases():
+            if release.id == releaseId:
+                return release
+
+        return None
+
+    security.declarePublic('getProjectPublishedReleases')
+    def getProjectPublishedReleaseIds(self):
+        """ returns a list of published release ids.
+        """
+        wtool = getToolByName(self, 'portal_workflow')
+        releaseIds = []
+        for release in self.getProjectReleases():
+            if wtool.getInfoFor(release, 'review_state') == 'published':
+                releaseIds.append(release.id)
+
+        releaseIds.sort()
+        releaseIds.reverse()
+        return releaseIds
 
     security.declarePublic('getProjectStories')
     def getProjectStories(self):
         """ returns all stories in this project.
         """
-        return self.contentValues(filter={'portal_type': ['XPointStory']})
+        return self.contentValues(
+            filter = {'portal_type': ['XPointStory']}
+            )
 
     security.declarePublic('getModuleStories')
     def getModuleStories(self, moduleName):
@@ -186,6 +204,17 @@ class XPointProject(ATFolder):
         stories = []
         for story in self.getProjectStories():
             if story.getStory_module() == moduleName:
+                stories.append(story)
+
+        return stories
+
+    security.declarePublic('getReleaseStories')
+    def getReleaseStories(self, releaseId):
+        """ return all stories for the given release.
+        """
+        stories = []
+        for story in self.getProjectStories():
+            if releaseId in story.getStory_releases():
                 stories.append(story)
 
         return stories

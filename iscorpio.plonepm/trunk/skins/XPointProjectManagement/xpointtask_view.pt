@@ -26,14 +26,21 @@
 
     <table class="listing" width="100%"><tbody>
       <tr>
-        <th width="120">Owner(s)</th>
-        <th>Estimated hours / Progress Status</th>
+        <th>Owner(s)</th>
+        <th>90% Done On</th>
+        <th>Used</th>
+        <th>Estimated Hours / Progress Status</th>
       </tr>
       <tr>
         <td tal:define="membersList here/getTask_owners">
           <tal:block
              metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_developers_list"
           />
+        </td>
+        <td tal:content="here/getTask_completion_date">
+        </td>
+        <td>
+          <span tal:content="here/getTask_used_hours"/> hours
         </td>
         <td tal:define="estimatedHours here/getTask_estimated_hours;
                         progressPercent here/getTask_progress_percent;">

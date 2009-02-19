@@ -77,16 +77,18 @@
   </tal:black>
   <!-- ==================================================================== -->
 
-	<!-- ==================================================================== -->
-	<!-- macro for tasks list. -->
-	<!-- parm: tasksList -->
-	<!-- ==================================================================== -->
-	<tal:block metal:define-macro="xpoint_tasks_list">
+  <!-- ==================================================================== -->
+  <!-- macro for tasks list. -->
+  <!-- parm: tasksList -->
+  <!-- ==================================================================== -->
+  <tal:block metal:define-macro="xpoint_tasks_list">
     <table class="listing" width="100%"><tbody>
       <tr>
         <th>Task</th>
         <th>Owners</th>
-        <th width="458">Estimated hours / Progress Status</th>
+        <th>90% Done On</th>
+        <th>Used</th>
+        <th width="458">Estimated Hours / Progress Status</th>
       </tr>
       <!-- one row for each task. -->
       <tal:block tal:repeat="task python: tasksList">
@@ -108,6 +110,11 @@
                metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_developers_list"
             />
           </td>
+          <td tal:content="task/getTask_completion_date">
+          </td>
+          <td>
+            <span tal:content="task/getTask_used_hours"/> hours
+          </td>
           <td tal:define="estimatedHours task/getTask_estimated_hours;
                           progressPercent task/getTask_progress_percent;">
             <tal:block
@@ -117,8 +124,8 @@
         </tr>
       </tal:block>
     </tbody></table>
-	</tal:block>
-	<!-- ==================================================================== -->
+  </tal:block>
+  <!-- ==================================================================== -->
 
   <!-- ==================================================================== -->
   <!-- xpoint macro for issues/memos/proposals list -->
@@ -215,8 +222,25 @@
     <!-- create the menu here. -->
 <ul id="qm0" class="qmmc">
 
+  <!-- releases -->
+  <tal:block tal:define="releaseIds python:here.getProjectPublishedReleaseIds();">
+  <li tal:condition="releaseIds">
+    <a class="qmparent" href="#">Releases</a>
+
+    <ul style="width:141px;">
+      <tal:block tal:repeat="release python:releaseIds">
+        <li>
+          <a tal:attributes="href python: portal_url + projectURL + '/xpointproject_release_view?releaseId=' + release"
+             tal:content="python: release">
+            module name
+          </a>
+        </li>
+      </tal:block>
+    </ul></li>
+  </tal:block>
+
   <!-- stories -->
-  <li><a class="qmparent" href="#">Stories</a>
+  <li><a class="qmparent" href="#">Views</a>
 
     <ul style="width:141px;">
       <li><a class="qmparent" href="#"

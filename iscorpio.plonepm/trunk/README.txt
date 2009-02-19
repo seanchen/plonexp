@@ -29,3 +29,16 @@ Leverage on portal_catalog
 
 For this version, you have to manually create index and metadata for 
 field getXpoint_tracking_status
+
+Thinking about programmly add the following metadata to portal_catalog.
+  getXpoint_tracking_status
+  getTask_estimated_hours
+  getTask_used_hours
+  getTask_owners
+  getTask_progress_percent
+  getTask_completion_date
+we may not need the add those fields into index, except
+getXpoint_tracking_status.
+
+????? looks like we have to add all of them into the index.
+

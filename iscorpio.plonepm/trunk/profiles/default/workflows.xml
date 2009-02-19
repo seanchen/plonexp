@@ -5,6 +5,9 @@
     <type type_id="XPointProject">
       <bound-workflow workflow_id="plone_workflow"/>
     </type>
+    <type type_id="XPointMetadata">
+      <bound-workflow workflow_id="plone_workflow"/>
+    </type>
     <type type_id="XPointStory">
       <bound-workflow workflow_id="plone_workflow"/>
     </type>

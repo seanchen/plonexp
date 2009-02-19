@@ -15,6 +15,8 @@ from Products.Archetypes.public import IntegerWidget
 from Products.Archetypes.public import SelectionWidget
 from Products.Archetypes.public import LinesField
 from Products.Archetypes.public import InAndOutWidget
+from Products.Archetypes.public import DateTimeField
+from Products.Archetypes.public import CalendarWidget
 from Products.Archetypes.public import DisplayList
 from Products.Archetypes.public import IntDisplayList
 from Products.Archetypes.public import registerType
@@ -50,14 +52,16 @@ XPointTaskSchema = ATFolderSchema.copy() + Schema((
                 ),
             ),
 
-        # estimated hours for this task.
-        IntegerField(
-            'task_estimated_hours',
+        # planned completed date, 90% finish deadline
+        DateTimeField(
+            'task_completion_date',
             searchable = False,
-            required = False,
-            widget = IntegerWidget(
-                label = 'Estimated Hours',
-                descrpiton = 'Put here the estimated hours for this task',
+            required = True,
+            widget = CalendarWidget(
+                label = '90% Completion Deadline',
+                description = 'Specify the date when this task should be completed at less 90%',
+                starting_year = 2007,
+                show_hm = False,
                 ),
             ),
 
@@ -73,6 +77,28 @@ XPointTaskSchema = ATFolderSchema.copy() + Schema((
                 label = 'Progress Status',
                 descrpiton = 'Progress status in percentage 0% - 100%',
                 format = 'select',
+                ),
+            ),
+
+        # estimated hours for this task.
+        IntegerField(
+            'task_estimated_hours',
+            searchable = False,
+            required = False,
+            widget = IntegerWidget(
+                label = 'Estimated Hours',
+                descrpiton = 'Put here the estimated hours for this task',
+                ),
+            ),
+
+        # used hours for this task.
+        IntegerField(
+            'task_used_hours',
+            searchable = False,
+            required = False,
+            widget = IntegerWidget(
+                label = 'Actual Used Hours',
+                descrpiton = 'Put here the actual used hours for this task',
                 ),
             ),
 

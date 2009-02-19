@@ -15,79 +15,22 @@
 
 <metal:main fill-slot="main">
   <tal:main-macro metal:define-macro="main">
-    
-    <div metal:use-macro="here/document_actions/macros/document_actions">
-        Document actions (print, sendto etc)
-    </div>
 
-    <h1 tal:content="object_title" class="documentFirstHeading">
-      Title or id
-    </h1>
-    
-    <div metal:use-macro="here/document_byline/macros/byline">
-      Get the byline - contains details about author and modification date.
-    </div>
-
-    <!-- display the subtotal progress bar here? or Not? -->
-    <table class="listing" width="100%"><tbody>
-      <tr>
-        <th>Estimated hours / Progress Status</th>
-      </tr>
-      <tr>
-        <td tal:define="estimatedHours python: here.getProjectEstimatedHours();
-                        progressPercent python: here.getProjectProgressPercent();">
-          <tal:block
-             metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_progress_bar"
-          />
-        </td>
-      </tr>
-    </tbody></table>
-
-    <div>
-      <span tal:content="structure here/getProject_text" />
-    </div>
+    <tal:block
+       metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_project_view_header"
+    />
 
     <!-- find all tasks for this story and list all of them as a table, -->
     <!-- each task will be a row in this table. -->
     <div tal:define="storiesList python: here.getProjectStories();
-                     issuesList python: here.getOutstandingIssues();
-                     developersList python: here.portal_catalog.uniqueValuesFor('getTask_owners');">
+                     impsList python: here.getOutstandingIssues();">
 
       <!-- outstanding issues -->
-      <div tal:condition="issuesList">
+      <div tal:condition="impsList">
         <h2>Outstanding Issues</h2>
-        <table class="listing" width="100%"><tbody>
-          <tr>
-            <th>Title</th>
-            <th>Creator</th>
-            <th>Status</th>
-          </tr>
-  
-          <!-- memos -->
-          <tal:block tal:repeat="obj python: issuesList">
-            <tr tal:define="oddrow repeat/obj/odd;
-                            url obj/getURL|obj/absolute_url;
-                            obj_type obj/portal_type;
-                            obj_typeinfo python:here.portal_types.getTypeInfo(obj_type);
-                            icon python:portal_url + '/' + obj_typeinfo.getIcon();"
-                tal:attributes="class python:test(oddrow, 'odd', 'even')">
-              <td>
-                <a href="#" tal:attributes="href url">
-                  <img src="#" height="16" width="16"
-                       tal:attributes="src icon"/>&nbsp;
-                  <span tal:content="obj/Title"/>
-                </a>
-              </td>
-              <td tal:define="creator obj/Creator;
-                              author python: mtool.getMemberInfo(creator);">
-                <span tal:content="python: author['fullname']" />
-              </td>
-              <td>
-                <span tal:content="python: obj['getXpoint_tracking_status']"/>
-              </td>
-            </tr>
-          </tal:block>
-        </tbody></table>
+        <tal:block
+           metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_imps_list"
+        />
       </div>
 
       <!-- the views list. -->
@@ -97,38 +40,12 @@
         />
       </div>
 
-      <div tal:condition="storiesList">
-        <h2>Stories List</h2>
-        <table class="listing" width="100%"><tbody>
-          <tr>
-            <th>Story</th>
-            <th width="458">Estimated hours / Progress Status</th>
-          </tr>
-          <!-- one row for each story. -->
-          <tal:block tal:repeat="story python: storiesList">
-            <tr tal:define="oddrow repeat/story/odd;
-                            url story/getURL|story/absolute_url;
-                            story_type story/portal_type;
-                            story_typeinfo python: here.portal_types.getTypeInfo(story_type);
-                            icon python: portal_url + '/' + story_typeinfo.getIcon();"
-                tal:attributes="class python: test(oddrow, 'odd', 'even')">
-              <td>
-                <a href="#" tal:attributes="href url">
-                  <img src="#" height="16" width="16"
-                       tal:attributes="src icon"/>&nbsp;
-                  <span tal:content="story/Title"/>
-                </a>
-              </td>
-              <td tal:define="estimatedHours python: story.getStoryEstimatedHours();
-                              progressPercent python: story.getStoryProgressPercent();">
-                <tal:block
-                   metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_progress_bar"
-                />
-              </td>
-            </tr>
-          </tal:block>
-        </tbody></table>
-      </div>
+	    <div tal:condition="storiesList">
+				<h2>Stories List</h2>
+				<tal:block
+					 metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_stories_list"
+				/>
+			</div>
     </div>
 
     <!-- related items list. -->

@@ -12,6 +12,8 @@ from AccessControl import ClassSecurityInfo
 from Products.Archetypes.public import Schema
 from Products.Archetypes.public import TextField
 from Products.Archetypes.public import RichWidget
+from Products.Archetypes.public import StringField
+from Products.Archetypes.public import SelectionWidget
 from Products.Archetypes.public import registerType
 # from ATContentTypes
 from Products.ATContentTypes.atct import ATFolder
@@ -46,7 +48,20 @@ XPointStorySchema = ATFolderSchema.copy() + Schema((
                 rows = 22,
                 ),
             ),
+
         # this all we need so far.
+        StringField(
+            'story_module',
+            searchable = False,
+            required = True,
+            vocabulary = 'getProjectModules',
+            default = 'mosapp',
+            widget = SelectionWidget(
+                label = "Module",
+                description = "Select the module for this story",
+                format = 'select'
+                ),
+            ),
         ),
     )
 

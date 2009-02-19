@@ -9,13 +9,6 @@
         tal:attributes="href string:xpprogressbar.css"/>
   <LINK href="xpmenu.css" type="text/css" rel="stylesheet"
         tal:attributes="href string:xpmenu.css"/>
-  <!-- NOTE: order is important for these CSS style sheets. -->
-  <LINK href="tabber.css" type="text/css" rel="stylesheet" 
-        tal:attributes="href string:tabber.css"/>
-  <script type="text/javascript" src="tabber.js" 
-        tal:attributes="src string:tabber-cookies.js"></script>
-  <script type="text/javascript" src="tabber.js" 
-        tal:attributes="src string:tabber.js"></script>
   <script type="text/javascript" src="xpmenu.js" 
         tal:attributes="src string:xpmenu.js"></script>
 </metal:block>
@@ -46,30 +39,13 @@
         />
       </div>
 
-      <div tal:define="developerId request/developerId;
-                       developerInfo python: mtool.getMemberInfo(developerId);">
-        <h2>Developer Activity - <span tal:content="python: developerInfo['fullname']"/></h2>
-        <div class="tabber">
-          <!-- XP Tasks tab. -->
-          <div tal:define="tasksList python: here.getTasksForMember(developerId);"
-               tal:condition="tasksList"
-               class="tabbertab"
-          >
-            <h2>Tasks</h2>
-            <tal:block
-               metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_tasks_list"
-            />
-          </div>
-          <!-- XP Memos, Issues, Proposals tab. -->
-          <div tal:define="impsList python: here.getImpsForMember(developerId);"
-               tal:condition="impsList"
-               class="tabbertab"
-          >
-            <h2>Notes</h2>
-            <tal:block
-               metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_imps_list"
-            />
-          </div>
+      <div tal:define="moduleName request/moduleName;
+                       storiesList python: here.getModuleStories(moduleName)">
+        <div tal:condition="storiesList">
+          <h2>Stories for module [<span tal:content="python: moduleName"/>]</h2>
+          <tal:block
+             metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_stories_list"
+          />
         </div>
       </div>
     </div>

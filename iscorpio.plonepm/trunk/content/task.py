@@ -82,7 +82,7 @@ XPointTaskSchema = ATFolderSchema.copy() + Schema((
             'task_owners',
             searchable = False,
             required = False,
-            vocabulary = 'vocabulary_allMembersList',
+            vocabulary = 'vocabulary_developers',
             widget = InAndOutWidget(
                 label = 'Task Owner(s)',
                 descrpiton = "Please select owners for this task",
@@ -147,16 +147,17 @@ class XPointTask(ATFolder):
     security = ClassSecurityInfo()
 
     #security.declareProtected('vocabulary_allMembersList')
-    def vocabulary_allMembersList(self):
+    def vocabulary_developers(self):
         """ Return a list of tuple (user_id, fullname, email) for all
         the members of the portal.
         """
         members = []
         portalMembers = getToolByName(self, 'portal_membership')
-        members = [(member.id,
-                    member.getProperty('fullname',None),
-                    member.getProperty('email',None))
-                   for member in portalMembers.listMembers()]
+        developers = self.getProjectDevelopers()
+        for memberId in developers:
+            members.append((memberId,
+                            portalMembers.getMemberById(memberId).getProperty('fullname', None))
+                           )
 
         return DisplayList(members)
 

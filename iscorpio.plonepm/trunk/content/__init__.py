@@ -6,3 +6,4 @@ import XPointStory
 import XPointSysReq
 import XPointUseCase
 import XPointArtifact
+import XPointResponse

@@ -19,6 +19,8 @@ Project
   |           |     |-- <Review Artifact> Test Case Review
   |           |-- Task
   |
+  |-- Metadata
+  |
   |-- Track (Available man days)
   |     |-- View: track status to show each story's status in this track.
   |
@@ -46,6 +48,30 @@ Artifact
   |-- <selection> Priority
   |-- <selection> StroyId
   |-- <file> attachement
+
+Response
+  |-- Description
+  |-- <selection> New Status
+  |-- <selection> New Category
+  |-- <selection> New Priority
+  |-- <selection> New StoryId
+  |-- <file> attachement
+
+Metadata
+  |-- id
+  |-- type
+  |-- title
+
+TODO List
+====================================================================
+
+1. move all vocabularies to project: priority, status, category
+
+2. create project metadata type for setting up vocabuaries...
+
+2. how we handle owners list.
+
+3. 
 
 A short memo for upgrading XPointProjectManagement to Plone 3.
 ====================================================================

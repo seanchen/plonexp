@@ -23,5 +23,8 @@
     <type type_id="XPointArtifact">
       <bound-workflow workflow_id="plone_workflow"/>
     </type>
+    <type type_id="XPointResponse">
+      <bound-workflow workflow_id="plone_workflow"/>
+    </type>
   </bindings>
 </object>

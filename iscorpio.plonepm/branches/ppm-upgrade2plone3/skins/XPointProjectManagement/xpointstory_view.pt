@@ -1,0 +1,76 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plone">
+<body>
+
+<metal:block fill-slot="css_slot">
+  <LINK href="xpointtaskstyle.css" type="text/css" rel="stylesheet"
+        tal:attributes="href string:xpprogressbar.css"/>
+</metal:block>
+
+<metal:main fill-slot="main">
+  <tal:main-macro metal:define-macro="main">
+    
+    <div metal:use-macro="here/document_actions/macros/document_actions">
+        Document actions (print, sendto etc)
+    </div>
+
+    <h1 tal:content="object_title" class="documentFirstHeading">
+      Title or id
+    </h1>
+    
+    <div metal:use-macro="here/document_byline/macros/byline">
+      Get the byline - contains details about author and modification date.
+    </div>
+
+    <!-- find all tasks for this story and list all of them as a table, -->
+    <!-- each task will be a row in this table. -->
+    <div tal:define="tasksList python: here.getStoryTasks();
+                     impsList python: here.getStoryMemosIssuesProposals();">
+
+      <!-- display the subtotal progress bar here? or Not? -->
+      <table class="listing" width="100%"><tbody>
+        <tr>
+          <th>Estimated hours / Progress Status</th>
+        </tr>
+        <tr>
+          <td tal:define="estimatedHours python: here.getStoryEstimatedHours();
+                          progressPercent python: here.getStoryProgressPercent();">
+            <tal:block
+               metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_progress_bar"
+            />
+          </td>
+        </tr>
+      </tbody></table>
+  
+      <div>
+        <span tal:content="structure here/getStory_text" />
+      </div>
+
+      <div tal:condition="tasksList">
+      <h2>Tasks List</h2>
+        <tal:block
+           metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_tasks_list"
+        />
+      </div>
+
+      <div tal:condition="impsList">
+      <h2>Memos, Issues, Proposals</h2>
+        <tal:block
+           metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_imps_list"
+        />
+      </div>
+    </div>
+
+    <!-- related items list. -->
+    <div metal:use-macro="here/document_relateditems/macros/relatedItems">
+      Show related items if they exist
+    </div>
+    <div class="visualClear" id="clear-space-after-relatedItems"></div>
+
+  </tal:main-macro>
+</metal:main>
+
+</body>
+</html>

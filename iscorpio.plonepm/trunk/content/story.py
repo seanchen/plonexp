@@ -49,15 +49,8 @@ XPointStorySchema = ATFolderSchema.copy() + Schema((
         ),
     )
 
-# moving the keyworks selection to mail tab.
-XPointStorySchema['subject'].schemata = 'default'
-XPointStorySchema['subject'].required = True
-XPointStorySchema['subject'].widget.label = 'Projects'
-XPointStorySchema['subject'].widget.description = \
-    "Select projects for this build journal, holding CTRL key to select more than one project"
-XPointStorySchema['subject'].widget.size = 5
-XPointStorySchema.moveField('subject', after='description')
-
+# we don't need description here.
+XPointStorySchema['description'].widget.visible = False
 # make this related items field visible and move to bottom.
 XPointStorySchema['relatedItems'].widget.visible = True
 XPointStorySchema['relatedItems'].widget.description = \

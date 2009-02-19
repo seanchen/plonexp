@@ -24,7 +24,6 @@ except: # Old CMF
 from Products.CMFCore.permissions import View
 
 from Products.XPointProjectManagement.config import *
-from Products.XPointProjectManagement.permissions import AddXPointMemo
 
 # define the schem for XPointMemo.
 XPointMemoSchema = ATContentTypeSchema.copy() + Schema((
@@ -89,7 +88,7 @@ class XPointMemo(ATCTContent):
         'id': 'edit',
         'name': 'Edit',
         'action': 'string:${object_url}/base_edit',
-        'permissions': (CMFCorePermissions.View,)
+        'permissions': (CMFCorePermissions.ModifyPortalContent,)
         },)
 
     security = ClassSecurityInfo()

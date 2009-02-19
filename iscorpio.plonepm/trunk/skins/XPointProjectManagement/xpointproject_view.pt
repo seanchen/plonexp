@@ -26,7 +26,7 @@
 
     <!-- find all tasks for this story and list all of them as a table, -->
     <!-- each task will be a row in this table. -->
-    <div tal:define="tasksList python: here.getStoryTasks();">
+    <div tal:define="storiesList python: here.getProjectStories();">
 
       <!-- display the subtotal progress bar here? or Not? -->
       <table class="listing" width="100%"><tbody>
@@ -35,12 +35,12 @@
           <th>Progress Status</th>
         </tr>
         <tr>
-          <td><span tal:content="python: str(here.getStoryEstimatedHours())" /></td>
+          <td><span tal:content="python: str(here.getProjectEstimatedHours())" /></td>
           <td>
             <div id="XPointProgressBar">
               <div class="fill" align="center"
-                   tal:attributes="style python: 'width: ' + str(here.getStoryProgressPercent()) + '%'">
-                <span tal:content="python: str(here.getStoryProgressPercent()) + '%'"></span>
+                   tal:attributes="style python: 'width: ' + str(here.getProjectProgressPercent()) + '%'">
+                <span tal:content="python: str(here.getProjectProgressPercent()) + '%'"></span>
               </div>
             </div>
           </td>
@@ -48,7 +48,7 @@
       </tbody></table>
   
       <div>
-        <span tal:content="structure here/getStory_text" />
+        <span tal:content="structure here/getProject_text" />
       </div>
 
 <!--       <p> -->
@@ -58,40 +58,31 @@
 
       <table class="listing" width="100%"><tbody>
         <tr>
-          <th>Task</th>
-          <th width="120">Owner(s)</th>
+          <th>Story</th>
           <th width="112">Estimated hours</th>
           <th width="368">Progress Status</th>
         </tr>
         <!-- one row for each task. -->
-        <tal:block tal:repeat="task python: tasksList">
-          <tr tal:define="oddrow repeat/task/odd;
-                          url task/getURL|task/absolute_url;
-                          task_type task/portal_type;
-                          task_typeinfo python: here.portal_types.getTypeInfo(task_type);
-                          icon python: portal_url + '/' + task_typeinfo.getIcon();"
+        <tal:block tal:repeat="story python: storiesList">
+          <tr tal:define="oddrow repeat/story/odd;
+                          url story/getURL|story/absolute_url;
+                          story_type story/portal_type;
+                          story_typeinfo python: here.portal_types.getTypeInfo(story_type);
+                          icon python: portal_url + '/' + story_typeinfo.getIcon();"
               tal:attributes="class python: test(oddrow, 'odd', 'even')">
             <td>
               <a href="#" tal:attributes="href url">
                 <img src="#" height="16" width="16"
                      tal:attributes="src icon"/>
-                <span tal:content="task/Title"/>
+                <span tal:content="story/Title"/>
               </a>
             </td>
-            <td>
-              <strong>
-              <tal:block repeat="owner python: task.getTask_owners()"> 
-                <span tal:define="theOwner python: mtool.getMemberInfo(owner)"
-                      tal:content="python: theOwner['fullname']" /><br/>
-              </tal:block>
-              </strong>
-            </td>
-            <td><span tal:content="python: task.getTask_estimated_hours()" /></td>
+            <td><span tal:content="python: story.getStoryEstimatedHours()" /></td>
             <td>
               <div id="XPointProgressBar">
                 <div class="fill" align="center"
-                     tal:attributes="style python: 'width: ' + str(task.getTask_progress_percent()) + '%'">
-                  <span tal:content="python: str(task.getTask_progress_percent()) + '%'"></span>
+                     tal:attributes="style python: 'width: ' + str(story.getStoryProgressPercent()) + '%'">
+                  <span tal:content="python: str(story.getStoryProgressPercent()) + '%'"></span>
                 </div>
               </div>
             </td>

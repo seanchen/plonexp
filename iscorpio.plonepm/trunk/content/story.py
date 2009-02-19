@@ -16,7 +16,6 @@ from Products.Archetypes.public import registerType
 # from ATContentTypes
 from Products.ATContentTypes.atct import ATFolder
 from Products.ATContentTypes.atct import ATFolderSchema
-from Products.ATContentTypes.atct import ATDocument
 from Products.ATContentTypes.configuration import zconf
 
 try: # Plone 3.0.x
@@ -81,7 +80,7 @@ class XPointStory(ATFolder):
     default_view = 'xpointstory_view'
 
     _at_rename_after_creation = True
-    global_allow = True
+    global_allow = False
 
     filter_content_types = True
     allowed_content_types = ('XPointTask')

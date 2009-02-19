@@ -122,7 +122,7 @@ class XPointTask(ATFolder):
     global_allow = False
 
     filter_content_types = True
-    #allowed_content_types = ('XPointResponse')
+    allowed_content_types = ('XPointMemo',)
 
     actions = ({
         'id': 'view',

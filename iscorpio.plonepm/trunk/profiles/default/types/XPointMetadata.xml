@@ -6,7 +6,7 @@
   <property name="title" i18n:translate="">XP Metadata</property>
   <property name="description"
             i18n:translate="">A eXtreme Programing Metadata</property>
-  <property name="content_icon">XPStory_icon.gif</property>
+  <property name="content_icon">xppm_metadata_icon.gif</property>
   <property name="content_meta_type">XPointMetadata</property>
   <property name="product">XPointProjectManagement</property>
   <property name="factory">addXPointMetadata</property>

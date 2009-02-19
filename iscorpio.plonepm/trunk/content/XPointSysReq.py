@@ -36,7 +36,7 @@ class XPointSysReq(XPPMBase, XPPMDocBase):
         XPPMDocBase.__implements__,
         )
 
-    xppm_id_prefix = "sr"
+    xppm_id_prefix = "xpsr"
     log = logging.getLogger("XPointProjectManagement XPointSysReq")
 
 registerType(XPointSysReq, PROJECTNAME)

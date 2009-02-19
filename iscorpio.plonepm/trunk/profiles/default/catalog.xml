@@ -5,6 +5,12 @@
   <index name="getXppm_status" meta_type="FieldIndex">
     <indexed_attr value="getXppm_status"/>
   </index>
+  <!-- metadata type. -->
+  <index name="getXppm_metadata_type" meta_type="KeywordIndex">
+    <indexed_attr value="getXppm_metadata_type"/>
+  </index>
 
+  <!-- metadata columns -->
   <column value="getXppm_status"/>
+  <column value="getXppm_metadata_type"/>
 </object>

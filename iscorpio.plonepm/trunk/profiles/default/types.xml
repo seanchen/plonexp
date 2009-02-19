@@ -4,6 +4,8 @@
 
   <object name="XPointProject"
           meta_type="Factory-based Type Information with dynamic views"/>
+  <object name="XPointMetadata"
+          meta_type="Factory-based Type Information with dynamic views"/>
   <object name="XPointStory"
           meta_type="Factory-based Type Information with dynamic views"/>
   <object name="XPointFuncSpec"

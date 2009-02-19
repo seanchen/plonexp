@@ -97,7 +97,9 @@ class XPointIssue(ATCTContent):
     allowed_content_types = []
 
     # allow discuss on issue.
-    allow_discussion = True
+    # comment out for Plone 3, it is just doesn't work.  Need figure
+    # out the new approach for Plone 3.
+    #allow_discussion = True
 
     actions = ({
         'id': 'view',

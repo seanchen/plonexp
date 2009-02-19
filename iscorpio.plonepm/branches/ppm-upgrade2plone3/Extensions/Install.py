@@ -8,8 +8,6 @@ from Products.Archetypes.public import listTypes
 
 from StringIO import StringIO
 
-from Products.CMFDynamicViewFTI.migrate import migrateFTIs
-
 from Products.XPointProjectManagement.config import *
 
 # When the installation is executed by "Add/Remove Products" on Plone UI, 
@@ -50,8 +48,8 @@ def install(self):
     # the folder includes the photograph list etc in the Plone standard. 
     # Please refer to suppl_views of the contents type mounting class for 
     # the specification method.
-    migrated = migrateFTIs(self, product=PROJECTNAME)
-    print >>out, "Switched to DynamicViewFTI: %s" % ', '.join(migrated)
+    #migrated = migrateFTIs(self, product=PROJECTNAME)
+    #print >>out, "Switched to DynamicViewFTI: %s" % ', '.join(migrated)
 
     # When the instance of contents is newly made, the instance is made 
     # in a temporary area when portal_factory is made effective. When the 

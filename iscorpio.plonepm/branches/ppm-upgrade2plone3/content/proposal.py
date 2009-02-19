@@ -15,6 +15,7 @@ from Products.Archetypes.public import StringField
 from Products.Archetypes.public import SelectionWidget
 from Products.Archetypes.public import registerType
 # from ATContentType
+from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 from Products.ATContentTypes.interfaces import IATDocument
 from Products.ATContentTypes.content.base import ATCTContent
@@ -68,13 +69,16 @@ XPointProposalSchema = ATContentTypeSchema.copy() + Schema((
         )
     )
 
+# have to finalize for Plone 3.
+finalizeATCTSchema(XPointProposalSchema)
+
 # make description invisible.
 XPointProposalSchema['description'].widget.visible = False
-
 # move the related items to the buttom.
 XPointProposalSchema['relatedItems'].widget.visible = True
 XPointProposalSchema['relatedItems'].widget.description = \
-    "Select related tasks"
+    "Select related items"
+XPointProposalSchema.changeSchemataForField('relatedItems', 'default')
 XPointProposalSchema.moveField('relatedItems', pos='bottom')
 
 # the class.

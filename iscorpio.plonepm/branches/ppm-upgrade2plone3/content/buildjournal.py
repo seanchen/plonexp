@@ -13,6 +13,8 @@ from Products.Archetypes.public import TextField
 from Products.Archetypes.public import RichWidget
 from Products.Archetypes.public import registerType
 
+from Products.ATContentTypes.interfaces import IATDocument
+from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.content.base import ATCTContent
 from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 from Products.ATContentTypes.configuration import zconf
@@ -42,6 +44,8 @@ XPointBuildJournalSchema = ATCTContent.schema.copy() + Schema((
         ),
     )
 
+finalizeATCTSchema(XPointBuildJournalSchema)
+
 # Decide to use the build in plone keywording as the projects selection.
 # Plone Keywording field is defined as subject in class
 # Archetypes.ExtensibleMetadata.ExtensibleMetadata
@@ -58,10 +62,8 @@ XPointBuildJournalSchema.moveField('subject', after='description')
 XPointBuildJournalSchema['relatedItems'].widget.visible = True
 XPointBuildJournalSchema['relatedItems'].widget.description = \
     "Select related items"
+XPointBuildJournalSchema['relatedItems'].schemata = 'default'
 XPointBuildJournalSchema.moveField('relatedItems', pos='bottom')
-
-# this is for folder type.
-#finalizeATCTSchema(XPointBuildJournalSchema)
 
 # the XPointBuildJournal class.
 class XPointBuildJournal(ATCTContent, HistoryAwareMixin):
@@ -74,29 +76,16 @@ class XPointBuildJournal(ATCTContent, HistoryAwareMixin):
 
     content_icon = 'XPBuildJournal_icon.gif'
 
+    __implements__ = (ATCTContent.__implements__,
+                      IATDocument,
+                      HistoryAwareMixin.__implements__,
+                     )
+
     _at_rename_after_creation = True
 
     default_view = 'base_view'
     # allow 
     global_allow = True
-
-    #actions = ({
-    #        'id': 'view',
-    #        'name': 'View',
-    #        'action': 'string:${object_url}/base_view',
-    #        'permissions': (CMFCorePermissions.View,)
-    #        },{
-    #        'id': 'edit',
-    #        'name': 'Edit',
-    #        'action': 'string:${object_url}/base_edit',
-    #        'permissions': (CMFCorePermissions.ViewManagementScreens,)
-    #        },{
-    #        'id': 'metadata',
-    #        'name': 'Properties',
-    #        'action': 'string:${object_url}/base_metadata',
-    #        'permissions': (CMFCorePermissions.ViewManagementScreens,)
-    #        },
-    #    )
 
     security = ClassSecurityInfo()
 

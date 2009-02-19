@@ -8,7 +8,7 @@ from Products.CMFCore import utils
 from Products.CMFCore.DirectoryView import registerDirectory
 
 from permissions import initialize as initialize_permissions
-from config import PROJECTNAME, SKINS_DIR, GLOBALS, BUILD_JOURNAL_PROJECT_NAMES
+from config import PROJECTNAME, SKINS_DIR, GLOBALS
 
 # Registration all sub-folders under SKINS_DIR as Filesystem Directory
 # View.

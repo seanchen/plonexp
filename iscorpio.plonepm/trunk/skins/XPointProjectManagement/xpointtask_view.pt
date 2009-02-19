@@ -30,24 +30,16 @@
         <th>Estimated hours / Progress Status</th>
       </tr>
       <tr>
-        <td>
-          <strong>
-          <tal:block repeat="owner here/getTask_owners">
-            <span tal:define="theOwner python: mtool.getMemberInfo(owner)"
-                  tal:content="python: theOwner['fullname']" /><br/>
-          </tal:block>
-          </strong>
+        <td tal:define="membersList here/getTask_owners">
+          <tal:block
+             metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_developers_list"
+          />
         </td>
-        <td>
-          <div align="center"><strong>
-            <span tal:content="here/getTask_estimated_hours" /> hours / 
-            <span tal:content="python: str(here.getTask_progress_percent()) + '%'" />
-          </strong></div>
-          <div id="XPointProgressBar">
-            <div class="fill" align="center"
-                 tal:attributes="style python: 'width: ' + str(here.getTask_progress_percent()) + '%'">
-            </div>
-          </div>
+        <td tal:define="estimatedHours here/getTask_estimated_hours;
+                        progressPercent here/getTask_progress_percent;">
+          <tal:block
+             metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_progress_bar"
+          />
         </td>
       </tr>
     </tbody></table>

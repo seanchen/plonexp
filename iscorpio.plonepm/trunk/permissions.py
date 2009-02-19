@@ -1,6 +1,9 @@
 # permission.py
 
-from Products.CMFCore.CMFCorePermissions import setDefaultRoles
+try: # Plone 3.0.x
+    from Products.CMFCore import permissions as CMFCorePermissions
+except: # Old CMF
+    from Products.CMFCore import CMFCorePermissions
 import Products.Archetypes.public as atapi
 import config
 
@@ -27,6 +30,6 @@ def initialize():
 
         # The permission name and the access permit at each roll 
         # corresponding to the permission name is set to CMFCore.
-        setDefaultRoles(permission, ('Manager','Owner'))
+        CMFCorePermissions.setDefaultRoles(permission, ('Manager','Owner'))
 
     return permissions

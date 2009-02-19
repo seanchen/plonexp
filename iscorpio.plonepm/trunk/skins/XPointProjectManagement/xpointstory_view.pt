@@ -76,13 +76,10 @@
                 <span tal:content="task/Title"/>
               </a>
             </td>
-            <td>
-              <strong>
-              <tal:block repeat="owner python: task.getTask_owners()"> 
-                <span tal:define="theOwner python: mtool.getMemberInfo(owner)"
-                      tal:content="python: theOwner['fullname']" /><br/>
-              </tal:block>
-              </strong>
+            <td tal:define="membersList task/getTask_owners">
+              <tal:block
+                 metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_developers_list"
+              />
             </td>
             <td>
               <div align="center"><strong>

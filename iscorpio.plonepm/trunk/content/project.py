@@ -154,5 +154,26 @@ class XPointProject(ATFolder):
 
         return portal_catalog.searchResults(query)
 
+    security.declarePublic('getProjectDevelopers')
+    def getProjectDevelopers(self):
+        """ returns all developers for this project.
+        """
+        portal_catalog = getToolByName(self, 'portal.catalog')
+        return portal_catalog.uniqueValuesFor('getTask_owners')
+
+    security.declarePublic('getTasksForMember')
+    def getTasksForMember(self, memberId=''):
+        """ Returns all tasks for the specified member id.
+        """
+        portal_catalog = getToolByName(self, 'portal_catalog')
+        cpath = '/'.join(self.getPhysicalPath())
+        query = {
+            'portal_type':['XPointTask'],
+            'getTask_owners':memberId,
+            'path':cpath,
+            }
+
+        return portal_catalog.searchResults(query)
+
 # register to the plone add-on product.
 registerType(XPointProject, PROJECTNAME)

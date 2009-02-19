@@ -1,0 +1,49 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      lang="en"
+      i18n:domain="plone">
+
+<body>
+
+  <!-- macro for progress bar with the estimate hours and progress percent. -->
+  <!-- two params: estimatedHours, progressPercent -->
+  <!--==================-->
+  <tal:block metal:define-macro="xpoint_progress_bar">
+    <div align="center"><strong>
+      <span tal:content="estimatedHours" /> hours /
+      <span tal:content="python: str(progressPercent) + '%'"/>
+    </strong></div>
+    <div id="XPointProgressBar">
+      <div class="fill" align="center"
+           tal:attributes="style python: 'width: ' + str(progressPercent) + '%'">
+      </div>
+    </div>
+  </tal:block>
+
+  <!-- macro to show a list of member's info. we need pass a list of -->
+  <!-- members' id -->
+  <!-- one param: membersList -->
+  <!--==================-->
+  <tal:block metal:define-macro="xpoint_developers_list">
+    <tal:block repeat="member membersList">
+      <a href="#"
+				 tal:define="memberInfo python: mtool.getMemberInfo(member)"
+         tal:attributes="href string:${portal_url}/author/${member}"
+         tal:content="python: memberInfo['fullname']" >
+        Tom
+      </a><br/>
+    </tal:block>
+  </tal:block>
+
+  <!-- mocro to show a list of project view, we need pass the project url -->
+  <!-- param: projectURL -->
+  <tal:block metal:define-macro="xpoint_project_views_list">
+    <a tal:attributes="href python: portal_url + projectURL + '/xpointproject_view'">
+      Stories List
+    </a> | <a tal:attributes="href python: portal_url + projectURL + '/xpointproject_member_view'">
+      By Developer
+    </a>
+  </tal:block>
+</body>
+</html>

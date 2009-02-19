@@ -16,6 +16,8 @@ from Products.Archetypes.public import InAndOutWidget
 from Products.Archetypes.public import LinesWidget
 from Products.Archetypes.public import registerType
 # from ATContentTypes
+from Products.ATContentTypes.content.schemata import finalizeATCTSchema
+from Products.ATContentTypes.interfaces import IATFolder
 from Products.ATContentTypes.atct import ATFolder
 from Products.ATContentTypes.atct import ATFolderSchema
 from Products.ATContentTypes.configuration import zconf
@@ -81,6 +83,8 @@ XPointProjectSchema['relatedItems'].widget.description = \
     "Select related items"
 XPointProjectSchema.moveField('relatedItems', pos='bottom')
 
+finalizeATCTSchema(XPointProjectSchema)
+
 # here is the class.
 class XPointProject(ATFolder):
     """XPointProject defines a software project following eXtreme
@@ -105,6 +109,11 @@ class XPointProject(ATFolder):
     # restrict allowed content types.
     filter_content_types = True
     allowed_content_types = ('XPointStory', 'XPointRelease', 'Topic')
+
+    __implements__ = (
+        ATFolder.__implements__,
+        IATFolder,
+        )
 
     # the logger.
     log = logging.getLogger("XPointProjectManagement Project")

@@ -21,6 +21,8 @@ from Products.Archetypes.public import DisplayList
 from Products.Archetypes.public import IntDisplayList
 from Products.Archetypes.public import registerType
 # from ATContentType
+from Products.ATContentTypes.content.schemata import finalizeATCTSchema
+from Products.ATContentTypes.interfaces import IATFolder
 from Products.ATContentTypes.content.folder import ATFolder
 from Products.ATContentTypes.content.folder import ATFolderSchema
 from Products.ATContentTypes.configuration import zconf
@@ -127,6 +129,8 @@ XPointTaskSchema['relatedItems'].widget.description = \
     "Select related tasks"
 XPointTaskSchema.moveField('relatedItems', pos='bottom')
 
+finalizeATCTSchema(XPointTaskSchema)
+
 # the content type class.
 class XPointTask(ATFolder):
     """The ATConentType class for a XPointTask.
@@ -151,6 +155,11 @@ class XPointTask(ATFolder):
     # comment out for Plone 3, it is just doesn't work.  Need figure
     # out the new approach for Plone 3.
     #allow_discussion = True
+
+    __implements__ = (
+        ATFolder.__implements__,
+        IATFolder,
+        )
 
     filter_content_types = True
     allowed_content_types = ('XPointMemo', 'XPointIssue', 'XPointProposal', )

@@ -13,6 +13,8 @@ from Products.Archetypes.public import TextField
 from Products.Archetypes.public import RichWidget
 from Products.Archetypes.public import registerType
 # from ATContentType
+from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
+from Products.ATContentTypes.interfaces import IATDocument
 from Products.ATContentTypes.content.base import ATCTContent
 from Products.ATContentTypes.content.base import ATContentTypeSchema
 from Products.ATContentTypes.configuration import zconf
@@ -83,6 +85,11 @@ class XPointMemo(ATCTContent):
     # comment out for Plone 3, it is just doesn't work.  Need figure
     # out the new approach for Plone 3.
     #allow_discussion = True
+
+    __implements__ = (ATCTContent.__implements__,
+                      IATDocument,
+                      HistoryAwareMixin.__implements__,
+                      )
 
     actions = ({
         'id': 'view',

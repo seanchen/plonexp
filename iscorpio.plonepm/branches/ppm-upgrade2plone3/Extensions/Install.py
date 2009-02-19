@@ -59,7 +59,11 @@ def install(self):
     # public in general.
     factory = getToolByName(self, 'portal_factory')
     types = factory.getFactoryTypes().keys()
-    for add_type in ('XPointBuildJournal',):
+    for add_type in (
+        'XPointBuildJournal', 'XPointProject',
+        'XPointStory', 'XPointTask', 'XPointIssue',
+        'XPointMemo', 'XPointRelease', 'XPointProposal',
+        ):
         if add_type not in types:
             types.append(add_type)
             factory.manage_setPortalFactoryTypes(listOfTypeIds = types)
@@ -73,7 +77,6 @@ def install(self):
 
     # The installation log is returned.
     return out.getvalue()
-
 
 # Resources (css and JavaScript, etc.) is installed.
 def install_resources(self, out):

@@ -20,6 +20,8 @@ from Products.Archetypes.public import FileField
 from Products.Archetypes.public import FileWidget
 from Products.Archetypes.public import IntegerField
 from Products.Archetypes.public import IntegerWidget
+from Products.Archetypes.public import LinesField
+from Products.Archetypes.public import InAndOutWidget
 from Products.Archetypes.public import DisplayList
 from Products.Archetypes.public import registerType
 # from ATContentTypes
@@ -95,6 +97,19 @@ XPointResponseSchema = ATCTContent.schema.copy() + Schema((
               default_method = 'getCurrentArtifactPriority',
             ),
 
+        # tags
+        LinesField(
+            'xppm_response_tags',
+            mutator = 'setXppm_response_tags',
+            vocabulary = "vocabulary_artifactTag",
+            widget = InAndOutWidget(
+                label = u'Tags',
+                description = "Please select the tags for this artifact",
+                ),
+            default_method = 'getCurrentArtifactTags',
+            #schemata = 'Properties',
+            ),
+
         # story
         StringField(
             'xppm_response_story',
@@ -166,6 +181,10 @@ class XPointResponse(XPPMBase, ATCTContent, HistoryAwareMixin):
     def getCurrentArtifactStatus(self):
         return self.aq_inner.aq_parent.getXppm_artifact_status()
 
+    security.declareProtected(permissions.View, 'getCurrentArtifactTags')
+    def getCurrentArtifactTags(self):
+        return self.aq_inner.aq_parent.getXppm_artifact_tags()
+
     # ==================
     # when we save a response, we need update the parent artifact with
     # the new properties and metadata, if those values are changed.
@@ -229,6 +248,18 @@ class XPointResponse(XPPMBase, ATCTContent, HistoryAwareMixin):
             artifact.reindexObject(('getXppm_artifact_status', ))
 
         self.getField("xppm_response_status").set(self, statusNew)
+
+    security.declareProtected(permissions.ModifyPortalContent,
+                              'setXppm_response_tags')
+    def setXppm_response_tags(self, tagsNew):
+        tagsNow = self.getCurrentArtifactTags()
+
+        if tagsNow and tagsNow != tagsNew:
+            artifact = self.aq_inner.aq_parent
+            artifact.setXppm_artifact_tags(tagsNew)
+            artifact.reindexObject(('getXppm_artifact_tags', ))
+
+        self.getField("xppm_response_tags").set(self, tagsNew)
 
     def logArtifactChanges(self, name, before, after):
         artifact = self.aq_inner.aq_parent

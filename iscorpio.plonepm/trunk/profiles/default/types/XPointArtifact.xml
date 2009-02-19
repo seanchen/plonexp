@@ -6,7 +6,7 @@
   <property name="title" i18n:translate="">XP Artifact</property>
   <property name="description"
             i18n:translate="">A eXtreme Programing Artifact</property>
-  <property name="content_icon">XPStory_icon.gif</property>
+  <property name="content_icon">xppm_artifact_icon.gif</property>
   <property name="content_meta_type">XPointArtifact</property>
   <property name="product">XPointProjectManagement</property>
   <property name="factory">addXPointArtifact</property>

@@ -72,6 +72,7 @@ class XPointMetadata(XPPMBase, ATCTContent, HistoryAwareMixin):
         return DisplayList([('priority', 'Artifact Priority'),
                             ('category', 'Artifact Category'),
                             ('status', 'Artifact Status'),
+                            ('tag', 'Artifact Tag'),
                             ])
 
 # register to the plone add-on product.

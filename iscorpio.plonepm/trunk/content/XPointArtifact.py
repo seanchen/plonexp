@@ -16,7 +16,8 @@ from Products.Archetypes.public import TextAreaWidget
 from Products.Archetypes.public import RichWidget
 from Products.Archetypes.public import StringField
 from Products.Archetypes.public import SelectionWidget
-from Products.Archetypes.public import LinesWidget
+from Products.Archetypes.public import LinesField
+from Products.Archetypes.public import InAndOutWidget
 from Products.Archetypes.public import FileField
 from Products.Archetypes.public import FileWidget
 from Products.Archetypes.public import DisplayList
@@ -26,6 +27,8 @@ from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.atct import ATFolder
 from Products.ATContentTypes.atct import ATFolderSchema
 from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
+
+from Products.CMFCore.utils import getToolByName
 
 # the configruation info for this project.
 from Products.XPointProjectManagement.config import PROJECTNAME
@@ -102,6 +105,17 @@ XPointArtifactSchema = ATFolderSchema.copy() + Schema((
                 ),
             ),
 
+        # tags
+        LinesField(
+            'xppm_artifact_tags',
+            vocabulary = "vocabulary_artifactTag",
+            widget = InAndOutWidget(
+                label = u'Tags',
+                description = "Please select the tags for this artifact",
+                ),
+            #schemata = 'Properties',
+            ),
+
         # attachment
         FileField(
             'xppm_artifact_attachment',
@@ -147,33 +161,23 @@ class XPointArtifact(XPPMBase, ATFolder, HistoryAwareMixin):
     def vocabulary_priorities(self):
         """ returns all priority options as a vocabulary.
         """
-        return DisplayList([('1', '1 - Highest'),
-                            ('2', '2 - High'),
-                            ('3', '3 - Medium'),
-                            ('4', '4 - Low'),
-                            ('5', '5 - Lowest'),
-                            ]
-                           )
+        return DisplayList(self.getMetadataByType('priority'))
 
     def vocabulary_categories(self):
         """ return all category options as a vocabulary.
         """
-        return DisplayList([('1', 'Issue'),
-                            ('2', 'Defect'),
-                            ('3', 'Proposal'),
-                            ])
+        return DisplayList(self.getMetadataByType('category'))
 
     def vocabulary_artifactStatus(self):
         """ return all status options as a vocabulary.
         """
-        return DisplayList([('1', 'New'),
-                            ('2', 'Open'),
-                            ('3', 'Pending Fix'),
-                            ('4', 'Pending Review'),
-                            ('5', 'Pending New Build'),
-                            ('6', 'Pending QA'),
-                            ('7', 'Close'),
-                            ])
+        
+        return DisplayList(self.getMetadataByType('status'))
+
+    def vocabulary_artifactTag(self):
+        """ return all tags options as a vocabulary.
+        """
+        return DisplayList(self.getMetadataByType('tag'))
 
 # register to the plone add-on product.
 registerType(XPointArtifact, PROJECTNAME)

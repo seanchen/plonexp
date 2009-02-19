@@ -155,22 +155,68 @@ class XPointProject(ATFolder):
     def getAllStories(self):
         """ Return all Stories in this project.
         """
-        catalog = getToolByName(self, 'portal_catalog')
-        # prepering the query.
-        query = {}
-        query['path'] = '/'.join(self.getPhysicalPath())
-        query['portal_type'] = 'XPointStory'
-
-        return catalog.searchResults(query)
+        return self.xpCatalogSearch(portal_type='XPointStory')
 
     security.declarePublic('getAllSysReqs')
     def getAllSysReqs(self):
         """ Return all system requirement in this project.
         """
-        catalog = getToolByName(self, 'portal_catalog')
+        return self.xpCatalogSearch(portal_type='XPointSysReq')
+
+    security.declarePublic('getMetadataByType')
+    def getMetadataByType(self, type=None):
+        """ this will return a catalog search result based on the
+        given metadata type.
+        """
+        if type is None:
+            return []
+
+        query = {}
+        query['portal_type'] = 'XPointMetadata'
+        query['getXppm_metadata_type'] = type
+
+        metadata = [(one.id, one.Title) for one in self.xpCatalogSearch(query)]
+        self.log.debug("Metadata for type %s: %s", type, metadata)
+        return metadata
+
+    security.declarePublic('getMetadataById')
+    def getMetadataById(self, theId):
+        """ return an unique metadata by the given id.
+        """
+        query = {'id' : theId}
+        oneMetadata = self.xpCatalogSearch(query)[0]
+        return oneMetadata
+
+    security.declarePublic('xpCatalogSearch')
+    def xpCatalogSearch(self, criteria=None, **kwargs):
+        """ returns the catalog search result based on the provided criteria
+        or kwargs.
+        """
+
+        if criteria is None:
+            criteria = kwargs
+        else:
+            criteria = dict(criteria)
+
+        availableCriteria = {'id' : 'getId',
+                             'text' : 'SearchableText',
+                             'portal_type' : 'portal_type',
+                             'metadata_type' : 'getXppm_metadata_type',
+                             }
+
         query = {}
         query['path'] = '/'.join(self.getPhysicalPath())
-        query['portal_type'] = 'XPointSysReq'
+
+        for k, v in availableCriteria.items():
+            if k in criteria:
+                query[v] = criteria[k]
+            elif v in criteria:
+                query[v] = criteria[v]
+
+        query['sort_on'] = 'created'
+        #query['sort_order'] = 'reverse'
+
+        catalog = getToolByName(self, 'portal_catalog')
 
         return catalog.searchResults(query)
 

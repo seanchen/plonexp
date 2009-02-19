@@ -59,8 +59,9 @@ Response
 
 Metadata
   |-- id
-  |-- type
   |-- title
+  |-- description
+  |-- type
 
 TODO List
 ====================================================================

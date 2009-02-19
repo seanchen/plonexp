@@ -9,10 +9,9 @@ from AccessControl import ClassSecurityInfo
 # Import modules and functions, etc. used in the following codes. 
 from Products.Archetypes.public import registerType
 
-# the configruation info for this project.
 from Products.XPointProjectManagement.content.xpointdoc import XPointDocument
 # the configruation info for this project.
-from Products.XPointProjectManagement.config import *
+from Products.XPointProjectManagement.config import PROJECTNAME
 
 # the XPointBuildJournal Schema.
 XPointBuildJournalSchema = XPointDocument.schema.copy()
@@ -29,12 +28,6 @@ XPointBuildJournalSchema['subject'].widget.description = \
     "Select projects for this build journal, holding CTRL key to select more than one project"
 XPointBuildJournalSchema['subject'].widget.size = 6
 XPointBuildJournalSchema.moveField('subject', after='description')
-
-XPointBuildJournalSchema['relatedItems'].widget.visible = True
-XPointBuildJournalSchema['relatedItems'].widget.description = \
-    "Select related items"
-XPointBuildJournalSchema['relatedItems'].schemata = 'default'
-XPointBuildJournalSchema.moveField('relatedItems', pos='bottom')
 
 # the XPointBuildJournal class.
 class XPointBuildJournal(XPointDocument):

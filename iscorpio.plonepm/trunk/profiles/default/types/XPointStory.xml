@@ -6,7 +6,7 @@
   <property name="title" i18n:translate="">XP Story</property>
   <property name="description"
             i18n:translate="">A eXtreme Programing Story.</property>
-  <property name="content_icon">XPStory_icon.gif</property>
+  <property name="content_icon">xppm_story_icon.gif</property>
   <property name="content_meta_type">XPointStory</property>
   <property name="product">XPointProjectManagement</property>
   <property name="factory">addXPointStory</property>

@@ -6,7 +6,7 @@
   <property name="title" i18n:translate="">XP Function Spec</property>
   <property name="description"
             i18n:translate="">A eXtreme Programing FSD.</property>
-  <property name="content_icon">XPStory_icon.gif</property>
+  <property name="content_icon">xppm_fsd_icon.gif</property>
   <property name="content_meta_type">XPointFuncSpec</property>
   <property name="product">XPointProjectManagement</property>
   <property name="factory">addXPointFuncSpec</property>

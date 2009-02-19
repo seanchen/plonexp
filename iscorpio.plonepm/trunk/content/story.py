@@ -77,7 +77,10 @@ class XPointStory(ATFolder):
     global_allow = False
 
     filter_content_types = True
-    allowed_content_types = ('XPointTask')
+    allowed_content_types = ('XPointTask', 'XPointMemo',
+                             'XPointIssue', 'XPointProposal')
+
+    allow_discussion = True
 
     # for logging.
     log = logging.getLogger("XPointProjectManagement Story")
@@ -97,7 +100,12 @@ class XPointStory(ATFolder):
         'name': 'Properties',
         'action': 'string:${object_url}/base_metadata',
         'permissions': (CMFCorePermissions.ViewManagementScreens,)
-        },)
+        },{
+        'id': 'local_roles',
+        'name': 'Sharing',
+        'action': 'string:${object_url}/sharing',
+        'permissions': (CMFCorePermissions.ViewManagementScreens,)
+        })
 
     security = ClassSecurityInfo()
 

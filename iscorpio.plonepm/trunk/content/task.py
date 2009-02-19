@@ -21,40 +21,36 @@ from Products.Archetypes.public import DisplayList
 from Products.Archetypes.public import IntDisplayList
 from Products.Archetypes.public import registerType
 # from ATContentType
+from Products.ATContentTypes.content.schemata import finalizeATCTSchema
+from Products.ATContentTypes.interfaces import IATFolder
 from Products.ATContentTypes.content.folder import ATFolder
 from Products.ATContentTypes.content.folder import ATFolderSchema
 from Products.ATContentTypes.configuration import zconf
 
 from Products.CMFCore.utils import getToolByName
-try: # Plone 3.0.x
-    from Products.CMFCore import permissions as CMFCorePermissions
-except: # Old CMF
-    from Products.CMFCore import CMFCorePermissions
-from Products.CMFCore.permissions import View
 
-from Products.XPointProjectManagement.config import *
+# the configruation info for this project.
+from Products.XPointProjectManagement.config import PROJECTNAME
 
 # the schema for XPointTask.
 XPointTaskSchema = ATFolderSchema.copy() + Schema((
 
         # text field for details description for this task.
         TextField(
-            'task_text',
+            'xptask_text',
             searchable = True,
             required = True,
-            allowable_content_types = zconf.ATDocument.allowed_content_types,
-            default_content_type = zconf.ATDocument.default_content_type,
             default_output_type = 'text/x-html-safe',
             widget = RichWidget(
                 label = 'Task description',
-                description = 'Provide the detail descrpiton for your task',
                 rows = 25,
                 ),
             ),
 
         # planned completed date, 90% finish deadline
         DateTimeField(
-            'task_completion_date',
+            'xptask_completion_date',
+            index = 'DateIndex:schema',
             searchable = False,
             required = True,
             widget = CalendarWidget(
@@ -67,7 +63,8 @@ XPointTaskSchema = ATFolderSchema.copy() + Schema((
 
         # Progress Status in percentage. 0% - 100%
         IntegerField(
-            'task_progress_percent',
+            'xptask_progress_percent',
+            index = 'FieldIndex:schema',
             searchable = False,
             required = True,
             default = 0,
@@ -82,7 +79,8 @@ XPointTaskSchema = ATFolderSchema.copy() + Schema((
 
         # estimated hours for this task.
         IntegerField(
-            'task_estimated_hours',
+            'xptask_estimated_hours',
+            index = 'FieldIndex:schema',
             searchable = False,
             required = False,
             widget = IntegerWidget(
@@ -93,7 +91,8 @@ XPointTaskSchema = ATFolderSchema.copy() + Schema((
 
         # used hours for this task.
         IntegerField(
-            'task_used_hours',
+            'xptask_used_hours',
+            index = 'FieldIndex:schema',
             searchable = False,
             required = False,
             widget = IntegerWidget(
@@ -105,7 +104,8 @@ XPointTaskSchema = ATFolderSchema.copy() + Schema((
         # owner of this task.??? select from membership.
         # getToolByName(self, 'portal_membership')
         LinesField(
-            'task_owners',
+            'xptask_owners',
+            index = 'KeywordIndex:schema',
             searchable = False,
             required = False,
             vocabulary = 'vocabulary_developers',
@@ -117,15 +117,11 @@ XPointTaskSchema = ATFolderSchema.copy() + Schema((
         ),
     )
 
+finalizeATCTSchema(XPointTaskSchema)
+
 # set the description field to invisible, we are not going to use it
 # for a task.
 XPointTaskSchema['description'].widget.visible = False
-
-# make the related item visible and move to the bottom.
-XPointTaskSchema['relatedItems'].widget.visible = True
-XPointTaskSchema['relatedItems'].widget.description = \
-    "Select related tasks"
-XPointTaskSchema.moveField('relatedItems', pos='bottom')
 
 # the content type class.
 class XPointTask(ATFolder):
@@ -140,35 +136,12 @@ class XPointTask(ATFolder):
     # this will show on the page.
     archetype_name = 'XP Task'
 
-    content_icon = 'XPTask_icon.gif'
-    immediate_view = 'xpointtask_view'
-    default_view = 'xpointtask_view'
-
     _at_rename_after_creation = True
-    global_allow = False
 
-    # allow discuss on the task.
-    allow_discussion = True
-
-    filter_content_types = True
-    allowed_content_types = ('XPointMemo', 'XPointIssue', 'XPointProposal', )
-
-    actions = ({
-        'id': 'view',
-        'name': 'View',
-        'action': 'string:${object_url}/xpointtask_view',
-        'permissions': (CMFCorePermissions.View,)
-        },{
-        'id': 'edit',
-        'name': 'Edit',
-        'action': 'string:${object_url}/base_edit',
-        'permissions': (CMFCorePermissions.ViewManagementScreens,)
-        },{
-        'id': 'metadata',
-        'name': 'Properties',
-        'action': 'string:${object_url}/base_metadata',
-        'permissions': (CMFCorePermissions.ViewManagementScreens,)
-        },)
+    __implements__ = (
+        ATFolder.__implements__,
+        IATFolder,
+        )
 
     security = ClassSecurityInfo()
 

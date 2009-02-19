@@ -8,75 +8,28 @@ import logging
 
 from AccessControl import ClassSecurityInfo
 # from Archetypes
-from Products.Archetypes.public import Schema
-from Products.Archetypes.public import TextField
-from Products.Archetypes.public import RichWidget
-from Products.Archetypes.public import StringField
-from Products.Archetypes.public import SelectionWidget
+from Products.Archetypes.public import DisplayList
 from Products.Archetypes.public import registerType
-# from ATContentType
-from Products.ATContentTypes.content.base import ATCTContent
-from Products.ATContentTypes.content.base import ATContentTypeSchema
-from Products.ATContentTypes.configuration import zconf
 
-try: # Plone 3.0.x
-    from Products.CMFCore import permissions as CMFCorePermissions
-except: # Old CMF
-    from Products.CMFCore import CMFCorePermissions
-from Products.CMFCore.permissions import View
-
-from Products.XPointProjectManagement.config import *
+from Products.XPointProjectManagement.content.xpointdoc import XPointDocument
+# the configruation info for this project.
+from Products.XPointProjectManagement.config import PROJECTNAME
 
 # the XPointIssue schema.
-XPointIssueSchema = ATContentTypeSchema.copy() + Schema((
-
-        # the issue details description.
-        TextField(
-            'issue_text',
-            searchable = True,
-            required = True,
-            allowable_content_types = zconf.ATDocument.allowed_content_types,
-            default_content_type = zconf.ATDocument.default_content_type,
-            default_output_type = 'text/x-html-safe',
-            widget = RichWidget(
-                label = 'Issue Body',
-                description = 'Provide the detail description for your issue',
-                rows = 18,
-                ),
-            ),
-
-        # the status for this issue.
-        StringField(
-            'xpoint_tracking_status',
-            searchable = False,
-            required = True,
-            default = 'open',
-            vocabulary = (
-                ('open', 'Open'),
-                ('pending', 'Pending'),
-                ('close', 'Close'),
-                ),
-            widget = SelectionWidget(
-                label = 'Issue Status',
-                descrpiton = 'Set status for this issue.',
-                format = 'select',
-                ),
-            ),
-
-        )
-    )
+XPointIssueSchema = XPointDocument.schema.copy()
 
 # make description invisible.
 XPointIssueSchema['description'].widget.visible = False
-
-# move the related items to the buttom.
-XPointIssueSchema['relatedItems'].widget.visible = True
-XPointIssueSchema['relatedItems'].widget.description = \
-    "Select related tasks"
-XPointIssueSchema.moveField('relatedItems', pos='bottom')
+# make document status visible.
+XPointIssueSchema['xpproject_document_status'].required = True
+XPointIssueSchema['xpproject_document_status'].widget.visible = True
+XPointIssueSchema['xpproject_document_status'].widget.label = \
+    "Issue Status"
+XPointIssueSchema['xpproject_document_status'].widget.description = \
+    "Status for this issue."
 
 # the class.
-class XPointIssue(ATCTContent):
+class XPointIssue(XPointDocument):
     """ XPointIssue records a issue for a XPoint Project.
     """
 
@@ -87,31 +40,19 @@ class XPointIssue(ATCTContent):
     portal_type = 'XPointIssue'
     archetype_name = "XP Issue"
 
-    content_icon = 'XPIssue_icon.gif'
-    immediate_view = 'xpointissue_view'
-    default_view = 'xpointissue_view'
-
     _at_rename_after_creation = True
-    global_allow = False
-    filter_content_types = False
-    allowed_content_types = []
-
-    # allow discuss on issue.
-    allow_discussion = True
-
-    actions = ({
-        'id': 'view',
-        'name': 'View',
-        'action': 'string:${object_url}/xpointissue_view',
-        'permissions': (CMFCorePermissions.View,)
-        },{
-        'id': 'edit',
-        'name': 'Edit',
-        'action': 'string:${object_url}/base_edit',
-        'permissions': (CMFCorePermissions.ModifyPortalContent,)
-        },)
 
     security = ClassSecurityInfo()
+
+    def vocabulary_documentStatus(self):
+        """ return a list of tuple (status, status desc) for the
+        document status select.
+        """
+        return DisplayList([('open', 'Open'),
+                            ('pending', 'Pending'),
+                            ('close', 'Close'),
+                            ]
+                           )
 
 # register this type to plone add-on product.
 registerType(XPointIssue, PROJECTNAME)

@@ -8,75 +8,28 @@ import logging
 
 from AccessControl import ClassSecurityInfo
 # from Archetypes
-from Products.Archetypes.public import Schema
-from Products.Archetypes.public import TextField
-from Products.Archetypes.public import RichWidget
-from Products.Archetypes.public import StringField
-from Products.Archetypes.public import SelectionWidget
+from Products.Archetypes.public import DisplayList
 from Products.Archetypes.public import registerType
-# from ATContentType
-from Products.ATContentTypes.content.base import ATCTContent
-from Products.ATContentTypes.content.base import ATContentTypeSchema
-from Products.ATContentTypes.configuration import zconf
 
-try: # Plone 3.0.x
-    from Products.CMFCore import permissions as CMFCorePermissions
-except: # Old CMF
-    from Products.CMFCore import CMFCorePermissions
-from Products.CMFCore.permissions import View
-
-from Products.XPointProjectManagement.config import *
+from Products.XPointProjectManagement.content.xpointdoc import XPointDocument
+# the configruation info for this project.
+from Products.XPointProjectManagement.config import PROJECTNAME
 
 # the XPointProposal schema.
-XPointProposalSchema = ATContentTypeSchema.copy() + Schema((
-
-        # the proposal details description.
-        TextField(
-            'proposal_text',
-            searchable = True,
-            required = True,
-            allowable_content_types = zconf.ATDocument.allowed_content_types,
-            default_content_type = zconf.ATDocument.default_content_type,
-            default_output_type = 'text/x-html-safe',
-            widget = RichWidget(
-                label = 'Proposal Body',
-                description = 'Provide the detail description for your proposal',
-                rows = 18,
-                ),
-            ),
-
-        # the status for this proposal.
-        StringField(
-            'xpoint_tracking_status',
-            searchable = False,
-            required = True,
-            default = 'draft',
-            vocabulary = (
-                ('draft', 'Draft'),
-                ('pending', 'Pending'),
-                ('accepted', 'Accepted'),
-                ),
-            widget = SelectionWidget(
-                label = 'Proposal Status',
-                descrpiton = 'Set status for this proposal.',
-                format = 'select',
-                ),
-            ),
-
-        )
-    )
+XPointProposalSchema = XPointDocument.schema.copy()
 
 # make description invisible.
 XPointProposalSchema['description'].widget.visible = False
-
-# move the related items to the buttom.
-XPointProposalSchema['relatedItems'].widget.visible = True
-XPointProposalSchema['relatedItems'].widget.description = \
-    "Select related tasks"
-XPointProposalSchema.moveField('relatedItems', pos='bottom')
+# make document status visible.
+XPointProposalSchema['xpproject_document_status'].required = True
+XPointProposalSchema['xpproject_document_status'].widget.visible = True
+XPointProposalSchema['xpproject_document_status'].widget.label = \
+    "Proposal Status"
+XPointProposalSchema['xpproject_document_status'].widget.description = \
+    "Status for this proposal."
 
 # the class.
-class XPointProposal(ATCTContent):
+class XPointProposal(XPointDocument):
     """ XPointProposal records a proposal for a XPoint Project.
     """
 
@@ -87,31 +40,19 @@ class XPointProposal(ATCTContent):
     portal_type = 'XPointProposal'
     archetype_name = "XP Proposal"
 
-    content_icon = 'XPProposal_icon.gif'
-    immediate_view = 'xpointproposal_view'
-    default_view = 'xpointproposal_view'
-
     _at_rename_after_creation = True
-    global_allow = False
-    filter_content_types = False
-    allowed_content_types = []
-
-    # allow discuss on proposal.
-    allow_discussion = True
-
-    actions = ({
-        'id': 'view',
-        'name': 'View',
-        'action': 'string:${object_url}/xpointproposal_view',
-        'permissions': (CMFCorePermissions.View,)
-        },{
-        'id': 'edit',
-        'name': 'Edit',
-        'action': 'string:${object_url}/base_edit',
-        'permissions': (CMFCorePermissions.ModifyPortalContent,)
-        },)
 
     security = ClassSecurityInfo()
+
+    def vocabulary_documentStatus(self):
+        """ return a list of tuple (status, status desc) for the
+        document status select.
+        """
+        return DisplayList([('draft', 'Draft'),
+                            ('pending', 'Pending'),
+                            ('accepted', 'Accepted'), 
+                            ]
+                           )
 
 # register this type to plone add-on product.
 registerType(XPointProposal, PROJECTNAME)

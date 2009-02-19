@@ -1,5 +1,10 @@
 # permission.py
 
+import logging
+
+from AccessControl import ModuleSecurityInfo
+from AccessControl import Permissions
+
 try: # Plone 3.0.x
     from Products.CMFCore import permissions as CMFCorePermissions
 except: # Old CMF
@@ -7,6 +12,7 @@ except: # Old CMF
 import Products.Archetypes.public as atapi
 import config
 
+log = logging.getLogger('XPointProjectManagement permissions')
 
 # The setting of the permission and the roll is made. This function is 
 # called from __ init__.py.
@@ -30,6 +36,22 @@ def initialize():
 
         # The permission name and the access permit at each roll 
         # corresponding to the permission name is set to CMFCore.
-        CMFCorePermissions.setDefaultRoles(permission, ('Manager','Owner'))
+        if atype['portal_type'] == 'XPointMemo':
+            log.info("Different permissions for type XPointMemo!")
+            CMFCorePermissions.setDefaultRoles(permission,
+                                               ('Manager','Owner', 'Member'))
+        else:
+            CMFCorePermissions.setDefaultRoles(permission, ('Manager','Owner'))
 
     return permissions
+
+#
+# customizing the XPointProjectManagement permissions.
+#
+
+security = ModuleSecurityInfo('Products.XPointProjectManagement.permissions')
+
+security.declarePublic('AddXPointMemo')
+AddXPointMemo = 'XPointProjectManagement: Add XPointMemo'
+CMFCorePermissions.setDefaultRoles(AddXPointMemo,
+                                   ('Member', 'Owner', 'Manager'))

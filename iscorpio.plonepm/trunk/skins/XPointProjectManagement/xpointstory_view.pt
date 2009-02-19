@@ -1,0 +1,90 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plone">
+<body>
+
+<metal:block fill-slot="css_slot">
+  <LINK href="xpointtaskstyle.css" type="text/css" rel="stylesheet"
+        tal:attributes="href string:xpprogressbar.css"/>
+</metal:block>
+
+<metal:main fill-slot="main">
+  <tal:main-macro metal:define-macro="main">
+    
+    <div metal:use-macro="here/document_actions/macros/document_actions">
+        Document actions (print, sendto etc)
+    </div>
+
+    <h1 tal:content="object_title" class="documentFirstHeading">
+      Title or id
+    </h1>
+    
+    <div metal:use-macro="here/document_byline/macros/byline">
+      Get the byline - contains details about author and modification date.
+    </div>
+
+    <!-- find all tasks for this story and list all of them as a table, -->
+    <!-- each task will be a row in this table. -->
+<!--     <div tal:define="tasksInfo python: here.scripts.getStoryTasks(context); -->
+<!--                      tasksList python: tasksInfo['tasksList']; -->
+<!--                      estimatedSubtotal python: tasksInfo['estimatedSubtotal']; -->
+<!--                      averageProgress python: tasksInfo['averageProgress'];"> -->
+      <div tal:define="tasksList python: here.getStoryTasks();">
+
+      <!-- display the subtotal progress bar here? or Not? -->
+  
+      <div>
+        <span tal:content="structure here/getStory_text" />
+      </div>
+
+<!--       <p> -->
+<!--         The Path: <span tal:content="python: tasksInfo['thePath']"/><br/> -->
+<!--         The Amount: <span tal:content="python: tasksInfo['tasksAmount']"/><br/> -->
+<!--        Estimated subtotal: <span tal:content="python: tasksInfo['estimatedSubtotal']"/> -->
+<!--       </p> -->
+
+      <table class="listing" width="100%"><tbody>
+        <tr>
+          <th>Task</th>
+          <th>Owner(s)</th>
+          <th>Estimated hours</th>
+          <th>Progress Status</th>
+        </tr>
+        <!-- one row for each task. -->
+        <tal:block tal:repeat="task python: tasksList">
+          <tr>
+            <td><span tal:content="task/Title"/></td>
+            <td>
+              <strong>
+              <tal:block repeat="owner python: task.getTask_owners()"> 
+                <span tal:define="theOwner python: mtool.getMemberInfo(owner)"
+                      tal:content="python: theOwner['fullname']" /><br/>
+              </tal:block>
+              </strong>
+            </td>
+            <td><span tal:content="python: task.getTask_estimated_hours()" /></td>
+            <td>
+              <div id="XPointProgressBar">
+                <div class="fill" align="center"
+                     tal:attributes="style python: 'width: ' + str(task.getTask_progress_percent()) + '%'">
+                  <span tal:content="python: str(task.getTask_progress_percent()) + '%'"></span>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tal:block>
+      </tbody></table>
+    </div>
+
+    <!-- related items list. -->
+    <div metal:use-macro="here/document_relateditems/macros/relatedItems">
+      Show related items if they exist
+    </div>
+    <div class="visualClear" id="clear-space-after-relatedItems"></div>
+
+  </tal:main-macro>
+</metal:main>
+
+</body>
+</html>

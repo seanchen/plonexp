@@ -1,0 +1,73 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plone">
+<body>
+
+<metal:block fill-slot="css_slot">
+  <LINK href="xpointtaskstyle.css" type="text/css" rel="stylesheet"
+        tal:attributes="href string:xpprogressbar.css"/>
+</metal:block>
+
+<metal:main fill-slot="main">
+  <tal:main-macro metal:define-macro="main">
+    
+    <div metal:use-macro="here/document_actions/macros/document_actions">
+        Document actions (print, sendto etc)
+    </div>
+
+    <h1 tal:content="object_title" class="documentFirstHeading">
+      Title or id
+    </h1>
+    
+    <div metal:use-macro="here/document_byline/macros/byline">
+      Get the byline - contains details about author and modification date.
+    </div>
+
+    <table class="listing" width="100%"><tbody>
+      <tr>
+        <th>Owner(s)</th>
+        <th>Estimated hours</th>
+        <th>Progress Status</th>
+      </tr>
+      <tr>
+        <td>
+          <strong>
+          <tal:block repeat="owner here/getTask_owners">
+            <span tal:define="theOwner python: mtool.getMemberInfo(owner)"
+                  tal:content="python: theOwner['fullname']" /><br/>
+          </tal:block>
+          </strong>
+        </td>
+        <td><span tal:content="here/getTask_estimated_hours" /></td>
+        <td>
+          <div id="XPointProgressBar">
+            <div class="fill" align="center"
+                 tal:attributes="style python: 'width: ' + str(here.getTask_progress_percent()) + '%'">
+              <span tal:content="python: str(here.getTask_progress_percent()) + '%'"></span>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody></table>
+
+    <div>
+      <span tal:content="structure here/getTask_text" />
+    </div>
+
+    <!-- button to create response. -->
+    <p>
+      <a tal:condition="not:isAnon"
+         href="createObject?type_name=XPointResponse">Add Response</a>
+    </p>
+
+    <div metal:use-macro="here/document_relateditems/macros/relatedItems">
+      Show related items if they exist
+    </div>
+    <div class="visualClear" id="clear-space-after-relatedItems"></div>
+
+  </tal:main-macro>
+</metal:main>
+
+</body>
+</html>

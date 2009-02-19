@@ -6,17 +6,12 @@
           meta_type="Factory-based Type Information with dynamic views"/>
   <object name="XPointStory"
           meta_type="Factory-based Type Information with dynamic views"/>
-  <object name="XPointTask"
+  <object name="XPointFuncSpec"
           meta_type="Factory-based Type Information with dynamic views"/>
-  <object name="XPointRelease"
+  <object name="XPointFuncReq"
           meta_type="Factory-based Type Information with dynamic views"/>
-  <object name="XPointMemo"
+  <object name="XPointSysReq"
           meta_type="Factory-based Type Information with dynamic views"/>
-  <object name="XPointIssue"
-          meta_type="Factory-based Type Information with dynamic views"/>
-  <object name="XPointProposal"
-          meta_type="Factory-based Type Information with dynamic views"/>
-
-  <object name="XPointBuildJournal"
+  <object name="XPointUseCase"
           meta_type="Factory-based Type Information with dynamic views"/>
 </object>

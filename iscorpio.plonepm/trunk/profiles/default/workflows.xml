@@ -5,25 +5,19 @@
     <type type_id="XPointProject">
       <bound-workflow workflow_id="plone_workflow"/>
     </type>
-    <type type_id="XPointRelease">
-      <bound-workflow workflow_id="plone_workflow"/>
-    </type>
     <type type_id="XPointStory">
       <bound-workflow workflow_id="plone_workflow"/>
     </type>
-    <type type_id="XPointTask">
+    <type type_id="XPointFuncSpec">
       <bound-workflow workflow_id="plone_workflow"/>
     </type>
-    <type type_id="XPointMemo">
+    <type type_id="XPointFuncReq">
       <bound-workflow workflow_id="plone_workflow"/>
     </type>
-    <type type_id="XPointIssue">
+    <type type_id="XPointSysReq">
       <bound-workflow workflow_id="plone_workflow"/>
     </type>
-    <type type_id="XPointProposal">
-      <bound-workflow workflow_id="plone_workflow"/>
-    </type>
-    <type type_id="XPointBuildJournal">
+    <type type_id="XPointUseCase">
       <bound-workflow workflow_id="plone_workflow"/>
     </type>
   </bindings>

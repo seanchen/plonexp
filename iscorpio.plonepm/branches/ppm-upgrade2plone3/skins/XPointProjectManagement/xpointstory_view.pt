@@ -30,7 +30,7 @@
                      impsList python: here.getStoryMemosIssuesProposals();">
 
       <!-- display the subtotal progress bar here? or Not? -->
-      <table class="listing" width="100%"><tbody>
+      <table class="listing" width="98%"><tbody>
         <tr>
           <th>Estimated hours / Progress Status</th>
         </tr>

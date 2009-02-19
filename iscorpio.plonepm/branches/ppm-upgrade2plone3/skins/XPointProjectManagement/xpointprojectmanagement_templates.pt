@@ -51,7 +51,7 @@
                          b_start request/b_start | b_start;
                          batch python: Batch(storiesList, b_size, int(b_start), orphan=2);">
     <div metal:use-macro="here/batch_macros/macros/navigation" />
-    <table class="listing" width="100%"><tbody>
+    <table class="listing" width="98%"><tbody>
       <tr>
         <th>Story</th>
         <th width="458">Estimated hours / Progress Status</th>
@@ -94,7 +94,7 @@
                          tasks_b_start request/tasks_b_start | tasks_b_start;
                          batch python: Batch(tasksList, b_size, int(tasks_b_start), orphan=2, b_start_str='tasks_b_start');">
     <div metal:use-macro="here/batch_macros/macros/navigation" />
-    <table class="listing" width="100%"><tbody>
+    <table class="listing" width="98%"><tbody>
       <tr>
         <th>Task</th>
         <th>Owners</th>
@@ -154,7 +154,7 @@
     <tal:block tal:condition="python: useBatch">
       <div metal:use-macro="here/batch_macros/macros/navigation" />
     </tal:block>
-    <table class="listing" width="100%"><tbody>
+    <table class="listing" width="98%"><tbody>
       <tr>
         <th>Title</th>
         <th>Creator</th>
@@ -187,10 +187,10 @@
           <td>
             <div tal:condition="python: obj_type == 'XPointMemo'">N/A</div>
             <div tal:condition="python: obj_type == 'XPointIssue'">
-              <span tal:content="obj/getXpoint_tracking_status"/>
+              <span tal:content="obj/getXpproject_document_status"/>
             </div>
             <div tal:condition="python: obj_type == 'XPointProposal'">
-              <span tal:content="obj/getXpoint_tracking_status"/>
+              <span tal:content="obj/getXpproject_document_status"/>
             </div>
           </td>
         </tr>
@@ -217,7 +217,7 @@
     </div>
 
     <!-- display the subtotal progress bar here? or Not? -->
-    <table class="listing" width="100%"><tbody>
+    <table class="listing" width="98%"><tbody>
       <tr>
         <th>Estimated hours / Progress Status</th>
       </tr>

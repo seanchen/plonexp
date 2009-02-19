@@ -11,6 +11,9 @@ from AccessControl import ClassSecurityInfo
 from Products.Archetypes.public import Schema
 from Products.Archetypes.public import TextField
 from Products.Archetypes.public import RichWidget
+from Products.Archetypes.public import LinesField
+from Products.Archetypes.public import InAndOutWidget
+from Products.Archetypes.public import LinesWidget
 from Products.Archetypes.public import registerType
 # from ATContentTypes
 from Products.ATContentTypes.atct import ATFolder
@@ -44,8 +47,40 @@ XPointProjectSchema = ATFolderSchema.copy() + Schema((
                 rows = 22,
                 ),
             ),
-
-        # anything else?
+        # developers for this project
+        LinesField(
+            'project_developers',
+            searchable = False,
+            required = True,
+            vocabulary = 'vocabulary_allMembersList',
+            widget = InAndOutWidget(
+                label = 'Developers',
+                descrpiton = "Please select developers for this project",
+                ),
+            ),
+        # modules
+        LinesField(
+            'project_modules',
+            searchable = False,
+            required = True,
+            widget = LinesWidget(
+                label = 'Project Modules',
+                description = 'Please specify the module for your project, one per line',
+                cols = 40,
+                ),
+            ),
+        # pages
+        # milestone
+        LinesField(
+            'project_milestones',
+            searchable = False,
+            required = True,
+            widget = LinesWidget(
+                label = 'Project Milestone',
+                description = 'Please define the milestones for your project, one per line',
+                cols = 40,
+                )
+            ),
         )
     )
 
@@ -106,11 +141,54 @@ class XPointProject(ATFolder):
     # preparing class security info for methods.
     security = ClassSecurityInfo()
 
+    #security.declareProtected('vocabulary_allMembersList')
+    def vocabulary_allMembersList(self):
+        """ Return a list of tuple (user_id, fullname, email) for all
+        the members of the portal.
+        """
+        members = []
+        portalMembers = getToolByName(self, 'portal_membership')
+        members = [(member.id,
+                    member.getProperty('fullname',None),
+                    member.getProperty('email',None))
+                   for member in portalMembers.listMembers()]
+
+        return DisplayList(members)
+
+    security.declarePublic('getProjectDevelopers')
+    def getProjectDevelopers(self):
+        """ returns all developers for this project.
+        """
+        return self.getProject_developers()
+
+    security.declarePublic('getProjectModules')
+    def getProjectModules(self):
+        """ returns all modules for this project.
+        """
+        return self.getProject_modules()
+
+    security.declarePublic('getProjectMilestones')
+    def getProjectMilestones(self):
+        """ returns all milestones defined in this project.
+        """
+        return self.getProject_milestones()
+
     security.declarePublic('getProjectStories')
     def getProjectStories(self):
         """ returns all stories in this project.
         """
         return self.contentValues(filter={'portal_type': ['XPointStory']})
+
+    security.declarePublic('getModuleStories')
+    def getModuleStories(self, moduleName):
+        """ return all stories for a module.
+        """
+        stories = []
+        for story in self.getProjectStories():
+            if story.getStory_module() == moduleName:
+                stories.append(story)
+
+        return stories
 
     security.declarePublic('getProjectEstimatedHours')
     def getProjectEstimatedHours(self):
@@ -154,13 +232,6 @@ class XPointProject(ATFolder):
 
         return portal_catalog.searchResults(query)
 
-    security.declarePublic('getProjectDevelopers')
-    def getProjectDevelopers(self):
-        """ returns all developers for this project.
-        """
-        portal_catalog = getToolByName(self, 'portal.catalog')
-        return portal_catalog.uniqueValuesFor('getTask_owners')
-
     security.declarePublic('getTasksForMember')
     def getTasksForMember(self, memberId=''):
         """ Returns all tasks for the specified member id.
@@ -170,6 +241,22 @@ class XPointProject(ATFolder):
         query = {
             'portal_type':['XPointTask'],
             'getTask_owners':memberId,
+            'path':cpath,
+            }
+
+        return portal_catalog.searchResults(query)
+
+    security.declarePublic('getImpsForMember')
+    def getImpsForMember(self, memberId=''):
+        """ Returns all responsed for the specified member id.
+        """
+        portal_catalog = getToolByName(self, 'portal_catalog')
+        cpath = '/'.join(self.getPhysicalPath())
+        query = {
+            'portal_type':['XPointMemo', 'XPointIssue', 'XPointProposal'],
+            'Creator':memberId,
+            'sort_on':'Date',
+            'sort_order':'reverse',
             'path':cpath,
             }
 

@@ -6,9 +6,10 @@
 
 <body>
 
+  <!-- ==================================================================== -->
   <!-- macro for progress bar with the estimate hours and progress percent. -->
   <!-- two params: estimatedHours, progressPercent -->
-  <!--==================-->
+  <!-- ==================================================================== -->
   <tal:block metal:define-macro="xpoint_progress_bar">
     <div align="center"><strong>
       <span tal:content="estimatedHours" /> hours /
@@ -20,11 +21,13 @@
       </div>
     </div>
   </tal:block>
+  <!-- ==================================================================== -->
 
+  <!-- ==================================================================== -->
   <!-- macro to show a list of member's info. we need pass a list of -->
   <!-- members' id -->
   <!-- one param: membersList -->
-  <!--==================-->
+  <!-- ==================================================================== -->
   <tal:block metal:define-macro="xpoint_developers_list">
     <tal:block repeat="member membersList">
       <a href="#"
@@ -35,9 +38,177 @@
       </a><br/>
     </tal:block>
   </tal:block>
+  <!-- ==================================================================== -->
 
+  <!-- ==================================================================== -->
+  <!-- macro for stories list. -->
+  <!-- param: storiesList -->
+  <!-- ==================================================================== -->
+  <tal:black metal:define-macro="xpoint_stories_list">
+    <table class="listing" width="100%"><tbody>
+      <tr>
+        <th>Story</th>
+        <th width="458">Estimated hours / Progress Status</th>
+      </tr>
+      <!-- one row for each story. -->
+      <tal:block tal:repeat="story python: storiesList">
+        <tr tal:define="oddrow repeat/story/odd;
+                        url story/getURL|story/absolute_url;
+                        story_type story/portal_type;
+                        story_typeinfo python: here.portal_types.getTypeInfo(story_type);
+                        icon python: portal_url + '/' + story_typeinfo.getIcon();"
+            tal:attributes="class python: test(oddrow, 'odd', 'even')">
+          <td>
+            <a href="#" tal:attributes="href url">
+              <img src="#" height="16" width="16"
+                   tal:attributes="src icon"/>&nbsp;
+              <span tal:content="story/Title"/>
+            </a>
+          </td>
+          <td tal:define="estimatedHours python: story.getStoryEstimatedHours();
+                          progressPercent python: story.getStoryProgressPercent();">
+            <tal:block
+               metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_progress_bar"
+            />
+          </td>
+        </tr>
+      </tal:block>
+    </tbody></table>
+  </tal:black>
+  <!-- ==================================================================== -->
+
+	<!-- ==================================================================== -->
+	<!-- macro for tasks list. -->
+	<!-- parm: tasksList -->
+	<!-- ==================================================================== -->
+	<tal:block metal:define-macro="xpoint_tasks_list">
+    <table class="listing" width="100%"><tbody>
+      <tr>
+        <th>Task</th>
+        <th>Owners</th>
+        <th width="458">Estimated hours / Progress Status</th>
+      </tr>
+      <!-- one row for each task. -->
+      <tal:block tal:repeat="task python: tasksList">
+        <tr tal:define="oddrow repeat/task/odd;
+                        url task/getURL|task/absolute_url;
+                        task_type task/portal_type;
+                        task_typeinfo python: here.portal_types.getTypeInfo(task_type);
+                        icon python: portal_url + '/' + task_typeinfo.getIcon();"
+            tal:attributes="class python: test(oddrow, 'odd', 'even')">
+          <td>
+            <a href="#" tal:attributes="href url">
+              <img src="#" height="16" width="16"
+                   tal:attributes="src icon"/>&nbsp;
+              <span tal:content="task/Title"/>
+            </a>
+          </td>
+          <td tal:define="membersList task/getTask_owners">
+            <tal:block
+               metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_developers_list"
+            />
+          </td>
+          <td tal:define="estimatedHours task/getTask_estimated_hours;
+                          progressPercent task/getTask_progress_percent;">
+            <tal:block
+               metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_progress_bar"
+            />
+          </td>
+        </tr>
+      </tal:block>
+    </tbody></table>
+	</tal:block>
+	<!-- ==================================================================== -->
+
+  <!-- ==================================================================== -->
+  <!-- xpoint macro for issues/memos/proposals list -->
+  <!-- param: impsList -->
+  <!-- ==================================================================== -->
+  <tal:black metal:define-macro="xpoint_imps_list">
+    <table class="listing" width="100%"><tbody>
+      <tr>
+        <th>Title</th>
+        <th>Creator</th>
+        <th>Status</th>
+      </tr>
+
+      <!-- memos -->
+      <tal:block tal:repeat="obj python: impsList">
+        <tr tal:define="oddrow repeat/obj/odd;
+                        url obj/getURL|obj/absolute_url;
+                        obj_type obj/portal_type;
+                        obj_typeinfo python:here.portal_types.getTypeInfo(obj_type);
+                        icon python:portal_url + '/' + obj_typeinfo.getIcon();"
+            tal:attributes="class python:test(oddrow, 'odd', 'even')">
+          <td>
+            <a href="#" tal:attributes="href url">
+              <img src="#" height="16" width="16"
+                   tal:attributes="src icon"/>&nbsp;
+              <span tal:content="obj/Title"/>
+            </a>
+          </td>
+          <td tal:define="creator obj/Creator;
+                          author python: mtool.getMemberInfo(creator);">
+            <span tal:content="python: author['fullname']" />
+          </td>
+          <td>
+            <div tal:condition="python: obj_type == 'XPointMemo'">N/A</div>
+            <div tal:condition="python: obj_type == 'XPointIssue'">
+              <span tal:content="obj/getXpoint_tracking_status"/>
+            </div>
+            <div tal:condition="python: obj_type == 'XPointProposal'">
+              <span tal:content="obj/getXpoint_tracking_status"/>
+            </div>
+          </td>
+        </tr>
+      </tal:block>
+    </tbody></table>
+  </tal:black>
+  <!-- ==================================================================== -->
+
+  <!-- ==================================================================== -->
+  <!-- macro for the project header -->
+  <!-- only for the project views. -->
+  <!-- ==================================================================== -->
+  <tal:block metal:define-macro="xpoint_project_view_header">
+    <div metal:use-macro="here/document_actions/macros/document_actions">
+        Document actions (print, sendto etc)
+    </div>
+
+    <h1 tal:content="object_title" class="documentFirstHeading">
+      Title or id
+    </h1>
+    
+    <div metal:use-macro="here/document_byline/macros/byline">
+      Get the byline - contains details about author and modification date.
+    </div>
+
+    <!-- display the subtotal progress bar here? or Not? -->
+    <table class="listing" width="100%"><tbody>
+      <tr>
+        <th>Estimated hours / Progress Status</th>
+      </tr>
+      <tr>
+        <td tal:define="estimatedHours python: here.getProjectEstimatedHours();
+                        progressPercent python: here.getProjectProgressPercent();">
+          <tal:block
+             metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_progress_bar"
+          />
+        </td>
+      </tr>
+    </tbody></table>
+
+    <div>
+      <span tal:content="structure here/getProject_text" />
+    </div>
+  </tal:block>
+  <!-- ==================================================================== -->
+
+  <!-- ==================================================================== -->
   <!-- mocro to show a list of project view, we need pass the project url -->
-  <!-- param: projectURL, developersList -->
+  <!-- this is only used by project views. -->
+  <!-- param: projectURL  -->
+  <!-- ==================================================================== -->
   <tal:block metal:define-macro="xpoint_project_views_list">
     <table width="100%" cellpadding="2" border="0" cellspacing="0"><tbody><tr><td>
     <div style="float: right;">
@@ -57,8 +228,24 @@
   <!-- milestone -->
 
   <!-- Modules -->
+  <tal:block tal:define="modulesList python:here.getProjectModules();">
+  <li tal:condition="modulesList">
+    <a class="qmparent" href="#">Modules</a>
+
+    <ul style="width:141px;">
+      <tal:block tal:repeat="module python:modulesList">
+        <li>
+          <a tal:attributes="href python: portal_url + projectURL + '/xpointproject_module_view?moduleName=' + module"
+             tal:content="python: module">
+            module name
+          </a>
+        </li>
+      </tal:block>
+    </ul></li>
+  </tal:block>
 
   <!-- Developers -->
+  <tal:block tal:define="developersList python: here.getProjectDevelopers();">
   <li tal:condition="developersList">
     <a class="qmparent" href="#">Developers</a>
 
@@ -72,12 +259,15 @@
         </li>
       </tal:block>
     </ul></li>
+  </tal:block>
 
-<li class="qmclear">&nbsp;</li></ul>
+  <!-- clean -->
+  <li class="qmclear">&nbsp;</li></ul>
 <script type="text/javascript">qm_create(0,false,0,500,false,false,false,false,false);</script>
     </div>
     </td></tr></tbody></table>
 
   </tal:block>
+  <!-- =========================== END ==================================== -->
 </body>
 </html>

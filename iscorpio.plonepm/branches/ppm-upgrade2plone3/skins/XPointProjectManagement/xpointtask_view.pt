@@ -41,18 +41,18 @@
         <th>Estimated Hours / Progress Status</th>
       </tr>
       <tr>
-        <td tal:define="membersList here/getTask_owners">
+        <td tal:define="membersList here/getXptask_owners">
           <tal:block
              metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_developers_list"
           />
         </td>
-        <td tal:content="here/getTask_completion_date">
+        <td tal:content="here/getXptask_completion_date">
         </td>
         <td>
-          <span tal:content="here/getTask_used_hours"/> hours
+          <span tal:content="here/getXptask_used_hours"/> hours
         </td>
-        <td tal:define="estimatedHours here/getTask_estimated_hours;
-                        progressPercent here/getTask_progress_percent;">
+        <td tal:define="estimatedHours here/getXptask_estimated_hours;
+                        progressPercent here/getXptask_progress_percent;">
           <tal:block
              metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_progress_bar"
           />
@@ -61,7 +61,7 @@
     </tbody></table>
 
     <!-- the task details -->
-    <metal:field use-macro="python:here.widget('task_text', mode='view')">
+    <metal:field use-macro="python:here.widget('xptask_text', mode='view')">
       Task Text
     </metal:field>
 

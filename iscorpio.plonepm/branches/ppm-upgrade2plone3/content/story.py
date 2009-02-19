@@ -25,15 +25,10 @@ from Products.ATContentTypes.atct import ATFolder
 from Products.ATContentTypes.atct import ATFolderSchema
 from Products.ATContentTypes.configuration import zconf
 
-try: # Plone 3.0.x
-    from Products.CMFCore import permissions as CMFCorePermissions
-except: # Old CMF
-    from Products.CMFCore import CMFCorePermissions
-from Products.CMFCore.permissions import View
 from Products.CMFCore.utils import getToolByName
 
 # the configruation info for this project.
-from Products.XPointProjectManagement.config import *
+from Products.XPointProjectManagement.config import PROJECTNAME
 
 # define the schem for this content type.
 # a XPointStory is a folder in Plone site.
@@ -41,22 +36,19 @@ XPointStorySchema = ATFolderSchema.copy() + Schema((
 
         # we need a rich text body for the story.
         TextField(
-            'story_text',
+            'xpstory_text',
             searchable = True,
             required = True,
-            allowable_content_types = zconf.ATDocument.allowed_content_types,
-            default_content_type = zconf.ATDocument.default_content_type,
             default_output_type = 'text/x-html-safe',
             widget = RichWidget(
                 label = 'Story body',
-                description = 'Provide details description for your story',
                 rows = 22,
                 ),
             ),
 
         # the module for this tory.
         StringField(
-            'story_module',
+            'xpstory_module',
             searchable = False,
             required = True,
             vocabulary = 'getProjectModules',
@@ -70,7 +62,7 @@ XPointStorySchema = ATFolderSchema.copy() + Schema((
 
         # select the release that this story will be included.
         LinesField(
-            'story_releases',
+            'xpstory_releases',
             searchable = True,
             required = True,
             vocabulary = 'vocabulary_releases',
@@ -86,11 +78,6 @@ finalizeATCTSchema(XPointStorySchema)
 
 # we don't need description here.
 XPointStorySchema['description'].widget.visible = False
-# make this related items field visible and move to bottom.
-XPointStorySchema['relatedItems'].widget.visible = True
-XPointStorySchema['relatedItems'].widget.description = \
-    "Select related items"
-XPointStorySchema.moveField('relatedItems', pos='bottom')
 
 # the XPointStory class.
 class XPointStory(ATFolder):
@@ -126,28 +113,6 @@ class XPointStory(ATFolder):
     # for logging.
     log = logging.getLogger("XPointProjectManagement Story")
 
-    actions = ({
-        'id': 'view',
-        'name': 'View',
-        'action': 'string:${object_url}/xpointstory_view',
-        'permissions': (CMFCorePermissions.View,)
-        },{
-        'id': 'edit',
-        'name': 'Edit',
-        'action': 'string:${object_url}/base_edit',
-        'permissions': (CMFCorePermissions.ViewManagementScreens,)
-        },{
-        'id': 'metadata',
-        'name': 'Properties',
-        'action': 'string:${object_url}/base_metadata',
-        'permissions': (CMFCorePermissions.ViewManagementScreens,)
-        },{
-        'id': 'local_roles',
-        'name': 'Sharing',
-        'action': 'string:${object_url}/sharing',
-        'permissions': (CMFCorePermissions.ViewManagementScreens,)
-        })
-
     security = ClassSecurityInfo()
 
     def vocabulary_releases(self):
@@ -168,10 +133,10 @@ class XPointStory(ATFolder):
         estimatedSubtotal = 0
         for task in tasks:
             # calc the subtotal of estimated hours.
-            if task.getTask_estimated_hours != None:
+            if task.getXptask_estimated_hours != None:
                 self.log.debug("Estimated hours [%s] for task [%s]",
-                               task.task_estimated_hours, task.id)
-                estimatedSubtotal = estimatedSubtotal + task.task_estimated_hours
+                               task.xptask_estimated_hours, task.id)
+                estimatedSubtotal = estimatedSubtotal + task.xptask_estimated_hours
 
         return estimatedSubtotal
 
@@ -187,10 +152,10 @@ class XPointStory(ATFolder):
             progressSubtotal = 0
             for task in tasks:
                 # calc the subtotal ...
-                if task.getTask_progress_percent != None:
+                if task.getXptask_progress_percent != None:
                     self.log.debug("Progress percent [%s] for task [%s]",
-                                   task.task_progress_percent, task.id)
-                    progressSubtotal = progressSubtotal + task.task_progress_percent
+                                   task.xptask_progress_percent, task.id)
+                    progressSubtotal = progressSubtotal + task.xptask_progress_percent
 
             # calc the average.
             averageProgress = progressSubtotal / len(tasks)

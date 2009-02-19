@@ -132,6 +132,19 @@ class XPointProject(ATFolder):
 
         return DisplayList(members)
 
+    #security.declarePublic('vocabulary_allStoriesList')
+    def vocabulary_allStoriesList(self):
+        """ Returns a display list for all stories, the format is like this:
+        [id, id + title].
+        """
+        retList = []
+        stories = self.getAllStories()
+        for story in stories:
+            retList.append((story.id, story.id + ' ' + story.Title))
+
+        self.log.debug('we got %s stories', len(retList))
+        return DisplayList(retList)
+
     security.declarePublic('getProjectDevelopers')
     def getProjectDevelopers(self):
         """ returns all developers for this project.

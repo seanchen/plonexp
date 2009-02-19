@@ -1,4 +1,4 @@
-# XPointBuildJournal.py
+# buildjournal.py
 
 __doc__ = """XPointBuildJournal Product for Plone to record build
 journal."""
@@ -15,6 +15,7 @@ from Products.Archetypes.public import registerType
 
 from Products.ATContentTypes.content.base import ATCTContent
 from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
+from Products.ATContentTypes.configuration import zconf
 
 from Products.CMFCore.permissions import View
 
@@ -29,11 +30,14 @@ XPointBuildJournalSchema = ATCTContent.schema.copy() + Schema((
             'buildJournalBody',
             searchable = True,
             required = True,
-            allowable_content_types = ('text/html',),
+            allowable_content_types = zconf.ATDocument.allowed_content_types,
+            default_content_type = zconf.ATDocument.default_content_type,
             default_output_type = 'text/x-html-safe',
-            widget = RichWidget(label = 'Build Journal Body',
-                                description = "The content of this build journal",
-                                rows = 28),
+            widget = RichWidget(
+                label = 'Build Journal Body',
+                description = "The content of this build journal",
+                rows = 22
+                ),
             ),
         ),
     )
@@ -64,9 +68,9 @@ class XPointBuildJournal(ATCTContent, HistoryAwareMixin):
 
     schema = XPointBuildJournalSchema
 
-    meta_type = 'BuildJournal'
-    archetype_name = 'BuildJournal'
-    portal_type = 'BuildJournal'
+    meta_type = 'XPointBuildJournal'
+    portal_type = 'XPointBuildJournal'
+    archetype_name = 'Build Journal'
 
     content_icon = 'XPBuildJournal_icon.gif'
 

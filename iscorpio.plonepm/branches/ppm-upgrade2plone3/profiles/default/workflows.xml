@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<object name="portal_workflow" meta_type="Plone Workflow Tool">
+
+  <bindings>
+    <type type_id="XPointProject">
+      <bound-workflow workflow_id="plone_workflow"/>
+    </type>
+    <type type_id="XPointRelease">
+      <bound-workflow workflow_id="plone_workflow"/>
+    </type>
+    <type type_id="XPointStory">
+      <bound-workflow workflow_id="plone_workflow"/>
+    </type>
+    <type type_id="XPointTask">
+      <bound-workflow workflow_id="plone_workflow"/>
+    </type>
+    <type type_id="XPointMemo">
+      <bound-workflow workflow_id="plone_workflow"/>
+    </type>
+    <type type_id="XPointIssue">
+      <bound-workflow workflow_id="plone_workflow"/>
+    </type>
+    <type type_id="XPointProposal">
+      <bound-workflow workflow_id="plone_workflow"/>
+    </type>
+    <type type_id="XPointBuildJournal">
+      <bound-workflow workflow_id="plone_workflow"/>
+    </type>
+  </bindings>
+</object>

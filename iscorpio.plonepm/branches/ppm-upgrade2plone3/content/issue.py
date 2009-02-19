@@ -40,17 +40,7 @@ class XPointIssue(XPointDocument):
     portal_type = 'XPointIssue'
     archetype_name = "XP Issue"
 
-    content_icon = 'XPIssue_icon.gif'
-
     _at_rename_after_creation = True
-    global_allow = False
-    filter_content_types = False
-    allowed_content_types = []
-
-    # allow discuss on issue.
-    # comment out for Plone 3, it is just doesn't work.  Need figure
-    # out the new approach for Plone 3.
-    #allow_discussion = True
 
     security = ClassSecurityInfo()
 

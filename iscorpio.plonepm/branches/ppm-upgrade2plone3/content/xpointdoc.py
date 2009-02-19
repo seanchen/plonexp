@@ -83,10 +83,6 @@ class XPointDocument(ATCTContent, HistoryAwareMixin):
 
     _at_rename_after_creation = True
 
-    default_view = 'xpointdoc_view'
-    # allow 
-    global_allow = True
-
     security = ClassSecurityInfo()
 
     security.declareProtected(View, 'CookedBody')

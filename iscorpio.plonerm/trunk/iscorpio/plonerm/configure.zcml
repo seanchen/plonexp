@@ -1,7 +1,17 @@
 <configure
    xmlns="http://namespaces.zope.org/zope"
+   xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
    xmlns:five="http://namespaces.zope.org/five"
-   i18n_domain="iscorpio.plonerm">
+   i18n_domain="iscorpio.plonerm"
+>
 
+  <!-- Generic Setup profiles -->
+  <genericsetup:registerProfile
+     name="default"
+     title="Plone Resource Management"
+     directory="profiles/default"
+     description="A Plone Way to Management Resources"
+     provides="Products.GenericSetup.interfaces.EXTENSION"
+  />
 
 </configure>

@@ -5,9 +5,9 @@
 # Register product, setup security, permission, roles, etc.
 # ??? How is this work?
 
-from Product.Archetypes.public import process_types, listTypes
-from Product.CMFCore import utils as cmfutils
-from Product.CMFCore.DirectoryView import registerDirectory
+from Products.Archetypes.public import process_types, listTypes
+from Products.CMFCore import utils as cmfutils
+from Products.CMFCore.DirectoryView import registerDirectory
 
 from permissions import initialize as initialize_permissions
 from config import PROJECTNAME, SKINS_DIR, GLOBALS
@@ -22,7 +22,7 @@ def initialize(context):
     # import all content types from content folder.
     import content
 
-    content_types, constructor, ftis = process_types(listTypes(PROJECTNAME),
+    content_types, constructors, ftis = process_types(listTypes(PROJECTNAME),
                                                      PROJECTNAME)
 
     permissions = initialize_permissions()

@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!-- this xml file defines the file system skins folder and the layer in Plone. -->
+<object name="portal_skins">
+
+  <object name="PloneRM" meta_type="Filesystem Directory View"
+          directory="iscorpio.plonerm:skins/PloneRM"/>
+
+  <skin-path name="*">
+    <layer name="PloneRM" insert-after="custom"/>
+  </skin-path>
+</object>

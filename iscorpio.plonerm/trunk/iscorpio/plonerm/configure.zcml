@@ -5,6 +5,8 @@
    i18n_domain="iscorpio.plonerm"
 >
 
+  <five:registerPackage package="." initialize=".initialize" />
+
   <!-- Generic Setup profiles -->
   <genericsetup:registerProfile
      name="default"

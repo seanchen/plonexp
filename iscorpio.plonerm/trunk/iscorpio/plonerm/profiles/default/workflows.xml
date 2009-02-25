@@ -8,5 +8,9 @@
     <type type_id="PRMResources">
       <bound-workflow workflow_id="plone_workflow"/>
     </type>
+
+    <type type_id="PRMComputer">
+      <bound-workflow workflow_id="plone_workflow"/>
+    </type>
   </bindings>
 </object>

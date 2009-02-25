@@ -4,5 +4,6 @@
 <object name="portal_factory" meta_type="Plone Factory Tool">
   <factorytypes>
     <type portal_type="PRMResources"/>
+    <type portal_type="PRMComputer"/>
   </factorytypes>
 </object>

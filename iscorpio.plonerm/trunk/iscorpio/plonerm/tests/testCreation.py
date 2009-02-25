@@ -71,7 +71,11 @@ class TestCreation(PlonermTestCase):
         resources = getattr(self.folder, self.outId)
 
         autoId = resources.invokeFactory('PRMComputer', id='test')
-        self.assertNotEquals('test', autoId)
+        self.assertEquals('test', autoId)
+        computer = getattr(resources, autoId)
+        computer._renameAfterCreation()
+        print "Computer ID: %s" % computer.id
+        self.assertNotEquals('test', computer.id)
 
     # Keep adding methods here, or break it into multiple classes or
     # multiple files as appropriate. Having tests in multiple files makes

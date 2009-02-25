@@ -5,4 +5,7 @@
   <object name="PRMResources"
           meta_type="Factory-based Type Information with dynamic views"/>
 
+  <object name="PRMComputer"
+          meta_type="Factory-based Type Information with dynamic views"/>
+
 </object>

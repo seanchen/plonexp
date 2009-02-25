@@ -35,7 +35,7 @@ def setup_product():
     own layer, but this is the easiest way for Plone integration tests.
     """
     
-    # Load the ZCML configuration for the example.tests package.
+    # Load the ZCML configuration for the iscorpio.plonerm package.
     # This can of course use <include /> to include other packages.
     
     fiveconfigure.debug_mode = True

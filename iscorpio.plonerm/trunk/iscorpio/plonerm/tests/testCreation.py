@@ -20,7 +20,12 @@ class TestCreation(PlonermTestCase):
         set up common state. Setup that is specific to a particular test 
         should be done in that test method.
         """
-        self.workflow = getToolByName(self.portal, 'portal_workflow')
+        self.inId = 'my-resources'
+        self.inSequence = 102
+
+        # create a resources by using the invokeFactory.
+        self.outId = self.folder.invokeFactory('PRMResources', self.inId,
+                                               prmUniqueSequence=self.inSequence)
 
     def beforeTearDown(self):
         """This method is called after each single test. It can be used for
@@ -51,18 +56,23 @@ class TestCreation(PlonermTestCase):
         self.assertEquals("Plone site", self.portal.getProperty('title'))
 
     def testAddPRMResources(self):
-        # create a resources by using the invokeFactory.
-        new_id = self.folder.invokeFactory('PRMResources', 'my-page',
-                                           prmUniqueSequence=102)
-        # get the resources object.
-        resources = getattr(self.folder, new_id)
 
-        self.assertEquals('my-page', new_id)
-        self.assertEquals(102, resources.prmUniqueSequence)
+        # get the resources object.
+        resources = getattr(self.folder, self.outId)
+
+        self.assertEquals(self.inId, self.outId)
+        self.assertEquals(self.inSequence, resources.prmUniqueSequence)
 
         nextSequence = resources.getNextUniqueId()
-        self.assertEquals(103, resources.prmUniqueSequence)
-        
+        self.assertEquals(self.inSequence + 1, resources.prmUniqueSequence)
+
+    def testAddPRMComputer(self):
+
+        resources = getattr(self.folder, self.outId)
+
+        autoId = resources.invokeFactory('PRMComputer', id='test')
+        self.assertNotEquals('test', autoId)
+
     # Keep adding methods here, or break it into multiple classes or
     # multiple files as appropriate. Having tests in multiple files makes
     # it possible to run tests from just one package:

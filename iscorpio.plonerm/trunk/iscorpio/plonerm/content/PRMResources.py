@@ -11,6 +11,8 @@ from AccessControl import ClassSecurityInfo
 from Products.Archetypes.public import Schema
 from Products.Archetypes.public import IntegerField
 from Products.Archetypes.public import IntegerWidget
+from Products.Archetypes.public import LinesField
+from Products.Archetypes.public import LinesWidget
 from Products.Archetypes.public import registerType
 # from ATContenttypes
 from Products.ATContentTypes.interfaces import IATFolder
@@ -22,6 +24,17 @@ from iscorpio.plonerm.config import PROJECTNAME
 
 # define the schema...
 PRMResourcesSchema = ATFolderSchema.copy() + Schema((
+
+        # the available manufacturers.
+        LinesField(
+            'prmManufacturers',
+            searchable = False,
+            required = True,
+            widget = LinesWidget(
+                label = 'Avilable Manufacturers',
+                description = 'Please specify available manufactures. One line for each',
+                ),
+            ),
 
         # The unique sequence will serve all resources managed under here.
         IntegerField(

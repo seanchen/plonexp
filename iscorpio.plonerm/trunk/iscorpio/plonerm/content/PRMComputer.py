@@ -8,8 +8,10 @@ from AccessControl import ClassSecurityInfo
 # from Archetypes
 from Products.Archetypes.public import Schema
 from Products.Archetypes.public import registerType
+from Products.Archetypes.public import DisplayList
 from Products.Archetypes.public import StringField
 from Products.Archetypes.public import StringWidget
+from Products.Archetypes.public import SelectionWidget
 
 from Products.ATContentTypes.interfaces import IATDocument
 from Products.ATContentTypes.content.base import ATCTContent
@@ -23,6 +25,16 @@ from iscorpio.plonerm.content.base import PRMBaseContent
 
 PRMComputerSchema = ATCTContent.schema.copy() + Schema((
 
+        StringField(
+            'prmManufacturer',
+            default = 'Unknow',
+            vocabulary = 'vocabularyManufacturers',
+            widget = SelectionWidget(
+                label = "Computer Manufacturer",
+                description = 'Please pick the manufacturer for this computer',
+                format = 'select',
+                ),
+            ),
         ),
     )
 
@@ -49,5 +61,12 @@ class PRMComputer(PRMBaseContent, ATCTContent):
     prm_id_prefix = "prmc"
 
     security = ClassSecurityInfo()
+
+    security.declarePrivate('vocabularyManufacturers')
+    def vocabularyManufacturers(self):
+        """ return all the manufacturers as a DisplayList.
+        """
+        manus = self.getPrmManufacturers()
+        return DisplayList(zip(manus, manus))
 
 registerType(PRMComputer, PROJECTNAME)

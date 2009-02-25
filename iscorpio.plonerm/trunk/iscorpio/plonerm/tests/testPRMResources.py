@@ -10,18 +10,18 @@ from iscorpio.plonerm.tests.base import PlonermTestCase
 
 from Products.CMFCore.utils import getToolByName
 
-class TestSetup(PlonermTestCase):
+class TestCreation(PlonermTestCase):
     """The name of the class should be meaningful. This may be a class that
     tests the installation of a particular product.
     """
-    
+
     def afterSetUp(self):
         """This method is called before each single test. It can be used to
         set up common state. Setup that is specific to a particular test 
         should be done in that test method.
         """
         self.workflow = getToolByName(self.portal, 'portal_workflow')
-        
+
     def beforeTearDown(self):
         """This method is called after each single test. It can be used for
         cleanup, if you need it. Note that the test framework will roll back
@@ -31,8 +31,8 @@ class TestSetup(PlonermTestCase):
         adapter in the Component Architecture during a test), you may want to
         tear things down here.
         """
-    
-    def test_portal_title(self):
+
+    def testPortalTitle(self):
         
         # This is a simple test. The method needs to start with the name
         # 'test'. 
@@ -50,9 +50,18 @@ class TestSetup(PlonermTestCase):
         
         self.assertEquals("Plone site", self.portal.getProperty('title'))
 
-    def test_able_to_add_document(self):
-        new_id = self.folder.invokeFactory('PRMResources', 'my-page')
+    def testAddPRMResources(self):
+        # create a resources by using the invokeFactory.
+        new_id = self.folder.invokeFactory('PRMResources', 'my-page',
+                                           prmUniqueSequence=102)
+        # get the resources object.
+        resources = getattr(self.folder, new_id)
+
         self.assertEquals('my-page', new_id)
+        self.assertEquals(102, resources.prmUniqueSequence)
+
+        nextSequence = resources.getNextUniqueId()
+        self.assertEquals(103, resources.prmUniqueSequence)
         
     # Keep adding methods here, or break it into multiple classes or
     # multiple files as appropriate. Having tests in multiple files makes
@@ -66,5 +75,5 @@ def test_suite():
     above
     """
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(TestSetup))
+    suite.addTest(unittest.makeSuite(TestCreation))
     return suite

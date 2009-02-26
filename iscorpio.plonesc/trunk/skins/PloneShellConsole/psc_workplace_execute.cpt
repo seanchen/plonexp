@@ -10,7 +10,7 @@
 <metal:main fill-slot="main">
 
   <tal:main-macro metal:define-macro="psc_workplace_execute"
-                  tal:condition="python:not user.has_role('Anonymous')">
+                  tal:condition="python: user.has_role('Manager') | user.has_role('BuildMaker')">
 
     <div tal:replace="structure provider:plone.abovecontenttitle"/>
 

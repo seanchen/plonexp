@@ -19,6 +19,10 @@ import config
 
 log = logging.getLogger('PloneShellConsole permissions')
 
+ExecuteWorkplace = "%s: Execute PSCWorkplace" % config.PROJECTNAME
+
+CMFCorePermissions.setDefaultRoles(ExecuteWorkplace, ("Manager"))
+
 # The setting of the permission and the roll is made. This function is 
 # called from __ init__.py.
 def initialize():

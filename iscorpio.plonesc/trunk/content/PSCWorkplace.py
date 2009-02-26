@@ -11,6 +11,8 @@ __docformat__ = 'plaintext'
 import os
 import commands
 import logging
+import time
+from operator import itemgetter
 
 from AccessControl import ClassSecurityInfo
 # from Archetypes
@@ -26,6 +28,8 @@ from Products.ATContentTypes.configuration import zconf
 from Products.statusmessages.interfaces import IStatusMessage
 
 from Products.CMFCore.utils import getToolByName
+
+from Products.CMFPlone.utils import _createObjectByType
 
 from Products.DataGridField import DataGridField
 from Products.DataGridField import DataGridWidget
@@ -84,7 +88,18 @@ class PSCWorkplace(ATFolder):
 
     # here are the methods.
 
-    security.declareProtected('View', 'pscWorplaceExecute')
+    security.declarePublic('getWorklogs')
+    def getWorklogs(self):
+        """
+        return all worklogs in this folder.
+        """
+        allLogs = self.contentValues(
+            filter = {'portal_type' : ['PSCWorklog']}
+            )
+        allLogs.sort(key=itemgetter('id'), reverse=True)
+        return allLogs
+
+    security.declareProtected('View', 'pscWorkplaceExecute')
     def pscWorkplaceExecute(self):
         """
         execute a workplace request.
@@ -109,7 +124,7 @@ class PSCWorkplace(ATFolder):
     security.declarePrivate('View', 'makeBuild')
     def makeBuild(self, svnurl):
 
-        buildFolder = '~/temp'
+        buildFolder = '/var/temp'
         workFolder = 'workplace'
 
         # change to working directory.
@@ -117,14 +132,44 @@ class PSCWorkplace(ATFolder):
 
         # check out the lates code from svnurl
         svnMessage = commands.getoutput('svn co --username user --password password %s %s' % (svnurl, workFolder))
+        self.log.debug(svnMessage)
+
+        # get the latest reversion.
+        os.chdir('%s/%s' % (buildFolder, workFolder))
+        svnMessage = commands.getoutput('svn info')
         self.log.info(svnMessage)
 
-        # make build by using MVN
-        os.chdir('%s/%s' % (buildFolder, workFolder))
-        mvnMessage = commands.getoutput('mvn deploy')
-        self.log.info(mvnMessage)
+        # parse the info output, extract the reversion number
 
-        # parse the mvn output message.
+        log_id = 'log-%s' % time.strftime('%Y%m%d%H%M%S')
+        # current user info.
+        mtool = getToolByName(self, 'portal_membership')
+        member = mtool.getAuthenticatedMember()
+        full_name = member.getProperty('fullname')
+
+        # creating a log from back end.
+        # ============================
+        # invokeFactory from folderish object will check the global allowed flag to
+        # decide whether not we can create the specified type of content.
+        #worklog = self.invokeFactory('PSCWorklog', 100)
+        # the _createObjectByType will bypass the global allowed flag checking.
+        _createObjectByType('PSCWorklog', self, id=log_id)
+        worklog = getattr(self, log_id)
+
+        worklog.setTitle('log message at %s' % time.strftime('%Y-%m-%d %H:%M'))
+        worklog.setPsc_log_username(full_name)
+        worklog.setPsc_log_timestamp('the time stamp')
+        worklog.setPsc_log_message(svnMessage)
+        # we have to reindex the object, otherwise the title will not show in the
+        # navigation tree and title of the page.
+        worklog.reindexObject()
+
+        # make build by using MVN
+        #mvnMessage = commands.getoutput('mvn deploy')
+        #self.log.info(mvnMessage)
+
+        # parse the mvn output message, extract the artifact names and
+        # then create the artifacts list in the worklog.
 
         commands.getoutput('rm -rf %s/%s' % (buildFolder, workFolder))
         # generate the PSCWorklog document.

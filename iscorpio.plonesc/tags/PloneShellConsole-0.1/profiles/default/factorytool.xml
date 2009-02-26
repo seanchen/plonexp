@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<!-- registering the portal type to portal factory, so plone will use factory to -->
+<!-- create the object. -->
+<object name="portal_factory" meta_type="Plone Factory Tool">
+  <factorytypes>
+    <type portal_type="PSCWorkplace"/>
+    <type portal_type="PSCWorklog"/>
+  </factorytypes>
+</object>

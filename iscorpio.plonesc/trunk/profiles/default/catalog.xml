@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<!-- plone catalog will create indexes and metadata columns based on the -->
+<!-- dedinition in this xml file. -->
+<object name="portal_catalog" meta_type="Plone Catalog Tool">
+
+  <!-- nothing for now. -->
+
+</object>

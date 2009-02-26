@@ -5,11 +5,14 @@
 ##bind script=script
 ##bind state=state  
 ##bind subpath=traverse_subpath
-##parameters=svnurl='', svnuser='', svnpassword=''
+##parameters=exepurpose='', svnurl='', svnuser='', svnpassword=''
 ##title=validates the svn url
 
 from Products.CMFPlone import PloneMessageFactory as _
 plone_utils=context.plone_utils
+
+if not exepurpose:
+    state.setError('exepurpose', _(u'Please set the purpose for making build.'), 'exepurpose_required')
 
 if not svnurl:
     state.setError('svnurl', _(u'Please set SVN URL for making build.'), 'svnurl_required')

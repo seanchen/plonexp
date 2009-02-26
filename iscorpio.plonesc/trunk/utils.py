@@ -53,7 +53,7 @@ class ScriptExecutor:
 
         # parse the mvn output message, extract the artifact names and
         # then create the artifacts list in the worklog.
-        mvnPattern = re.compile(r"Uploading: scp://.*(/maven.*/(.*\.(jar|war)))\n")
+        mvnPattern = re.compile(r"Uploading: http://.*(/maven.*/(.*\.(jar|war)))\n")
         mvnResult = mvnPattern.findall(mvnOutput)
         self.log.info("mvn result: %s" % mvnResult)
 

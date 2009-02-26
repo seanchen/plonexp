@@ -98,6 +98,13 @@ class PSCWorkplace(ATFolder):
         allLogs.sort(key=itemgetter('id'), reverse=True)
         return allLogs
 
+    security.declarePrivate('getConfigParam')
+    def getConfigParam(self, theKey):
+        """
+        return the config value for a config param key.
+        """
+        
+
     security.declareProtected('PloneShellConsole: Execute PSCWorkplace', 'pscWorkplaceExecute')
     def pscWorkplaceExecute(self):
         """
@@ -111,11 +118,12 @@ class PSCWorkplace(ATFolder):
             return self.REQUEST.RESPONSE.redirect(self.absolute_url());
 
         # the svn url.
+        purpose = form.get('exepurpose', None)
         svnurl = form.get('svnurl', None)
         svnuser = form.get('svnuser')
         svnpassword = form.get('svnpassword')
         self.log.info("making build for %s" % svnurl)
-        self.makeBuild(svnurl, svnuser, svnpassword)
+        self.makeBuild(purpose, svnurl, svnuser, svnpassword)
 
         status.addStatusMessage('Successfully make build for [%s], please check log for details.' % svnurl,
                                 type='info')
@@ -125,7 +133,7 @@ class PSCWorkplace(ATFolder):
 
     # make a build from the given svn url.
     security.declarePrivate('makeBuild')
-    def makeBuild(self, svnurl, svnuser, svnpassword):
+    def makeBuild(self, purpose, svnurl, svnuser, svnpassword):
 
         # we are using the executor to do the build.
         executor = ScriptExecutor()
@@ -168,7 +176,7 @@ class PSCWorkplace(ATFolder):
         _createObjectByType('PSCWorklog', self, id=log_id)
         worklog = getattr(self, log_id)
 
-        worklog.setTitle('log message at %s' % time.strftime('%Y-%m-%d %H:%M'))
+        worklog.setTitle(purpose)
         worklog.setPsc_log_timestamp(time.strftime('%b %d, %Y %H:%M'))
         worklog.setPsc_log_username(full_name)
         worklog.setPsc_log_subject(svnMessage)

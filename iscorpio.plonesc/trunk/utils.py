@@ -8,7 +8,7 @@ import os
 import time
 import commands
 import re
-import subprocess
+#import subprocess
 import logging
 from threading import Thread
 from random import randint
@@ -46,14 +46,14 @@ class ScriptExecutor:
         self.log.info("svn result: %s" % svnResult)
     
         # make build by using MVN
-        #mvnOutput = commands.getoutput('mvn deploy')
-        pmvn = subprocess.Popen("mvn" + " deploy", shell=True, stdout=subprocess.PIPE)
-        mvnOutput = pmvn.communicate()[0]
+        mvnOutput = commands.getoutput('mvn deploy')
+        #pmvn = subprocess.Popen("mvn" + " deploy", shell=True, stdout=subprocess.PIPE)
+        #mvnOutput = pmvn.communicate()[0]
         self.log.debug(mvnOutput)
 
         # parse the mvn output message, extract the artifact names and
         # then create the artifacts list in the worklog.
-        mvnPattern = re.compile(r"Uploading: http://.*(/maven.*/(.*\.(jar|war)))\n")
+        mvnPattern = re.compile(r"Uploading: scp://.*(/maven.*/(.*\.(jar|war)))\n")
         mvnResult = mvnPattern.findall(mvnOutput)
         self.log.info("mvn result: %s" % mvnResult)
 

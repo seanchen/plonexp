@@ -8,12 +8,8 @@ __docformat__ = 'plaintext'
 # a set of similar remote job.  It also tracks all logging message around the
 # remote jobs.
 
-import os
-import re
-import commands
 import logging
 import time
-import subprocess
 from operator import itemgetter
 
 from AccessControl import ClassSecurityInfo
@@ -38,6 +34,7 @@ from Products.DataGridField import DataGridWidget
 from Products.DataGridField.Column import Column
 
 from Products.PloneShellConsole.config import PROJECTNAME
+from Products.PloneShellConsole.utils import ScriptExecutor
 
 PSCWorkplaceSchema = ATFolderSchema.copy() + Schema((
 
@@ -130,26 +127,12 @@ class PSCWorkplace(ATFolder):
     security.declarePrivate('makeBuild')
     def makeBuild(self, svnurl, svnuser, svnpassword):
 
-        buildFolder = '/var/tmp'
-        workFolder = 'workplace'
+        # we are using the executor to do the build.
+        executor = ScriptExecutor()
+        output = executor.makeBuild(svnurl, svnuser, svnpassword)
 
-        # change to working directory.
-        os.chdir(buildFolder)
-
-        # check out the lates code from svnurl
-        svnMessage = commands.getoutput('svn co --username %s --password %s %s %s' %
-                                        (svnuser, svnpassword, svnurl, workFolder))
-        self.log.debug(svnMessage)
-    
-        # get the latest reversion.
-    
-        os.chdir('%s/%s' % (buildFolder, workFolder))
-        svnOutput = commands.getoutput('svn info')
-        self.log.info(svnOutput)
-    
-        # parse the info output, extract the reversion number
-        svnPattern = re.compile(r"(URL|Repository Root|Revision|Last Changed Rev|Last Changed Date): (http://.*|\d*|\d{4}-\d{2}.*)\n")
-        svnResult = svnPattern.findall(svnOutput)
+        # the subversion message.
+        svnResult = output[0]
         svnPath = svnResult[0][1].replace(svnResult[1][1], "")
         svnMessage = self.psc_svn_message(self,
                                           svnURL = svnResult[0][1],
@@ -157,18 +140,10 @@ class PSCWorkplace(ATFolder):
                                           svnRevision = svnResult[2][1],
                                           svnLastRev = svnResult[3][1],
                                           svnLastDate = svnResult[4][1])
-    
-        # make build by using MVN
-        #mvnOutput = commands.getoutput('mvn deploy')
-        pmvn = subprocess.Popen("mvn" + " deploy", shell=True, stdout=subprocess.PIPE)
-        mvnOutput = pmvn.communicate()[0]
-        self.log.debug(mvnOutput)
+        self.log.debug("svn message: %s" % svnMessage)
 
-        self.log.info("generating the worklog ...")
-        # parse the mvn output message, extract the artifact names and
-        # then create the artifacts list in the worklog.
-        mvnPattern = re.compile(r"Uploading: http://.*(/maven.*/(.*\.(jar|war)))\n")
-        mvnResult = mvnPattern.findall(mvnOutput)
+        # the maven message.
+        mvnResult = output[1]
         mvnMessage = ""
         for one in mvnResult:
             mvnMessage = mvnMessage + self.psc_mvn_message(self,
@@ -202,8 +177,6 @@ class PSCWorkplace(ATFolder):
         # navigation tree and title of the page.
 
         worklog.reindexObject()
-        # clean up the working folder.
-        commands.getoutput('rm -rf %s/%s' % (buildFolder, workFolder))
 
         return
 

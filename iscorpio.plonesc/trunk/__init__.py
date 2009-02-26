@@ -4,7 +4,7 @@
 # PRODUCT, setup security and roles.
 
 from Products.Archetypes.public import process_types, listTypes
-from Products.CMFCore import utils
+from Products.CMFCore import utils as cmfutils
 from Products.CMFCore.DirectoryView import registerDirectory
 
 from permissions import initialize as initialize_permissions
@@ -35,7 +35,7 @@ def initialize(context):
     for atype, constructor in allTypes:
         kind = "%s: %s" % (config.PROJECTNAME, atype.archetype_name)
         # Call CMFCore.utils.ContentInit to register content types.
-        utils.ContentInit(
+        cmfutils.ContentInit(
             # Name that display in ADD drop-down menu on ZMI is 
             # specified. This is used as meta_type in internal. However, 
             # there is no relation to meta_type set in each contents type 

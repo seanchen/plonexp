@@ -1,0 +1,98 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plone">
+<body>
+
+<metal:main fill-slot="main">
+
+  <tal:main-macro metal:define-macro="psc_workplace_view">
+
+    <div tal:replace="structure provider:plone.abovecontenttitle"/>
+
+    <h1 class="documentFirstHeading">
+      <span tal:replace="here/title"/>
+    </h1>
+
+    <div tal:replace="structure provider:plone.belowcontenttitle" />
+
+    <p class="documentDescription">
+      <span tal:replace="here/Description"/>
+    </p>
+
+    <!-- execution buttons -->
+    <p tal:condition="python: user.has_permission('PloneShellConsole: Execute PSCWorkplace', here)">
+      <input class="context" value="Make Build" type="button"
+             tal:attributes="onclick string:window.location='${here/absolute_url}/psc_workplace_execute'"
+      />
+    </p>
+
+    <div tal:replace="structure provider:plone.abovecontentbody" />
+
+    <!-- worklog list by page. -->
+    <tal:logs
+       tal:define="logsList here/getWorklogs">
+      <div tal:condition="logsList">
+        <h2>Worklog List</h2>
+        <!-- the list talbe. -->
+  <tal:black metal:define-macro="psc_worklogs_list"
+             tal:define="Batch python: modules['Products.CMFPlone'].Batch;
+                         b_size python: 15;
+                         b_start python: 0;
+                         b_start request/b_start | b_start;
+                         batch python: Batch(logsList, b_size, int(b_start), orphan=5);">
+    <div metal:use-macro="here/batch_macros/macros/navigation" />
+    <table class="listing" width="98%"><tbody>
+      <tr>
+        <th>Title</th>
+        <th>User</th>
+        <th>Execute Time</th>
+        <th>Summary</th>
+      </tr>
+      <!-- one row for each message. -->
+      <tal:block tal:repeat="log python: batch">
+        <tr tal:define="oddrow repeat/log/odd;
+                        url log/getURL|log/absolute_url;
+                        log_type log/portal_type;
+                        log_typeinfo python: here.portal_types.getTypeInfo(log_type);
+                        icon python: portal_url + '/' + log_typeinfo.getIcon();"
+            tal:attributes="class python: test(oddrow, 'odd', 'even')">
+          <!-- title -->
+          <td>
+            <a href="#" tal:attributes="href url">
+              <img src="#" height="16" width="16"
+                   tal:attributes="src icon"/>&nbsp;
+              <span tal:content="log/title"/>
+            </a>
+          </td>
+          <!-- user -->
+          <td>
+            <span tal:content="log/psc_log_username"/>
+          </td>
+          <!-- time -->
+          <td>
+            <span tal:content="log/psc_log_timestamp"/>
+          </td>
+          <!-- summary -->
+          <td>
+            <span tal:content="structure log/psc_log_subject"/>
+          </td>
+        </tr>
+      </tal:block>
+    </tbody></table>
+  </tal:black>
+
+      </div>
+    </tal:logs>
+
+    <div tal:replace="structure provider:plone.belowcontentbody" />
+    
+  </tal:main-macro>
+
+</metal:main>
+
+</body>
+</html>

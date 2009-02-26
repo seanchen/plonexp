@@ -113,7 +113,9 @@ class PSCWorkplace(ATFolder):
 
         # the svn url.
         svnurl = form.get('svnurl', None)
-        self.makeBuild(svnurl)
+        svnuser = form.get('svnuser')
+        svnpassword = form.get('svnpassword')
+        self.makeBuild(svnurl, svnuser, svnpassword)
 
         status.addStatusMessage('Successfully make build for [%s], please check log for details.' % svnurl,
                                 type='info')
@@ -122,16 +124,17 @@ class PSCWorkplace(ATFolder):
 
     # make a build from the given svn url.
     security.declarePrivate('makeBuild')
-    def makeBuild(self, svnurl):
+    def makeBuild(self, svnurl, svnuser, svnpassword):
 
-        buildFolder = '/var/temp'
+        buildFolder = '/var/tmp'
         workFolder = 'workplace'
 
         # change to working directory.
         os.chdir(buildFolder)
 
         # check out the lates code from svnurl
-        svnMessage = commands.getoutput('svn co --username user --password password %s %s' % (svnurl, workFolder))
+        svnMessage = commands.getoutput('svn co --username %s --password %s %s %s' %
+                                        (svnuser, svnpassword, svnurl, workFolder))
         self.log.debug(svnMessage)
 
         # get the latest reversion.

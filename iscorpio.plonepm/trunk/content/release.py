@@ -1,7 +1,7 @@
 # release.py
 
 __doc__ = """XPointRelease defines the release note for a XPoint Project."""
-__author__ = 'Xiang(Sean) Chen <chyxiang@gmail.com>'
+__author__ = 'iScorpio <iscorpio@users.sourceforge.net>'
 __docformat__ = 'plaintext'
 
 import logging

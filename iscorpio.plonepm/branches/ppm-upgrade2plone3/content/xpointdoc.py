@@ -2,7 +2,7 @@
 
 __doc__ = """XPointDocument is the super class of XPointProjectManagement general
 documents, such as memo, buildjounal, proposal, and issue."""
-__author__ = 'Xiang(Sean) Chen <chyxiang@gmail.com>'
+__author__ = 'iScorpio <iscorpio@users.sourceforge.net>'
 __docformat__ = 'plaintext'
 
 from AccessControl import ClassSecurityInfo

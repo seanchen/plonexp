@@ -2,7 +2,7 @@
 # XPointResponse.py
 
 __doc__ = """XPointResponse defines a """
-__author__ = 'Xiang(Sean) Chen <chyxiang@gmail.com>'
+__author__ = 'iScorpio <iscorpio@users.sourceforge.net>'
 __docformat__ = 'plaintext'
 
 import logging

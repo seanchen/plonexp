@@ -2,7 +2,7 @@
 # XPointFuncReq.py
 
 __doc__ = """XPointFuncReq defines a function requirment for a software project."""
-__author__ = 'Xiang(Sean) Chen <chyxiang@gmail.com>'
+__author__ = 'iScorpio <iscorpio@users.sourceforge.net>'
 __docformat__ = 'plaintext'
 
 import logging

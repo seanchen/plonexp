@@ -2,7 +2,7 @@
 # base.py
 
 __doc__ = """ this package will contain the base classes for xpoint project management."""
-__author__ = 'Xiang(Sean) Chen <chyxiang@gmail.com>'
+__author__ = 'iScorpio <iscorpio@users.sourceforge.net>'
 __docformat__ = 'plaintext'
 
 import logging

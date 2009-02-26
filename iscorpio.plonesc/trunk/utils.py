@@ -10,6 +10,7 @@ import commands
 import re
 import subprocess
 import logging
+from threading import Thread
 
 class ScriptExecutor:
 
@@ -59,3 +60,22 @@ class ScriptExecutor:
         commands.getoutput('rm -rf %s/%s' % (buildFolder, workFolder))
 
         return [svnResult, mvnResult]
+# End of class.
+
+# execute the script in a separate thread.
+class ScriptExecutorThread(Thread):
+
+    def __init__(self, svnurl, svnuser, svnpassword):
+
+        Thread.__init__(self)
+
+        self.svnurl = svnurl
+        self.svnuser = svnuser
+        self.svnpassword = svnpassword
+        self.output = None
+
+    def run(self):
+
+        executor = ScriptExecutor()
+        self.output = executor.makeBuild(self.svnurl, self.svnuser, self.svnpassword)
+# End of class

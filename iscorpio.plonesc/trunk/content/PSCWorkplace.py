@@ -34,8 +34,7 @@ from Products.DataGridField import DataGridWidget
 from Products.DataGridField.Column import Column
 
 from Products.PloneShellConsole.config import PROJECTNAME
-from Products.PloneShellConsole.utils import ScriptExecutorThread
-from Products.PloneShellConsole.utils import executeScript
+from Products.PloneShellConsole.utils import ScriptExecutor
 
 PSCWorkplaceSchema = ATFolderSchema.copy() + Schema((
 
@@ -129,7 +128,8 @@ class PSCWorkplace(ATFolder):
     def makeBuild(self, svnurl, svnuser, svnpassword):
 
         # we are using the executor to do the build.
-        output = executeScript(svnurl, svnuser, svnpassword)
+        executor = ScriptExecutor()
+        output = executor.makeBuild(svnurl, svnuser, svnpassword)
 
         # the subversion message.
         svnResult = output[0]

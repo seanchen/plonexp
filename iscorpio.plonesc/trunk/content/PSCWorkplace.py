@@ -13,6 +13,7 @@ import re
 import commands
 import logging
 import time
+import subprocess
 from operator import itemgetter
 
 from AccessControl import ClassSecurityInfo
@@ -116,11 +117,13 @@ class PSCWorkplace(ATFolder):
         svnurl = form.get('svnurl', None)
         svnuser = form.get('svnuser')
         svnpassword = form.get('svnpassword')
+        self.log.info("making build for %s" % svnurl)
         self.makeBuild(svnurl, svnuser, svnpassword)
 
         status.addStatusMessage('Successfully make build for [%s], please check log for details.' % svnurl,
                                 type='info')
 
+        self.log.debug("redirecting to %s" % self.absolute_url())
         return self.REQUEST.RESPONSE.redirect(self.absolute_url())
 
     # make a build from the given svn url.
@@ -137,12 +140,13 @@ class PSCWorkplace(ATFolder):
         svnMessage = commands.getoutput('svn co --username %s --password %s %s %s' %
                                         (svnuser, svnpassword, svnurl, workFolder))
         self.log.debug(svnMessage)
-
+    
         # get the latest reversion.
+    
         os.chdir('%s/%s' % (buildFolder, workFolder))
         svnOutput = commands.getoutput('svn info')
         self.log.info(svnOutput)
-
+    
         # parse the info output, extract the reversion number
         svnPattern = re.compile(r"(URL|Repository Root|Revision|Last Changed Rev|Last Changed Date): (http://.*|\d*|\d{4}-\d{2}.*)\n")
         svnResult = svnPattern.findall(svnOutput)
@@ -153,11 +157,14 @@ class PSCWorkplace(ATFolder):
                                           svnRevision = svnResult[2][1],
                                           svnLastRev = svnResult[3][1],
                                           svnLastDate = svnResult[4][1])
-
+    
         # make build by using MVN
-        mvnOutput = commands.getoutput('mvn deploy')
-        self.log.info(mvnOutput)
+        #mvnOutput = commands.getoutput('mvn deploy')
+        pmvn = subprocess.Popen("mvn" + " deploy", shell=True, stdout=subprocess.PIPE)
+        mvnOutput = pmvn.communicate()[0]
+        self.log.debug(mvnOutput)
 
+        self.log.info("generating the worklog ...")
         # parse the mvn output message, extract the artifact names and
         # then create the artifacts list in the worklog.
         mvnPattern = re.compile(r"Uploading: http://.*(/maven.*/(.*\.(jar|war)))\n")
@@ -168,9 +175,7 @@ class PSCWorkplace(ATFolder):
                                                            artifactURL = one[0],
                                                            artifactName = one[1]
                                                            )
-
-        # clean up the working folder.
-        commands.getoutput('rm -rf %s/%s' % (buildFolder, workFolder))
+        self.log.debug("mvn message: %s" % mvnMessage)
 
         # generate the PSCWorklog document.
         log_id = 'log-%s' % time.strftime('%Y%m%d%H%M%S')
@@ -195,7 +200,10 @@ class PSCWorkplace(ATFolder):
         worklog.setPsc_log_message(mvnMessage)
         # we have to reindex the object, otherwise the title will not show in the
         # navigation tree and title of the page.
+
         worklog.reindexObject()
+        # clean up the working folder.
+        commands.getoutput('rm -rf %s/%s' % (buildFolder, workFolder))
 
         return
 

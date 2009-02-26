@@ -1,9 +1,9 @@
 from setuptools import setup, find_packages
 import os
 
-version = '0.1'
+version = open(os.path.join('iscorpio/myworkshop', 'version.txt')).read()
 
-setup(name='iscoprio.myworkshop',
+setup(name='iscorpio.myworkshop',
       version=version,
       description="online service for publishing and managing workshop info and event",
       long_description=open("README.txt").read() + "\n" +

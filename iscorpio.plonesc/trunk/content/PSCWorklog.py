@@ -87,12 +87,5 @@ class PSCWorklog(ATCTContent):
     log = logging.getLogger("PloneShellConsole PSCWorklog")
     security = ClassSecurityInfo()
 
-def modify_fti(fti):
-    # Hide unnecessary tabs (usability enhancement)
-    for a in fti['actions']:
-        if a['id'] in ['sharing']:
-            a['visible'] = False
-    return fti
-
 registerType(PSCWorklog, PROJECTNAME)
 # End of class PSCWorklog

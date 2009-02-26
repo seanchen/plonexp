@@ -1,0 +1,42 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plone">
+<body>
+
+<metal:main fill-slot="main">
+
+  <tal:main-macro metal:define-macro="psc_worklog_view">
+
+    <div tal:replace="structure provider:plone.abovecontenttitle"/>
+
+    <h1 class="documentFirstHeading">
+      <span tal:replace="here/title"/>
+    </h1>
+
+    <div tal:replace="structure provider:plone.belowcontenttitle" />
+
+    <div tal:replace="structure provider:plone.abovecontentbody" />
+
+    <p>
+      Build executed by <strong><span tal:replace="here/psc_log_username"/></strong>
+      at <strong><span tal:replace="here/psc_log_timestamp"/></strong>
+    </p>
+
+    <p><strong>Build Message:</strong></p>
+
+    <p>
+      <span tal:replace="here/psc_log_message"/>
+    </p>
+
+    <div tal:replace="structure provider:plone.belowcontentbody" />
+    
+  </tal:main-macro>
+
+</metal:main>
+
+</body>
+</html>

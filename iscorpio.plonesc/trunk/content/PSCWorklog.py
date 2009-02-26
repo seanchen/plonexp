@@ -35,7 +35,7 @@ PSCWorklogSchema = ATCTContent.schema.copy() + Schema((
                 label = 'User Name',
                 description = 'The user, who performed this work',
                 ),
-            mode = 'r',
+            #mode = 'r',
             ),
 
         # time stamp for this work.
@@ -45,7 +45,7 @@ PSCWorklogSchema = ATCTContent.schema.copy() + Schema((
                 label = 'Time Stamp',
                 description = 'Time stamp for this work',
                 ),
-            mode = 'r',
+            #mode = 'r',
             ),
 
         # log message, may have certain format. and we are going to parse it
@@ -56,12 +56,15 @@ PSCWorklogSchema = ATCTContent.schema.copy() + Schema((
                 label = 'Log Message',
                 description = 'This message may include all artifaces info',
                 ),
-            mode = 'r',
+            #mode = 'r',
             ),
         ),
     )
 
 finalizeATCTSchema(PSCWorklogSchema)
+
+# set the title to read only.
+#PSCWorklogSchema['title'].mode = 'r'
 
 class PSCWorklog(ATCTContent):
     """
@@ -84,4 +87,12 @@ class PSCWorklog(ATCTContent):
     log = logging.getLogger("PloneShellConsole PSCWorklog")
     security = ClassSecurityInfo()
 
+def modify_fti(fti):
+    # Hide unnecessary tabs (usability enhancement)
+    for a in fti['actions']:
+        if a['id'] in ['sharing']:
+            a['visible'] = False
+    return fti
+
 registerType(PSCWorklog, PROJECTNAME)
+# End of class PSCWorklog

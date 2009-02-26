@@ -24,7 +24,7 @@
     </p>
 
     <!-- execution buttons -->
-    <p tal:condition="python: user.has_role('Manager') | user.has_role('BuildMaker')">
+    <p tal:condition="python: user.has_permission('PloneShellConsole: Execute PSCWorkplace', here)">
       <input class="context" value="Make Build" type="button"
              tal:attributes="onclick string:window.location='${here/absolute_url}/psc_workplace_execute'"
       />

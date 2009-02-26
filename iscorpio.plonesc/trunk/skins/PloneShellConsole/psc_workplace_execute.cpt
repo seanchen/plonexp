@@ -10,7 +10,7 @@
 <metal:main fill-slot="main">
 
   <tal:main-macro metal:define-macro="psc_workplace_execute"
-                  tal:condition="python: user.has_role('Manager') | user.has_role('BuildMaker')">
+                  tal:condition="python: user.has_permission('PloneShellConsole: Execute PSCWorkplace', here)">
 
     <div tal:replace="structure provider:plone.abovecontenttitle"/>
 

@@ -99,7 +99,7 @@ class PSCWorkplace(ATFolder):
         allLogs.sort(key=itemgetter('id'), reverse=True)
         return allLogs
 
-    security.declareProtected('View', 'pscWorkplaceExecute')
+    security.declareProtected('PloneShellConsole: Execute PSCWorkplace', 'pscWorkplaceExecute')
     def pscWorkplaceExecute(self):
         """
         execute a workplace request.
@@ -121,7 +121,7 @@ class PSCWorkplace(ATFolder):
         return self.REQUEST.RESPONSE.redirect(self.absolute_url())
 
     # make a build from the given svn url.
-    security.declarePrivate('View', 'makeBuild')
+    security.declarePrivate('makeBuild')
     def makeBuild(self, svnurl):
 
         buildFolder = '/var/temp'

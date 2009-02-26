@@ -1,0 +1,11 @@
+<table class="listing" width="98%"><tbody>
+  <tr class="odd">
+    <td>
+    Repository URL
+    </td>
+    <td>
+    <a href="<dtml-var svnURL>"><dtml-var svnURL></a>
+    </td>
+  </tr>
+</tbody></table>
+

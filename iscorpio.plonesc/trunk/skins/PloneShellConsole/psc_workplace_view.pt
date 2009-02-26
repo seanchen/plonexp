@@ -47,6 +47,7 @@
     <div metal:use-macro="here/batch_macros/macros/navigation" />
     <table class="listing" width="98%"><tbody>
       <tr>
+        <th>Title</th>
         <th>User</th>
         <th>Execute Time</th>
         <th>Summary</th>
@@ -59,13 +60,17 @@
                         log_typeinfo python: here.portal_types.getTypeInfo(log_type);
                         icon python: portal_url + '/' + log_typeinfo.getIcon();"
             tal:attributes="class python: test(oddrow, 'odd', 'even')">
-          <!-- user -->
+          <!-- title -->
           <td>
             <a href="#" tal:attributes="href url">
               <img src="#" height="16" width="16"
                    tal:attributes="src icon"/>&nbsp;
-              <span tal:content="log/psc_log_username"/>
+              <span tal:content="log/title"/>
             </a>
+          </td>
+          <!-- user -->
+          <td>
+            <span tal:content="log/psc_log_username"/>
           </td>
           <!-- time -->
           <td>

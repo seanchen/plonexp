@@ -10,7 +10,9 @@
     </type>
 
     <type type_id="PSCWorklog">
-      <bound-workflow workflow_id="plone_workflow"/>
+      <!-- using one_state_workflow for log, which only has one state: Published -->
+      <!-- we not supposed to change the log once it is created. -->
+      <bound-workflow workflow_id="one_state_workflow"/>
     </type>
   </bindings>
 </object>

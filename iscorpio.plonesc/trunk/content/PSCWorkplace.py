@@ -144,13 +144,15 @@ class PSCWorkplace(ATFolder):
         self.log.info(svnOutput)
 
         # parse the info output, extract the reversion number
-        svnPattern = re.compile(r"(URL|Revision|Last Changed Rev|Last Changed Date): (http://.*|\d*|\d{4}-\d{2}.*)\n")
+        svnPattern = re.compile(r"(URL|Repository Root|Revision|Last Changed Rev|Last Changed Date): (http://.*|\d*|\d{4}-\d{2}.*)\n")
         svnResult = svnPattern.findall(svnOutput)
+        svnPath = svnResult[0][1].replace(svnResult[1][1], "")
         svnMessage = self.psc_svn_message(self,
                                           svnURL = svnResult[0][1],
-                                          svnRevision = svnResult[1][1],
-                                          svnLastRev = svnResult[2][1],
-                                          svnLastDate = svnResult[3][1])
+                                          svnPath = svnPath,
+                                          svnRevision = svnResult[2][1],
+                                          svnLastRev = svnResult[3][1],
+                                          svnLastDate = svnResult[4][1])
 
         # make build by using MVN
         #mvnOutput = commands.getoutput('mvn deploy')
@@ -181,7 +183,8 @@ class PSCWorkplace(ATFolder):
         worklog.setTitle('log message at %s' % time.strftime('%Y-%m-%d %H:%M'))
         worklog.setPsc_log_timestamp(time.strftime('%b %d, %Y %H:%M'))
         worklog.setPsc_log_username(full_name)
-        worklog.setPsc_log_message(svnMessage)
+        worklog.setPsc_log_subject(svnMessage)
+        #worklog.setPsc_log_message(mvnMessage)
         # we have to reindex the object, otherwise the title will not show in the
         # navigation tree and title of the page.
         worklog.reindexObject()

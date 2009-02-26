@@ -78,7 +78,7 @@
           </td>
           <!-- summary -->
           <td>
-            <span tal:content="structure log/psc_log_message"/>
+            <span tal:content="structure log/psc_log_subject"/>
           </td>
         </tr>
       </tal:block>

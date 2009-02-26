@@ -35,6 +35,7 @@ PSCWorklogSchema = ATCTContent.schema.copy() + Schema((
                 label = 'User Name',
                 description = 'The user, who performed this work',
                 ),
+            mode = 'r',
             ),
 
         # time stamp for this work.
@@ -44,6 +45,7 @@ PSCWorklogSchema = ATCTContent.schema.copy() + Schema((
                 label = 'Time Stamp',
                 description = 'Time stamp for this work',
                 ),
+            mode = 'r',
             ),
 
         # log message, may have certain format. and we are going to parse it
@@ -54,6 +56,7 @@ PSCWorklogSchema = ATCTContent.schema.copy() + Schema((
                 label = 'Log Message',
                 description = 'This message may include all artifaces info',
                 ),
+            mode = 'r',
             ),
         ),
     )

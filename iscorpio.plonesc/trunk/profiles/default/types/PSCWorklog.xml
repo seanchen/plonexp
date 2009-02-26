@@ -6,9 +6,9 @@
         xmlns:i18n="http://xml.zope.org/namespaces/i18n">
   <!-- the properties for this type. -->
   <!-- the title will show on the new dropdown. -->
-  <property name="title" i18n:translate="">PSC Workplace</property>
+  <property name="title" i18n:translate="">PSC Worklog</property>
   <property name="description"
-            i18n:translate="">Shell Console Workplace</property>
+            i18n:translate="">Shell Console Worklog</property>
   <property name="content_icon">psc_worklog_icon.gif</property>
   <property name="content_meta_type">PSCWorklog</property>
   <property name="product">PloneShellConsole</property>
@@ -29,12 +29,12 @@
   <!-- alias -->
   <alias from="(Default)" to="(dynamic view)"/>
   <!-- alias from="edit" to="atct_edit"/ -->
-  <alias from="sharing" to="@@sharing"/>
+  <!--alias from="sharing" to="@@sharing"/-->
   <alias from="view" to="(selected layout)"/>
 
   <!-- define the actions -->
   <action title="View" action_id="view" category="object" condition_expr=""
-          url_expr="string:${folder_url}/" visible="True"
+          url_expr="string:${object_url}" visible="True"
           i18n:attributes="title">
     <permission value="View"/>
   </action>
@@ -44,11 +44,11 @@
           i18n:attributes="title">
     <permission value="Modify portal content"/>
   </action -->
-  <action title="References" action_id="references" category="object"
+  <!--action title="References" action_id="references" category="object"
           condition_expr="object/archetype_tool/has_graphviz"
           url_expr="string:${object_url}/reference_graph" visible="True"
           i18n:attributes="title">
     <permission value="Modify portal content"/>
     <permission value="Review portal content"/>
-  </action>
+  </action-->
 </object>

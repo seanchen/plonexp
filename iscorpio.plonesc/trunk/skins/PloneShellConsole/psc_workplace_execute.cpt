@@ -9,22 +9,19 @@
 
 <metal:main fill-slot="main">
 
-  <tal:main-macro metal:define-macro="psc_workplace_execute">
+  <tal:main-macro metal:define-macro="psc_workplace_execute"
+                  tal:condition="python:not user.has_role('Anonymous')">
 
     <div tal:replace="structure provider:plone.abovecontenttitle"/>
 
     <h1 class="documentFirstHeading">
-      <metal:field use-macro="python:here.widget('title', mode='view')">
-        Title or id
-      </metal:field>
+      <span tal:replace="here/title"/>
     </h1>
 
     <div tal:replace="structure provider:plone.belowcontenttitle" />
 
     <p class="documentDescription">
-      <metal:field use-macro="python:here.widget('description', mode='view')">
-        Description
-      </metal:field>
+      <span tal:replace="here/Description"/>
     </p>
   
     <div class="formControls">

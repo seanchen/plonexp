@@ -2,7 +2,7 @@
 # XPointArtifact.py
 
 __doc__ = """XPointStory defines a track item for a software project in Agile approach."""
-__author__ = 'Xiang(Sean) Chen <chyxiang@gmail.com>'
+__author__ = 'iScorpio <iscorpio@users.sourceforge.net>'
 __docformat__ = 'plaintext'
 
 import logging

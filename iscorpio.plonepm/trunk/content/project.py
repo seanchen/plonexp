@@ -1,7 +1,7 @@
 # project.py
 
 __doc__ = """XPointProject defines a software project."""
-__author__ = 'Xiang(Sean) Chen <chyxiang@gmail.com>'
+__author__ = 'iScorpio <iscorpio@users.sourceforge.net>'
 __docformat__ = 'plaintext'
 
 import logging

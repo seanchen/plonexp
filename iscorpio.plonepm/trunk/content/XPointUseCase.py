@@ -4,7 +4,7 @@
 __doc__ = """XPointUseCases defines a use case for a software project.
 A use case could explain a funcationality from function specification.
 """
-__author__ = 'Xiang(Sean) Chen <chyxiang@gmail.com>'
+__author__ = 'iScorpio <iscorpio@users.sourceforge.net>'
 __docformat__ = 'plaintext'
 
 import logging

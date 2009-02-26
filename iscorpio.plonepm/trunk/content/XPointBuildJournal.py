@@ -2,7 +2,7 @@
 
 __doc__ = """XPointBuildJournal Product for Plone to record build
 journal."""
-__author__ = 'Xiang(Sean) Chen'
+__author__ = 'iScorpio'
 __docformat__ = 'plaintext'
 
 from AccessControl import ClassSecurityInfo

@@ -51,6 +51,50 @@
           />
         </div>
 
+        <!-- svn user name -->
+        <div class="field"
+               tal:define="error errors/svnuser | nothing;"
+               tal:attributes="class python:test(error, 'field error', 'field')"
+             >
+          <label for="svnuser">
+            SVN Username
+          </label>
+
+          <span class="fieldRequired" title="Required">(Required)</span>
+
+          <div class="formHelp" id="svnuser_help">
+            Please specify your SVN username
+          </div>
+
+          <div tal:content="error">Validation error output</div>
+
+          <input size="18" type="text" name="svnuser" id="svnuser"
+                 tal:attributes="value request/svnuser | nothing;"
+          />
+        </div>
+
+        <!-- svn user password -->
+        <div class="field"
+               tal:define="error errors/svnpassword | nothing;"
+               tal:attributes="class python:test(error, 'field error', 'field')"
+             >
+          <label for="svnpassword">
+            SVN Password
+          </label>
+
+          <span class="fieldRequired" title="Required">(Required)</span>
+
+          <div class="formHelp" id="svnpassword_help">
+            Please specify your SVN Password
+          </div>
+
+          <div tal:content="error">Validation error output</div>
+
+          <input size="18" type="password" name="svnpassword" id="svnpassword"
+                 tal:attributes="value request/svnuser | nothing;"
+          />
+        </div>
+
         <!-- submit button. -->
         <input class="standalone" value="Submit" type="submit"
                name="form.button.execute"

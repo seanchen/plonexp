@@ -13,7 +13,7 @@
   <property name="content_meta_type">PSCWorkplace</property>
   <property name="product">PloneShellConsole</property>
   <property name="factory">addPSCWorkplace</property>
-  <property name="immediate_view">folder_listing</property>
+  <property name="immediate_view">psc_workplace_view</property>
   <property name="global_allow">True</property>
   <property name="filter_content_types">True</property>
   <property name="allowed_content_types">
@@ -21,9 +21,10 @@
     <!-- element value="PSCWorklog"/ -->
   </property>
   <property name="allow_discussion">False</property>
-  <property name="default_view">folder_listing</property>
+  <property name="default_view">psc_workplace_view</property>
   <property name="view_methods">
-    <element value="folder_listing"/>
+    <!--element value="folder_listing"/-->
+    <element value="psc_workplace_view"/>
   </property>
 
   <!-- alias -->
@@ -50,11 +51,5 @@
           i18n:attributes="title">
     <permission value="Modify portal content"/>
     <permission value="Review portal content"/>
-  </action>
-  <action title="Folder Listing" action_id="folderlisting" category="folder"
-          condition_expr="object/isPrincipiaFolderish"
-          url_expr="string:${folder_url}/view" visible="False"
-          i18n:attributes="title">
-    <permission value="View"/>
   </action>
 </object>

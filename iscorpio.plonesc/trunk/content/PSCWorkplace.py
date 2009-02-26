@@ -155,13 +155,21 @@ class PSCWorkplace(ATFolder):
                                           svnLastDate = svnResult[4][1])
 
         # make build by using MVN
-        #mvnOutput = commands.getoutput('mvn deploy')
-        #self.log.info(mvnOutput)
+        mvnOutput = commands.getoutput('mvn deploy')
+        self.log.info(mvnOutput)
 
         # parse the mvn output message, extract the artifact names and
         # then create the artifacts list in the worklog.
-        
+        mvnPattern = re.compile(r"Uploading: http://.*(/maven.*/(.*\.(jar|war)))\n")
+        mvnResult = mvnPattern.findall(mvnOutput)
+        mvnMessage = ""
+        for one in mvnResult:
+            mvnMessage = mvnMessage + self.psc_mvn_message(self,
+                                                           artifactURL = one[0],
+                                                           artifactName = one[1]
+                                                           )
 
+        # clean up the working folder.
         commands.getoutput('rm -rf %s/%s' % (buildFolder, workFolder))
 
         # generate the PSCWorklog document.
@@ -184,7 +192,7 @@ class PSCWorkplace(ATFolder):
         worklog.setPsc_log_timestamp(time.strftime('%b %d, %Y %H:%M'))
         worklog.setPsc_log_username(full_name)
         worklog.setPsc_log_subject(svnMessage)
-        #worklog.setPsc_log_message(mvnMessage)
+        worklog.setPsc_log_message(mvnMessage)
         # we have to reindex the object, otherwise the title will not show in the
         # navigation tree and title of the page.
         worklog.reindexObject()

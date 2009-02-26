@@ -31,6 +31,28 @@
 
         <!-- svn url for build -->
         <div class="field"
+               tal:define="error errors/exepurpose | nothing;"
+               tal:attributes="class python:test(error, 'field error', 'field')"
+             >
+          <label for="exepurpose">
+            Execute Purpose
+          </label>
+
+          <span class="fieldRequired" title="Required">(Required)</span>
+
+          <div class="formHelp" id="exepurpose_help">
+            Please explain your purpose for this build.
+          </div>
+
+          <div tal:content="error">Validation error output</div>
+
+          <input size="80" type="text" name="exepurpose" id="exepurpose"
+                 tal:attributes="value request/exepurpose | nothing;"
+          />
+        </div>
+
+        <!-- svn url for build -->
+        <div class="field"
                tal:define="error errors/svnurl | nothing;"
                tal:attributes="class python:test(error, 'field error', 'field')"
              >

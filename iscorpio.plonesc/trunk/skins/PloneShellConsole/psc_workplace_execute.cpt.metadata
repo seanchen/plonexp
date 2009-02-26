@@ -1,0 +1,9 @@
+[default]
+title=Execute MVN deploy
+
+[validators]
+validators=psc_workplace_execute_validate
+validators..cancel=
+
+[actions]
+action.success=traverse_to:string:pscWorkplaceExecute

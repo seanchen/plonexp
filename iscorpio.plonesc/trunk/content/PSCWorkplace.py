@@ -8,6 +8,8 @@ __docformat__ = 'plaintext'
 # a set of similar remote job.  It also tracks all logging message around the
 # remote jobs.
 
+import os
+import commands
 import logging
 
 from AccessControl import ClassSecurityInfo
@@ -81,6 +83,52 @@ class PSCWorkplace(ATFolder):
     security = ClassSecurityInfo()
 
     # here are the methods.
+
+    security.declareProtected('View', 'pscWorplaceExecute')
+    def pscWorkplaceExecute(self):
+        """
+        execute a workplace request.
+        """
+        status = IStatusMessage(self.REQUEST)
+        form = self.REQUEST.form
+
+        if form.has_key('form.button.cancel'):
+            status.addStatusMessage('Cancel Executing ...', type='info')
+            return self.REQUEST.RESPONSE.redirect(self.absolute_url());
+
+        # the svn url.
+        svnurl = form.get('svnurl', None)
+        self.makeBuild(svnurl)
+
+        status.addStatusMessage('Successfully make build for [%s], please check log for details.' % svnurl,
+                                type='info')
+
+        return self.REQUEST.RESPONSE.redirect(self.absolute_url())
+
+    # make a build from the given svn url.
+    security.declarePrivate('View', 'makeBuild')
+    def makeBuild(self, svnurl):
+
+        buildFolder = '~/temp'
+        workFolder = 'workplace'
+
+        # change to working directory.
+        os.chdir(buildFolder)
+
+        # check out the lates code from svnurl
+        svnMessage = commands.getoutput('svn co --username user --password password %s %s' % (svnurl, workFolder))
+        self.log.info(svnMessage)
+
+        # make build by using MVN
+        os.chdir('%s/%s' % (buildFolder, workFolder))
+        mvnMessage = commands.getoutput('mvn deploy')
+        self.log.info(mvnMessage)
+
+        # parse the mvn output message.
+
+        commands.getoutput('rm -rf %s/%s' % (buildFolder, workFolder))
+        # generate the PSCWorklog document.
+        return
 
 # register to the product.
 registerType(PSCWorkplace, PROJECTNAME)

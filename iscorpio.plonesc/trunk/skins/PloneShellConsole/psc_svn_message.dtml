@@ -1,11 +1,5 @@
-<table class="listing" width="98%"><tbody>
-  <tr class="odd">
-    <td>
-    Repository URL
-    </td>
-    <td>
-    <a href="<dtml-var svnURL>"><dtml-var svnURL></a>
-    </td>
-  </tr>
-</tbody></table>
-
+Repository URL: <a href="<dtml-var svnURL>"><dtml-var svnPath></a> 
+<br/>
+Last Changed Revision: <strong><dtml-var svnLastRev></strong>
+<br/>
+Last Changed Date: <strong><dtml-var svnLastDate></strong>

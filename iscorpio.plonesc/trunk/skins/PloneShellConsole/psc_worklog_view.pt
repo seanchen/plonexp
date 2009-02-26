@@ -29,6 +29,11 @@
     <p><strong>Build Message:</strong></p>
 
     <p>
+      <span tal:replace="structure here/psc_log_subject"/>
+    </p>
+
+    <p><strong>Artifacts List:</strong></p>
+    <p>
       <span tal:replace="structure here/psc_log_message"/>
     </p>
 

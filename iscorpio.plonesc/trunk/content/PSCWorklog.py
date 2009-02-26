@@ -48,6 +48,17 @@ PSCWorklogSchema = ATCTContent.schema.copy() + Schema((
             #mode = 'r',
             ),
 
+        # log subject, a brief message which 
+        StringField(
+            'psc_log_subject',
+            default_output_type = 'text/x-html-safe',
+            widget = StringWidget(
+                label = 'Log Subject',
+                description = 'This message may include all artifaces info',
+                ),
+            #mode = 'r',
+            ),
+
         # log message, may have certain format. and we are going to parse it
         # within in a certain method and show it on the view...
         StringField(

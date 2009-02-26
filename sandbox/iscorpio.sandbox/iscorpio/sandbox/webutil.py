@@ -136,7 +136,7 @@ class MoviesCalendar:
                     table = table + '<tr><td>'
                 else:
                     table = table + '<tr><td style="background: #d8d8d8">'
-                table = table + '<strong><i>' + movieTitle + '</i></strong>'
+                table = table + "<strong><i><a href='#' onclick='document.forms[0].q.value=\"movie \" + innerHTML; document.forms[0].submit();'>%s</a></i></strong>" % movieTitle
                 table = table + '</td></tr>'
                 n = n + 1
 

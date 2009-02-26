@@ -24,7 +24,7 @@
     </p>
 
     <!-- execution buttons -->
-    <p>
+    <p tal:condition="python: user.has_role('Manager') | user.has_role('BuildMaker')">
       <input class="context" value="Make Build" type="button"
              tal:attributes="onclick string:window.location='${here/absolute_url}/psc_workplace_execute'"
       />

@@ -5,4 +5,6 @@
   <object name="PSCWorkplace"
           meta_type="Factory-based Type Information with dynamic views"/>
 
+  <object name="PSCWorklog"
+          meta_type="Factory-based Type Information with dynamic views"/>
 </object>

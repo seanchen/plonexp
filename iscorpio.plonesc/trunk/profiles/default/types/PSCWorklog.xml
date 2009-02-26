@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!-- the object name will show on the portal_types in ZMI. -->
-<object name="PSCWorkplace"
+<object name="PSCWorklog"
         meta_type="Factory-based Type Information with dynamic views"
         i18n:domain="plone"
         xmlns:i18n="http://xml.zope.org/namespaces/i18n">
@@ -9,26 +9,26 @@
   <property name="title" i18n:translate="">PSC Workplace</property>
   <property name="description"
             i18n:translate="">Shell Console Workplace</property>
-  <property name="content_icon">psc_workplace_icon.gif</property>
-  <property name="content_meta_type">PSCWorkplace</property>
+  <property name="content_icon">psc_worklog_icon.gif</property>
+  <property name="content_meta_type">PSCWorklog</property>
   <property name="product">PloneShellConsole</property>
-  <property name="factory">addPSCWorkplace</property>
-  <property name="immediate_view">folder_listing</property>
-  <property name="global_allow">True</property>
+  <property name="factory">addPSCWorklog</property>
+  <property name="immediate_view">base_view</property>
+  <property name="global_allow">False</property>
   <property name="filter_content_types">True</property>
   <property name="allowed_content_types">
     <!-- the elements here should be the object name. -->
-    <!-- element value="PSCWorklog"/ -->
+    <!-- element value=""/ -->
   </property>
   <property name="allow_discussion">False</property>
-  <property name="default_view">folder_listing</property>
+  <property name="default_view">base_view</property>
   <property name="view_methods">
-    <element value="folder_listing"/>
+    <element value="base_view"/>
   </property>
 
   <!-- alias -->
   <alias from="(Default)" to="(dynamic view)"/>
-  <alias from="edit" to="atct_edit"/>
+  <!-- alias from="edit" to="atct_edit"/ -->
   <alias from="sharing" to="@@sharing"/>
   <alias from="view" to="(selected layout)"/>
 
@@ -38,23 +38,17 @@
           i18n:attributes="title">
     <permission value="View"/>
   </action>
-  <action title="Edit" action_id="edit"
+  <!-- action title="Edit" action_id="edit"
           category="object" condition_expr="not:object/@@plone_lock_info/is_locked_for_current_user|python:True"
           url_expr="string:${object_url}/edit" visible="True"
           i18n:attributes="title">
     <permission value="Modify portal content"/>
-  </action>
+  </action -->
   <action title="References" action_id="references" category="object"
           condition_expr="object/archetype_tool/has_graphviz"
           url_expr="string:${object_url}/reference_graph" visible="True"
           i18n:attributes="title">
     <permission value="Modify portal content"/>
     <permission value="Review portal content"/>
-  </action>
-  <action title="Folder Listing" action_id="folderlisting" category="folder"
-          condition_expr="object/isPrincipiaFolderish"
-          url_expr="string:${folder_url}/view" visible="False"
-          i18n:attributes="title">
-    <permission value="View"/>
   </action>
 </object>

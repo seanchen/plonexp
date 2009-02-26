@@ -49,7 +49,7 @@
 
           <div tal:content="error">Validation error output</div>
 
-          <input size="60" type="text" name="svnurl" id="svnurl"
+          <input size="80" type="text" name="svnurl" id="svnurl"
                  tal:attributes="value request/svnurl | nothing;"
           />
         </div>

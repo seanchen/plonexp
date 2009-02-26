@@ -8,5 +8,9 @@
     <type type_id="PSCWorkplace">
       <bound-workflow workflow_id="plone_workflow"/>
     </type>
+
+    <type type_id="PSCWorklog">
+      <bound-workflow workflow_id="plone_workflow"/>
+    </type>
   </bindings>
 </object>

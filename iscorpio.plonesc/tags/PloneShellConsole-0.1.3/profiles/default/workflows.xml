@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+
+<!-- in this xml file, we can set up the workflow for each portal type in the -->
+<!-- product. -->
+<object name="portal_workflow" meta_type="Plone Workflow Tool">
+
+  <bindings>
+    <type type_id="PSCWorkplace">
+      <bound-workflow workflow_id="plone_workflow"/>
+    </type>
+
+    <type type_id="PSCWorklog">
+      <!-- using one_state_workflow for log, which only has one state: Published -->
+      <!-- we not supposed to change the log once it is created. -->
+      <bound-workflow workflow_id="one_state_workflow"/>
+    </type>
+  </bindings>
+</object>

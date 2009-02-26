@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+
+<!-- in this xml file, we can set up the workflow for each portal type in the -->
+<!-- product. -->
+<object name="portal_workflow" meta_type="Plone Workflow Tool">
+
+  <bindings>
+    <type type_id="PSCWorkplace">
+      <bound-workflow workflow_id="plone_workflow"/>
+    </type>
+  </bindings>
+</object>

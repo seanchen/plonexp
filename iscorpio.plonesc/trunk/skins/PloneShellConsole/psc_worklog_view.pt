@@ -29,7 +29,7 @@
     <p><strong>Build Message:</strong></p>
 
     <p>
-      <span tal:replace="here/psc_log_message"/>
+      <span tal:replace="structure here/psc_log_message"/>
     </p>
 
     <div tal:replace="structure provider:plone.belowcontentbody" />

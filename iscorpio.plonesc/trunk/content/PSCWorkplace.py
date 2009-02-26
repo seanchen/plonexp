@@ -9,6 +9,7 @@ __docformat__ = 'plaintext'
 # remote jobs.
 
 import os
+import re
 import commands
 import logging
 import time
@@ -139,11 +140,29 @@ class PSCWorkplace(ATFolder):
 
         # get the latest reversion.
         os.chdir('%s/%s' % (buildFolder, workFolder))
-        svnMessage = commands.getoutput('svn info')
-        self.log.info(svnMessage)
+        svnOutput = commands.getoutput('svn info')
+        self.log.info(svnOutput)
 
         # parse the info output, extract the reversion number
+        svnPattern = re.compile(r"(URL|Revision|Last Changed Rev|Last Changed Date): (http://.*|\d*|\d{4}-\d{2}.*)\n")
+        svnResult = svnPattern.findall(svnOutput)
+        svnMessage = self.psc_svn_message(self,
+                                          svnURL = svnResult[0][1],
+                                          svnRevision = svnResult[1][1],
+                                          svnLastRev = svnResult[2][1],
+                                          svnLastDate = svnResult[3][1])
 
+        # make build by using MVN
+        #mvnOutput = commands.getoutput('mvn deploy')
+        #self.log.info(mvnOutput)
+
+        # parse the mvn output message, extract the artifact names and
+        # then create the artifacts list in the worklog.
+        
+
+        commands.getoutput('rm -rf %s/%s' % (buildFolder, workFolder))
+
+        # generate the PSCWorklog document.
         log_id = 'log-%s' % time.strftime('%Y%m%d%H%M%S')
         # current user info.
         mtool = getToolByName(self, 'portal_membership')
@@ -160,22 +179,13 @@ class PSCWorkplace(ATFolder):
         worklog = getattr(self, log_id)
 
         worklog.setTitle('log message at %s' % time.strftime('%Y-%m-%d %H:%M'))
+        worklog.setPsc_log_timestamp(time.strftime('%b %d, %Y %H:%M'))
         worklog.setPsc_log_username(full_name)
-        worklog.setPsc_log_timestamp('the time stamp')
         worklog.setPsc_log_message(svnMessage)
         # we have to reindex the object, otherwise the title will not show in the
         # navigation tree and title of the page.
         worklog.reindexObject()
 
-        # make build by using MVN
-        #mvnMessage = commands.getoutput('mvn deploy')
-        #self.log.info(mvnMessage)
-
-        # parse the mvn output message, extract the artifact names and
-        # then create the artifacts list in the worklog.
-
-        commands.getoutput('rm -rf %s/%s' % (buildFolder, workFolder))
-        # generate the PSCWorklog document.
         return
 
 # register to the product.

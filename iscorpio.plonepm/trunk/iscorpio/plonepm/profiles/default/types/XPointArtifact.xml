@@ -8,7 +8,7 @@
             i18n:translate="">A eXtreme Programing Artifact</property>
   <property name="content_icon">xppm_artifact_icon.gif</property>
   <property name="content_meta_type">XPointArtifact</property>
-  <property name="product">PlonePM</property>
+  <property name="product">iscorpio.plonepm</property>
   <property name="factory">addXPointArtifact</property>
   <property name="immediate_view">folder_listing</property>
   <property name="global_allow">False</property>

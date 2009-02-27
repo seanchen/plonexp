@@ -6,7 +6,7 @@ version = open(os.path.join('iscorpio/plonepm', 'version.txt')).read()
 setup(name='iscorpio.plonepm',
       version=version,
       description="A Plone way to manage project",
-      long_description=open("README.txt").read() + "\n" +
+      long_description=open(os.path.join('iscorpio/plonepm', "README.txt")).read() + "\n" +
                        open(os.path.join("docs", "HISTORY.txt")).read(),
       # Get more strings from http://www.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[

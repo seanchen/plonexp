@@ -11,9 +11,9 @@ from AccessControl import ClassSecurityInfo
 from Products.Archetypes.public import DisplayList
 from Products.Archetypes.public import registerType
 
-from Products.XPointProjectManagement.content.xpointdoc import XPointDocument
+from iscorpio.plonepm.content.xpointdoc import XPointDocument
 # the configruation info for this project.
-from Products.XPointProjectManagement.config import PROJECTNAME
+from iscorpio.plonepm.config import PROJECTNAME
 
 # the XPointProposal schema.
 XPointProposalSchema = XPointDocument.schema.copy()

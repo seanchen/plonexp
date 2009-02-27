@@ -20,7 +20,7 @@ from Products.CMFCore.permissions import View
 from Products.CMFCore.utils import getToolByName
 
 # the configruation info for this project.
-from Products.XPointProjectManagement.config import *
+from iscorpio.plonepm.config import *
 
 # the XPointBuildJournal Schema.
 XPointBuildJournalSchema = ATCTContent.schema.copy() + Schema((

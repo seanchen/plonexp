@@ -22,8 +22,8 @@ from Products.ATContentTypes.content.base import ATCTContent
 from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 
 # the configruation info for this project.
-from Products.XPointProjectManagement.config import PROJECTNAME
-from Products.XPointProjectManagement.content.base import XPPMBase
+from iscorpio.plonepm.config import PROJECTNAME
+from iscorpio.plonepm.content.base import XPPMBase
 
 # define the schema for the metadata.
 XPointMetadataSchema = ATCTContent.schema.copy() + Schema((

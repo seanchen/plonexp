@@ -30,7 +30,7 @@ from Products.ATContentTypes.configuration import zconf
 from Products.CMFCore.utils import getToolByName
 
 # the configruation info for this project.
-from Products.XPointProjectManagement.config import PROJECTNAME
+from iscorpio.plonepm.config import PROJECTNAME
 
 # the schema for XPointTask.
 XPointTaskSchema = ATFolderSchema.copy() + Schema((

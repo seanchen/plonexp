@@ -1,14 +1,14 @@
-XPointProjectManagement is a light weight project management software
+Plone Project Management is a light weight project management software
 closely follow the eXtreame Programming's concept.  It helps project
 manager to break down a complex project to a set of stories and create
 a set of tasks for each story.  Then project manager can assign each
 task to team members.
 
-XPointProjectManagement provides progress bars for each task, each
+Plone Project Managementprovides progress bars for each task, each
 story and the whole project.  So project managers can have a clear and
 direct view of how is this project going.
 
-Meanwhile, XPointProjectManagement also provides a set of document
+Meanwhile, Plone Project Management also provides a set of document
 types (memos, issues, and proposals) to keep tracking the whole
 project's progress.
 

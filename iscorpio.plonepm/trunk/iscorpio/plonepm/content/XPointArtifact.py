@@ -31,8 +31,8 @@ from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 from Products.CMFCore.utils import getToolByName
 
 # the configruation info for this project.
-from Products.XPointProjectManagement.config import PROJECTNAME
-from Products.XPointProjectManagement.content.base import XPPMBase
+from iscorpio.plonepm.config import PROJECTNAME
+from iscorpio.plonepm.content.base import XPPMBase
 
 # the schema for artifact.
 XPointArtifactSchema = ATFolderSchema.copy() + Schema((

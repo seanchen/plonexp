@@ -21,8 +21,8 @@ from Products.ATContentTypes.atct import ATFolderSchema
 from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 
 # the configruation info for this project.
-from Products.XPointProjectManagement.config import PROJECTNAME
-from Products.XPointProjectManagement.content.base import XPPMBase
+from iscorpio.plonepm.config import PROJECTNAME
+from iscorpio.plonepm.content.base import XPPMBase
 
 # define a XPointProject as a folder in plone site.
 XPointFuncSpecSchema = ATFolderSchema.copy() + Schema((

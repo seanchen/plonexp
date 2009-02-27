@@ -9,9 +9,9 @@ from AccessControl import ClassSecurityInfo
 # Import modules and functions, etc. used in the following codes. 
 from Products.Archetypes.public import registerType
 
-from Products.XPointProjectManagement.content.xpointdoc import XPointDocument
+from iscorpio.plonepm.content.xpointdoc import XPointDocument
 # the configruation info for this project.
-from Products.XPointProjectManagement.config import PROJECTNAME
+from iscorpio.plonepm.config import PROJECTNAME
 
 # the XPointBuildJournal Schema.
 XPointBuildJournalSchema = XPointDocument.schema.copy()

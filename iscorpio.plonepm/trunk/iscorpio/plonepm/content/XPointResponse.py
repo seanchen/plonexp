@@ -33,8 +33,8 @@ from Products.CMFCore import permissions
 from Products.CMFCore.utils import getToolByName
 
 # the configruation info for this project.
-from Products.XPointProjectManagement.config import PROJECTNAME
-from Products.XPointProjectManagement.content.base import XPPMBase
+from iscorpio.plonepm.config import PROJECTNAME
+from iscorpio.plonepm.content.base import XPPMBase
 
 # define a XPointProject as a folder in plone site.
 XPointResponseSchema = ATCTContent.schema.copy() + Schema((

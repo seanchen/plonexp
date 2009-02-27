@@ -25,8 +25,8 @@ from Products.ATContentTypes.atct import ATFolderSchema
 from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 
 # the configruation info for this project.
-from Products.XPointProjectManagement.config import PROJECTNAME
-from Products.XPointProjectManagement.content.base import XPPMBase
+from iscorpio.plonepm.config import PROJECTNAME
+from iscorpio.plonepm.content.base import XPPMBase
 
 # the schema for story.
 XPointStorySchema = ATFolderSchema.copy() + Schema((

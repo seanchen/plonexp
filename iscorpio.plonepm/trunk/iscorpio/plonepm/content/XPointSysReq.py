@@ -10,9 +10,9 @@ import logging
 from Products.Archetypes.public import Schema
 from Products.Archetypes.public import registerType
 
-from Products.XPointProjectManagement.config import PROJECTNAME
-from Products.XPointProjectManagement.content.base import XPPMBase
-from Products.XPointProjectManagement.content.base import XPPMDocBase
+from iscorpio.plonepm.config import PROJECTNAME
+from iscorpio.plonepm.content.base import XPPMBase
+from iscorpio.plonepm.content.base import XPPMDocBase
 
 # the function requirement schema
 XPointSysReqSchema = XPPMDocBase.schema.copy()

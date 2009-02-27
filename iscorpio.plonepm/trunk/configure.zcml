@@ -7,6 +7,8 @@
    i18n:domain=""
 >
 
+  <five:registerPackage package="." initialize=".initialize" />
+
   <!-- Generic Setup profiles -->
   <genericsetup:registerProfile
      name="default"

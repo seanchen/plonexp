@@ -61,7 +61,7 @@ class XPointMetadata(XPPMBase, ATCTContent, HistoryAwareMixin):
     # the prefix for the auto generated ids.
     xppm_id_prefix = 'xpm'
     # log.
-    log = logging.getLogger("XPointProjectManagement XPointMetadata")
+    log = logging.getLogger("PlonePM XPointMetadata")
 
     security = ClassSecurityInfo()
 

@@ -84,7 +84,7 @@ class XPointProject(ATFolder):
     _at_rename_after_creation = True
 
     # the logger.
-    log = logging.getLogger("XPointProjectManagement Project")
+    log = logging.getLogger("PlonePM Project")
 
     # preparing class security info for methods.
     security = ClassSecurityInfo()

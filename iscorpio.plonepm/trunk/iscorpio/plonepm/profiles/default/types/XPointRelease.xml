@@ -10,7 +10,7 @@
             i18n:translate="">A XP Release Notes, Can contain rich text.</property>
   <property name="content_icon">XPRelease_icon.gif</property>
   <property name="content_meta_type">XPointRelease</property>
-  <property name="product">XPointProjectManagement</property>
+  <property name="product">PlonePM</property>
   <property name="factory">addXPointRelease</property>
   <property name="immediate_view">xpointdoc_view</property>
   <property name="global_allow">False</property>

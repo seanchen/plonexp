@@ -4,7 +4,7 @@
 # configuration constants for XPoint Consulting Project Management.
 
 # project name.
-PROJECTNAME = "XPointProjectManagement"
+PROJECTNAME = "PlonePM"
 
 # skins directory for this project, contains gif, vie pt ...
 SKINS_DIR = "skins"

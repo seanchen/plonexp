@@ -150,7 +150,7 @@ class XPointArtifact(XPPMBase, ATFolder, HistoryAwareMixin):
     # set up the prefix for auto generated ids.
     xppm_id_prefix = 'xpa'
     # the logger.
-    log = logging.getLogger("XPointProjectManagement XPointArtifact")
+    log = logging.getLogger("PlonePM XPointArtifact")
 
     # the artifact change log.
     _artifactChangeLog = []

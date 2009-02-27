@@ -37,6 +37,6 @@ class XPointFuncReq(XPPMBase, XPPMDocBase):
         )
 
     xppm_id_prefix = "fr"
-    log = logging.getLogger("XPointProjectManagement XPointFuncReq")
+    log = logging.getLogger("PlonePM XPointFuncReq")
 
 registerType(XPointFuncReq, PROJECTNAME)

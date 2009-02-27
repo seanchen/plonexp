@@ -8,7 +8,7 @@
             i18n:translate="">A eXtreme Programing Task.</property>
   <property name="content_icon">XPTask_icon.gif</property>
   <property name="content_meta_type">XPointTask</property>
-  <property name="product">XPointProjectManagement</property>
+  <property name="product">PlonePM</property>
   <property name="factory">addXPointTask</property>
   <property name="immediate_view">xpointtask_view</property>
   <property name="global_allow">False</property>

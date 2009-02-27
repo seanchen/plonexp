@@ -10,7 +10,7 @@
             i18n:translate="">A function requirement.</property>
   <property name="content_icon">xppm_fr_icon.gif</property>
   <property name="content_meta_type">XPointFuncReq</property>
-  <property name="product">XPointProjectManagement</property>
+  <property name="product">PlonePM</property>
   <property name="factory">addXPointFuncReq</property>
   <property name="immediate_view">base_view</property>
   <property name="global_allow">False</property>

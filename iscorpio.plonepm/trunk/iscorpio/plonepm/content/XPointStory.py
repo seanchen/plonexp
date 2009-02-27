@@ -105,7 +105,7 @@ class XPointStory(XPPMBase, ATFolder, HistoryAwareMixin):
     # set up the prefix for auto generated ids.
     xppm_id_prefix = 'xps'
     # the logger.
-    log = logging.getLogger("XPointProjectManagement XPointStory")
+    log = logging.getLogger("PlonePM XPointStory")
     # preparing class security info for methods.
     security = ClassSecurityInfo()
 

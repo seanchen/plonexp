@@ -33,7 +33,7 @@ class XPPMBase:
     # own prefix.
     xppm_id_prefix = "xppm"
 
-    log = logging.getLogger("XPointProjectManagement XPPMBase")
+    log = logging.getLogger("PlonePM XPPMBase")
 
     # override renameAfterCreation to generate the unique id for
     # contact. This method is defined in Archetypes.BaseObject.py.

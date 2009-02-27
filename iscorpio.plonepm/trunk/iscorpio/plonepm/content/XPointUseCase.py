@@ -42,7 +42,7 @@ class XPointUseCase(XPPMBase, XPPMDocBase):
         )
 
     xppm_id_prefix = "uc"
-    log = logging.getLogger("XPointProjectManagement XPointUseCase")
+    log = logging.getLogger("PlonePM XPointUseCase")
     security = ClassSecurityInfo()
 
 registerType(XPointUseCase, PROJECTNAME)

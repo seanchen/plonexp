@@ -1,6 +1,6 @@
 # xpointdoc.py
 
-__doc__ = """XPointDocument is the super class of XPointProjectManagement general
+__doc__ = """XPointDocument is the super class of PlonePM general
 documents, such as memo, buildjounal, proposal, and issue."""
 __author__ = 'iScorpio <iscorpio@users.sourceforge.net>'
 __docformat__ = 'plaintext'

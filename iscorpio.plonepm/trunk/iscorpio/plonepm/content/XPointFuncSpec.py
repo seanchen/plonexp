@@ -63,7 +63,7 @@ class XPointFuncSpec(XPPMBase, ATFolder, HistoryAwareMixin):
     # set the unique id prefix.
     xppm_id_prefix = "fsd"
 
-    log = logging.getLogger('XPointProjectManagement FSD')
+    log = logging.getLogger('PlonePM FSD')
 
     security = ClassSecurityInfo()
 

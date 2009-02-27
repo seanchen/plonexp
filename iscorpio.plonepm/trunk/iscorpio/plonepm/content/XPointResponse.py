@@ -156,7 +156,7 @@ class XPointResponse(XPPMBase, ATCTContent, HistoryAwareMixin):
     # set up the prefix for auto generated ids.
     xppm_id_prefix = 'xpr'
     # the logger.
-    log = logging.getLogger("XPointProjectManagement XPointResponse")
+    log = logging.getLogger("PlonePM XPointResponse")
     # preparing class security info for methods
     security = ClassSecurityInfo()
 

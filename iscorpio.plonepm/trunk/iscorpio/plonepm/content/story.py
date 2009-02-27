@@ -98,7 +98,7 @@ class XPointStory(ATFolder):
         )
 
     # for logging.
-    log = logging.getLogger("XPointProjectManagement Story")
+    log = logging.getLogger("PlonePM Story")
 
     security = ClassSecurityInfo()
 

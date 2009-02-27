@@ -12,7 +12,7 @@ except: # Old CMF
 import Products.Archetypes.public as atapi
 import config
 
-log = logging.getLogger('XPointProjectManagement permissions')
+log = logging.getLogger('PlonePM permissions')
 
 # The setting of the permission and the roll is made. This function is 
 # called from __ init__.py.

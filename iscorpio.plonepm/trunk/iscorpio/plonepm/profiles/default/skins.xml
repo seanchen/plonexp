@@ -2,7 +2,7 @@
 <object name="portal_skins">
 
   <object name="PlonePM" meta_type="Filesystem Directory View"
-          directory="Products.PlonePM:skins/PlonePM"/>
+          directory="iscorpio.plonepm:skins/PlonePM"/>
 
   <skin-path name="*">
     <layer name="PlonePM" insert-after="custom"/>

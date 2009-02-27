@@ -1,25 +1,25 @@
 <?xml version="1.0"?>
-<object name="XPointMemo"
+<object name="PPMSysReq"
         meta_type="Factory-based Type Information with dynamic views"
         i18n:domain="plone"
         xmlns:i18n="http://xml.zope.org/namespaces/i18n">
 
   <!-- properties for this type. -->
-  <property name="title" i18n:translate="">XP Memo</property>
+  <property name="title" i18n:translate="">XP System Requirement</property>
   <property name="description"
-            i18n:translate="">A XP Memo, Can contain rich text.</property>
-  <property name="content_icon">XPMemo_icon.gif</property>
-  <property name="content_meta_type">XPointMemo</property>
+            i18n:translate="">A system requirement.</property>
+  <property name="content_icon">xppm_sr_icon.gif</property>
+  <property name="content_meta_type">PPMSysReq</property>
   <property name="product">iscorpio.plonepm</property>
-  <property name="factory">addXPointMemo</property>
-  <property name="immediate_view">xpointdoc_view</property>
+  <property name="factory">addPPMSysReq</property>
+  <property name="immediate_view">base_view</property>
   <property name="global_allow">False</property>
   <property name="filter_content_types">True</property>
   <property name="allowed_content_types"/>
   <property name="allow_discussion">True</property>
-  <property name="default_view">xpointdoc_view</property>
+  <property name="default_view">base_view</property>
   <property name="view_methods">
-    <element value="xpointdoc_view"/>
+    <element value="base_view"/>
   </property>
 
   <!-- alias for this content type -->

@@ -1,7 +1,7 @@
 
-# XPointUseCase.py
+# PPMUseCase.py
 
-__doc__ = """XPointUseCases defines a use case for a software project.
+__doc__ = """PPMUseCases defines a use case for a software project.
 A use case could explain a funcationality from function specification.
 """
 __author__ = 'iScorpio <iscorpio@users.sourceforge.net>'
@@ -20,29 +20,29 @@ from iscorpio.plonepm.content.base import XPPMBase
 from iscorpio.plonepm.content.base import XPPMDocBase
 
 # the use case schema.
-XPointUseCaseSchema = XPPMDocBase.schema.copy()
+PPMUseCaseSchema = XPPMDocBase.schema.copy()
 
 # set up the label and description for generic field.
-XPointUseCaseSchema['xppm_text'].widget.label = "Use Case Text"
-XPointUseCaseSchema['xppm_text'].widget.description = "Details explain for this use case."
+PPMUseCaseSchema['xppm_text'].widget.label = "Use Case Text"
+PPMUseCaseSchema['xppm_text'].widget.description = "Details explain for this use case."
 
 # the use case class.
-class XPointUseCase(XPPMBase, XPPMDocBase):
+class PPMUseCase(XPPMBase, XPPMDocBase):
     """ content type class for a use case.
     """
 
-    schema = XPointUseCaseSchema
+    schema = PPMUseCaseSchema
 
-    meta_type = "XPointUseCase"
-    portal_type = "XPointUseCase"
-    archetype_name = "XPointUseCase"
+    meta_type = "PPMUseCase"
+    portal_type = "PPMUseCase"
+    archetype_name = "PPMUseCase"
 
     __implements__ = (
         XPPMDocBase.__implements__,
         )
 
     xppm_id_prefix = "uc"
-    log = logging.getLogger("PlonePM XPointUseCase")
+    log = logging.getLogger("PlonePM PPMUseCase")
     security = ClassSecurityInfo()
 
-registerType(XPointUseCase, PROJECTNAME)
+registerType(PPMUseCase, PROJECTNAME)

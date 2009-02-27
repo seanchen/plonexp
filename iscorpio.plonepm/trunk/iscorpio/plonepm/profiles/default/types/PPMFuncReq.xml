@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<object name="XPointFuncReq"
+<object name="PPMFuncReq"
         meta_type="Factory-based Type Information with dynamic views"
         i18n:domain="plone"
         xmlns:i18n="http://xml.zope.org/namespaces/i18n">
@@ -9,9 +9,9 @@
   <property name="description"
             i18n:translate="">A function requirement.</property>
   <property name="content_icon">xppm_fr_icon.gif</property>
-  <property name="content_meta_type">XPointFuncReq</property>
+  <property name="content_meta_type">PPMFuncReq</property>
   <property name="product">iscorpio.plonepm</property>
-  <property name="factory">addXPointFuncReq</property>
+  <property name="factory">addPPMFuncReq</property>
   <property name="immediate_view">base_view</property>
   <property name="global_allow">False</property>
   <property name="filter_content_types">True</property>

@@ -1,7 +1,7 @@
 
-# XPointArtifact.py
+# PPMArtifact.py
 
-__doc__ = """XPointStory defines a track item for a software project in Agile approach."""
+__doc__ = """PPMStory defines a track item for a software project in Agile approach."""
 __author__ = 'iScorpio <iscorpio@users.sourceforge.net>'
 __docformat__ = 'plaintext'
 
@@ -35,7 +35,7 @@ from iscorpio.plonepm.config import PROJECTNAME
 from iscorpio.plonepm.content.base import XPPMBase
 
 # the schema for artifact.
-XPointArtifactSchema = ATFolderSchema.copy() + Schema((
+PPMArtifactSchema = ATFolderSchema.copy() + Schema((
 
         # artifact details
         TextField(
@@ -129,19 +129,19 @@ XPointArtifactSchema = ATFolderSchema.copy() + Schema((
     )
 
 # finalize the schema.
-finalizeATCTSchema(XPointArtifactSchema)
+finalizeATCTSchema(PPMArtifactSchema)
 
 # set the description field invisible.
-XPointArtifactSchema['description'].widget.visible = False
+PPMArtifactSchema['description'].widget.visible = False
 
 # the class.
-class XPointArtifact(XPPMBase, ATFolder, HistoryAwareMixin):
+class PPMArtifact(XPPMBase, ATFolder, HistoryAwareMixin):
 
-    schema = XPointArtifactSchema
+    schema = PPMArtifactSchema
 
-    meta_type = "XPointArtifact"
-    portal_type = "XPointArtifact"
-    archetypes_type = "XPointArtifact"
+    meta_type = "PPMArtifact"
+    portal_type = "PPMArtifact"
+    archetypes_type = "PPMArtifact"
 
     __implements__ = (ATFolder.__implements__,
                       HistoryAwareMixin.__implements__,
@@ -150,7 +150,7 @@ class XPointArtifact(XPPMBase, ATFolder, HistoryAwareMixin):
     # set up the prefix for auto generated ids.
     xppm_id_prefix = 'xpa'
     # the logger.
-    log = logging.getLogger("PlonePM XPointArtifact")
+    log = logging.getLogger("PlonePM PPMArtifact")
 
     # the artifact change log.
     _artifactChangeLog = []
@@ -180,4 +180,4 @@ class XPointArtifact(XPPMBase, ATFolder, HistoryAwareMixin):
         return DisplayList(self.getMetadataByType('tag'))
 
 # register to the plone add-on product.
-registerType(XPointArtifact, PROJECTNAME)
+registerType(PPMArtifact, PROJECTNAME)

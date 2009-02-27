@@ -1,25 +1,25 @@
 <?xml version="1.0"?>
-<object name="XPointUseCase"
+<object name="PPMIssue"
         meta_type="Factory-based Type Information with dynamic views"
         i18n:domain="plone"
         xmlns:i18n="http://xml.zope.org/namespaces/i18n">
 
   <!-- properties for this type. -->
-  <property name="title" i18n:translate="">XP Use Case</property>
+  <property name="title" i18n:translate="">XP Issue</property>
   <property name="description"
-            i18n:translate="">A use case.</property>
-  <property name="content_icon">xppm_usecase_icon.gif</property>
-  <property name="content_meta_type">XPointUseCase</property>
+            i18n:translate="">A XP Issue, Can contain rich text.</property>
+  <property name="content_icon">XPIssue_icon.gif</property>
+  <property name="content_meta_type">PPMIssue</property>
   <property name="product">iscorpio.plonepm</property>
-  <property name="factory">addXPointUseCase</property>
-  <property name="immediate_view">base_view</property>
+  <property name="factory">addPPMIssue</property>
+  <property name="immediate_view">xpointdoc_view</property>
   <property name="global_allow">False</property>
   <property name="filter_content_types">True</property>
   <property name="allowed_content_types"/>
   <property name="allow_discussion">True</property>
-  <property name="default_view">base_view</property>
+  <property name="default_view">xpointdoc_view</property>
   <property name="view_methods">
-    <element value="base_view"/>
+    <element value="xpointdoc_view"/>
   </property>
 
   <!-- alias for this content type -->

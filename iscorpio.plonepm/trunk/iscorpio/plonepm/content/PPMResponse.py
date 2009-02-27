@@ -1,7 +1,7 @@
 
-# XPointResponse.py
+# PPMResponse.py
 
-__doc__ = """XPointResponse defines a """
+__doc__ = """PPMResponse defines a """
 __author__ = 'iScorpio <iscorpio@users.sourceforge.net>'
 __docformat__ = 'plaintext'
 
@@ -36,8 +36,8 @@ from Products.CMFCore.utils import getToolByName
 from iscorpio.plonepm.config import PROJECTNAME
 from iscorpio.plonepm.content.base import XPPMBase
 
-# define a XPointProject as a folder in plone site.
-XPointResponseSchema = ATCTContent.schema.copy() + Schema((
+# define a PPMProject as a folder in plone site.
+PPMResponseSchema = ATCTContent.schema.copy() + Schema((
 
         # artifact details
         TextField(
@@ -137,17 +137,17 @@ XPointResponseSchema = ATCTContent.schema.copy() + Schema((
         )
     )
 
-finalizeATCTSchema(XPointResponseSchema)
+finalizeATCTSchema(PPMResponseSchema)
 
-#XPointResponseSchema.changeSchemataForField('
+#PPMResponseSchema.changeSchemataForField('
 
-class XPointResponse(XPPMBase, ATCTContent, HistoryAwareMixin):
+class PPMResponse(XPPMBase, ATCTContent, HistoryAwareMixin):
 
-    schema = XPointResponseSchema
+    schema = PPMResponseSchema
 
-    meta_type = "XPointResponse"
-    portal_type = "XPointResponse"
-    archetypes_type = "XPointResponse"
+    meta_type = "PPMResponse"
+    portal_type = "PPMResponse"
+    archetypes_type = "PPMResponse"
 
     __implements__ = (HistoryAwareMixin.__implements__,
                       ATCTContent.__implements__,
@@ -156,7 +156,7 @@ class XPointResponse(XPPMBase, ATCTContent, HistoryAwareMixin):
     # set up the prefix for auto generated ids.
     xppm_id_prefix = 'xpr'
     # the logger.
-    log = logging.getLogger("PlonePM XPointResponse")
+    log = logging.getLogger("PlonePM PPMResponse")
     # preparing class security info for methods
     security = ClassSecurityInfo()
 
@@ -276,4 +276,4 @@ class XPointResponse(XPPMBase, ATCTContent, HistoryAwareMixin):
         return
 
 # register to the plone add-on product.
-registerType(XPointResponse, PROJECTNAME)
+registerType(PPMResponse, PROJECTNAME)

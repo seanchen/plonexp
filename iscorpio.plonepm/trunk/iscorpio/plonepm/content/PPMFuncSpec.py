@@ -1,7 +1,7 @@
 
-# XPointFuncSpec.py
+# PPMFuncSpec.py
 
-__doc__ = """XPointFuncSpec defines a function specification document for a software project."""
+__doc__ = """PPMFuncSpec defines a function specification document for a software project."""
 __author__ = 'iScorpio <iscorpio@users.sourceforge.net>'
 __docformat__ = 'plaintext'
 
@@ -24,8 +24,8 @@ from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 from iscorpio.plonepm.config import PROJECTNAME
 from iscorpio.plonepm.content.base import XPPMBase
 
-# define a XPointProject as a folder in plone site.
-XPointFuncSpecSchema = ATFolderSchema.copy() + Schema((
+# define a PPMProject as a folder in plone site.
+PPMFuncSpecSchema = ATFolderSchema.copy() + Schema((
 
         # the function specificaion docuemnt.
         FileField(
@@ -41,19 +41,19 @@ XPointFuncSpecSchema = ATFolderSchema.copy() + Schema((
         )
     )
 
-finalizeATCTSchema(XPointFuncSpecSchema);
+finalizeATCTSchema(PPMFuncSpecSchema);
 
 # the corresponding class file.
-class XPointFuncSpec(XPPMBase, ATFolder, HistoryAwareMixin):
+class PPMFuncSpec(XPPMBase, ATFolder, HistoryAwareMixin):
     """ defines a content type for function specification docuemtn.
     """
 
-    schema = XPointFuncSpecSchema
+    schema = PPMFuncSpecSchema
 
     # type, name
-    meta_type = 'XPointFuncSpec'
-    portal_type = 'XPointFuncSpec'
-    archetypes_type = 'XPointFuncSpec'
+    meta_type = 'PPMFuncSpec'
+    portal_type = 'PPMFuncSpec'
+    archetypes_type = 'PPMFuncSpec'
 
     __implements__ = (
         ATFolder.__implements__,
@@ -74,4 +74,4 @@ class XPointFuncSpec(XPPMBase, ATFolder, HistoryAwareMixin):
         """
         return
 
-registerType(XPointFuncSpec, PROJECTNAME)
+registerType(PPMFuncSpec, PROJECTNAME)

@@ -1,7 +1,7 @@
 
-# XPointFuncReq.py
+# PPMFuncReq.py
 
-__doc__ = """XPointFuncReq defines a function requirment for a software project."""
+__doc__ = """PPMFuncReq defines a function requirment for a software project."""
 __author__ = 'iScorpio <iscorpio@users.sourceforge.net>'
 __docformat__ = 'plaintext'
 
@@ -15,28 +15,28 @@ from iscorpio.plonepm.content.base import XPPMBase
 from iscorpio.plonepm.content.base import XPPMDocBase
 
 # the function requirement schema
-XPointFuncReqSchema = XPPMDocBase.schema.copy()
+PPMFuncReqSchema = XPPMDocBase.schema.copy()
 
 # set up label and description for generic fields.
-XPointFuncReqSchema['xppm_text'].widget.label = "Function Requirement Text"
-XPointFuncReqSchema['xppm_text'].widget.description = "The details explain of the function requirement."
+PPMFuncReqSchema['xppm_text'].widget.label = "Function Requirement Text"
+PPMFuncReqSchema['xppm_text'].widget.description = "The details explain of the function requirement."
 
 # the classes.
-class XPointFuncReq(XPPMBase, XPPMDocBase):
+class PPMFuncReq(XPPMBase, XPPMDocBase):
     """ content type for a function requirement.
     """
 
-    schema = XPointFuncReqSchema
+    schema = PPMFuncReqSchema
 
-    meta_type = "XPointFuncReq"
-    portal_type = "XPointFuncReq"
-    archetype_name = "XPointFuncReq"
+    meta_type = "PPMFuncReq"
+    portal_type = "PPMFuncReq"
+    archetype_name = "PPMFuncReq"
 
     __implements__ = (
         XPPMDocBase.__implements__,
         )
 
     xppm_id_prefix = "fr"
-    log = logging.getLogger("PlonePM XPointFuncReq")
+    log = logging.getLogger("PlonePM PPMFuncReq")
 
-registerType(XPointFuncReq, PROJECTNAME)
+registerType(PPMFuncReq, PROJECTNAME)

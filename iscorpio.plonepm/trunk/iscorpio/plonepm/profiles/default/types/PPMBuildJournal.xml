@@ -1,19 +1,19 @@
 <?xml version="1.0"?>
-<object name="XPointProposal"
+<object name="PPMBuildJournal"
         meta_type="Factory-based Type Information with dynamic views"
         i18n:domain="plone"
         xmlns:i18n="http://xml.zope.org/namespaces/i18n">
 
   <!-- properties for this type. -->
-  <property name="title" i18n:translate="">XP Proposal</property>
+  <property name="title" i18n:translate="">Build Journal</property>
   <property name="description"
-            i18n:translate="">A XP Proposal, Can contain rich text.</property>
-  <property name="content_icon">XPProposal_icon.gif</property>
-  <property name="content_meta_type">XPointProposal</property>
+            i18n:translate="">A XP Build Journal, Can contain rich text.</property>
+  <property name="content_icon">XPBuildJournal_icon.gif</property>
+  <property name="content_meta_type">PPMBuildJournal</property>
   <property name="product">iscorpio.plonepm</property>
-  <property name="factory">addXPointProposal</property>
+  <property name="factory">addPPMBuildJournal</property>
   <property name="immediate_view">xpointdoc_view</property>
-  <property name="global_allow">False</property>
+  <property name="global_allow">True</property>
   <property name="filter_content_types">True</property>
   <property name="allowed_content_types"/>
   <property name="allow_discussion">True</property>

@@ -1,7 +1,7 @@
 
-# XPointResponse.py
+# PPMResponse.py
 
-__doc__ = """XPointResponse defines a """
+__doc__ = """PPMResponse defines a """
 __author__ = 'iScorpio <iscorpio@users.sourceforge.net>'
 __docformat__ = 'plaintext'
 
@@ -26,7 +26,7 @@ from iscorpio.plonepm.config import PROJECTNAME
 from iscorpio.plonepm.content.base import XPPMBase
 
 # define the schema for the metadata.
-XPointMetadataSchema = ATCTContent.schema.copy() + Schema((
+PPMMetadataSchema = ATCTContent.schema.copy() + Schema((
 
         # the type of this metadata.
         StringField(
@@ -41,18 +41,18 @@ XPointMetadataSchema = ATCTContent.schema.copy() + Schema((
         )
     )
 
-finalizeATCTSchema(XPointMetadataSchema)
+finalizeATCTSchema(PPMMetadataSchema)
 
-class XPointMetadata(XPPMBase, ATCTContent, HistoryAwareMixin):
+class PPMMetadata(XPPMBase, ATCTContent, HistoryAwareMixin):
 
-    """ a metadata for XPoint Project.
+    """ a metadata for PPM Project.
     """
 
-    schema = XPointMetadataSchema
+    schema = PPMMetadataSchema
 
-    meta_type = "XPointMetadata"
-    portal_type = "XPointMetadata"
-    archetypes_type = "XPointMetadata"
+    meta_type = "PPMMetadata"
+    portal_type = "PPMMetadata"
+    archetypes_type = "PPMMetadata"
 
     __implements__ = (ATCTContent.__implements__,
                       HistoryAwareMixin.__implements__,
@@ -61,7 +61,7 @@ class XPointMetadata(XPPMBase, ATCTContent, HistoryAwareMixin):
     # the prefix for the auto generated ids.
     xppm_id_prefix = 'xpm'
     # log.
-    log = logging.getLogger("PlonePM XPointMetadata")
+    log = logging.getLogger("PlonePM PPMMetadata")
 
     security = ClassSecurityInfo()
 
@@ -76,4 +76,4 @@ class XPointMetadata(XPPMBase, ATCTContent, HistoryAwareMixin):
                             ])
 
 # register to the plone add-on product.
-registerType(XPointMetadata, PROJECTNAME)
+registerType(PPMMetadata, PROJECTNAME)

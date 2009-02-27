@@ -1,7 +1,7 @@
 
-# XPointSysReq.py
+# PPMSysReq.py
 
-__doc__ = """XPointSysReq defines a system requirment for a software project."""
+__doc__ = """PPMSysReq defines a system requirment for a software project."""
 __author__ = 'iScorpio <iscorpio@users.sourceforge.net>'
 __docformat__ = 'plaintext'
 
@@ -15,28 +15,28 @@ from iscorpio.plonepm.content.base import XPPMBase
 from iscorpio.plonepm.content.base import XPPMDocBase
 
 # the function requirement schema
-XPointSysReqSchema = XPPMDocBase.schema.copy()
+PPMSysReqSchema = XPPMDocBase.schema.copy()
 
 # set up label and description for generic fields.
-XPointSysReqSchema['xppm_text'].widget.label = "System Requirement Text"
-XPointSysReqSchema['xppm_text'].widget.description = "The details explain of the system requirement."
+PPMSysReqSchema['xppm_text'].widget.label = "System Requirement Text"
+PPMSysReqSchema['xppm_text'].widget.description = "The details explain of the system requirement."
 
 # the classes.
-class XPointSysReq(XPPMBase, XPPMDocBase):
+class PPMSysReq(XPPMBase, XPPMDocBase):
     """ content type for a system requirement.
     """
 
-    schema = XPointSysReqSchema
+    schema = PPMSysReqSchema
 
-    meta_type = "XPointSysReq"
-    portal_type = "XPointSysReq"
-    archetype_name = "XPointSysReq"
+    meta_type = "PPMSysReq"
+    portal_type = "PPMSysReq"
+    archetype_name = "PPMSysReq"
 
     __implements__ = (
         XPPMDocBase.__implements__,
         )
 
     xppm_id_prefix = "xpsr"
-    log = logging.getLogger("PlonePM XPointSysReq")
+    log = logging.getLogger("PlonePM PPMSysReq")
 
-registerType(XPointSysReq, PROJECTNAME)
+registerType(PPMSysReq, PROJECTNAME)

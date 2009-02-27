@@ -1,7 +1,7 @@
 
-# XPointProject.py
+# PPMProject.py
 
-__doc__ = """XPointProject defines a software project in Agile approach."""
+__doc__ = """PPMProject defines a software project in Agile approach."""
 __author__ = 'iScorpio <iscorpio@users.sourceforge.net>'
 __docformat__ = 'plaintext'
 
@@ -30,8 +30,8 @@ from Products.CMFCore.utils import getToolByName
 # the configruation info for this project.
 from iscorpio.plonepm.config import PROJECTNAME
 
-# define a XPointProject as a folder in plone site.
-XPointProjectSchema = ATFolderSchema.copy() + Schema((
+# define a PPMProject as a folder in plone site.
+PPMProjectSchema = ATFolderSchema.copy() + Schema((
 
         # detail description for this project, it allows rich text.
         TextField(
@@ -82,24 +82,24 @@ XPointProjectSchema = ATFolderSchema.copy() + Schema((
         )
     )
 
-finalizeATCTSchema(XPointProjectSchema)
+finalizeATCTSchema(PPMProjectSchema)
 
 # customizing the schema here, set visible of some fields, location of
 # some fields.
-XPointProjectSchema.changeSchemataForField('xppm_unique_sequence', 'settings')
+PPMProjectSchema.changeSchemataForField('xppm_unique_sequence', 'settings')
 
 # here is the class.
-class XPointProject(ATFolder):
-    """XPointProject defines a software project following eXtreme
+class PPMProject(ATFolder):
+    """PPMProject defines a software project following eXtreme
     Programming's idea/concept.
     """
 
-    schema = XPointProjectSchema
+    schema = PPMProjectSchema
 
     # type, name
-    meta_type = 'XPointProject'
-    portal_type = 'XPointProject'
-    archetype_name = 'XPointProject'
+    meta_type = 'PPMProject'
+    portal_type = 'PPMProject'
+    archetype_name = 'PPMProject'
 
     _at_rename_after_creation = True
 
@@ -155,13 +155,13 @@ class XPointProject(ATFolder):
     def getAllStories(self):
         """ Return all Stories in this project.
         """
-        return self.xpCatalogSearch(portal_type='XPointStory')
+        return self.xpCatalogSearch(portal_type='PPMStory')
 
     security.declarePublic('getAllSysReqs')
     def getAllSysReqs(self):
         """ Return all system requirement in this project.
         """
-        return self.xpCatalogSearch(portal_type='XPointSysReq')
+        return self.xpCatalogSearch(portal_type='PPMSysReq')
 
     security.declarePublic('getMetadataByType')
     def getMetadataByType(self, type=None):
@@ -172,7 +172,7 @@ class XPointProject(ATFolder):
             return []
 
         query = {}
-        query['portal_type'] = 'XPointMetadata'
+        query['portal_type'] = 'PPMMetadata'
         query['getXppm_metadata_type'] = type
 
         metadata = [(one.id, one.Title) for one in self.xpCatalogSearch(query)]
@@ -221,4 +221,4 @@ class XPointProject(ATFolder):
         return catalog.searchResults(query)
 
 # register to the plone add-on product.
-registerType(XPointProject, PROJECTNAME)
+registerType(PPMProject, PROJECTNAME)

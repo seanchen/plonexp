@@ -10,7 +10,7 @@
             i18n:translate="">A XP Issue, Can contain rich text.</property>
   <property name="content_icon">XPIssue_icon.gif</property>
   <property name="content_meta_type">XPointIssue</property>
-  <property name="product">PlonePM</property>
+  <property name="product">iscorpio.plonepm</property>
   <property name="factory">addXPointIssue</property>
   <property name="immediate_view">xpointdoc_view</property>
   <property name="global_allow">False</property>

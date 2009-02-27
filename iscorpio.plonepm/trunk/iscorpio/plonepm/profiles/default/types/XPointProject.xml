@@ -11,7 +11,7 @@
             i18n:translate="">A eXtreme Programing Project.</property>
   <property name="content_icon">XPProject_icon.gif</property>
   <property name="content_meta_type">XPointProject</property>
-  <property name="product">PlonePM</property>
+  <property name="product">iscorpio.plonepm</property>
   <property name="factory">addXPointProject</property>
   <property name="immediate_view">folder_listing</property>
   <property name="global_allow">True</property>

@@ -10,7 +10,7 @@
             i18n:translate="">A XP Build Journal, Can contain rich text.</property>
   <property name="content_icon">XPBuildJournal_icon.gif</property>
   <property name="content_meta_type">XPointBuildJournal</property>
-  <property name="product">PlonePM</property>
+  <property name="product">iscorpio.plonepm</property>
   <property name="factory">addXPointBuildJournal</property>
   <property name="immediate_view">xpointdoc_view</property>
   <property name="global_allow">True</property>

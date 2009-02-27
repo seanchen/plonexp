@@ -10,7 +10,7 @@
             i18n:translate="">A XP Proposal, Can contain rich text.</property>
   <property name="content_icon">XPProposal_icon.gif</property>
   <property name="content_meta_type">XPointProposal</property>
-  <property name="product">PlonePM</property>
+  <property name="product">iscorpio.plonepm</property>
   <property name="factory">addXPointProposal</property>
   <property name="immediate_view">xpointdoc_view</property>
   <property name="global_allow">False</property>

@@ -1,6 +1,7 @@
-# XPointBuildJournal.py
 
-__doc__ = """XPointBuildJournal Product for Plone to record build
+# PPMBuildJournal.py
+
+__doc__ = """PPMBuildJournal Product for Plone to record build
 journal."""
 __author__ = 'iScorpio'
 __docformat__ = 'plaintext'
@@ -22,8 +23,8 @@ from Products.CMFCore.utils import getToolByName
 # the configruation info for this project.
 from iscorpio.plonepm.config import *
 
-# the XPointBuildJournal Schema.
-XPointBuildJournalSchema = ATCTContent.schema.copy() + Schema((
+# the PPMBuildJournal Schema.
+PPMBuildJournalSchema = ATCTContent.schema.copy() + Schema((
 
         # The body of the build journal.
         TextField(
@@ -45,22 +46,22 @@ XPointBuildJournalSchema = ATCTContent.schema.copy() + Schema((
 # Archetypes.ExtensibleMetadata.ExtensibleMetadata
 # by default this LinesField is located in propertie tab (metadata),
 # we need move it to the default tab and set it to required.
-XPointBuildJournalSchema['subject'].schemata = 'default' # used to 'metadata'
-XPointBuildJournalSchema['subject'].required = True
-XPointBuildJournalSchema['subject'].widget.label = 'Projects'
-XPointBuildJournalSchema['subject'].widget.size = 6
-XPointBuildJournalSchema.moveField('subject', after='description')
+PPMBuildJournalSchema['subject'].schemata = 'default' # used to 'metadata'
+PPMBuildJournalSchema['subject'].required = True
+PPMBuildJournalSchema['subject'].widget.label = 'Projects'
+PPMBuildJournalSchema['subject'].widget.size = 6
+PPMBuildJournalSchema.moveField('subject', after='description')
 
-XPointBuildJournalSchema['relatedItems'].widget.visible = True
-XPointBuildJournalSchema.moveField('relatedItems', pos='bottom')
+PPMBuildJournalSchema['relatedItems'].widget.visible = True
+PPMBuildJournalSchema.moveField('relatedItems', pos='bottom')
 
 # this is for folder type.
-#finalizeATCTSchema(XPointBuildJournalSchema)
+#finalizeATCTSchema(PPMBuildJournalSchema)
 
-# the XPointBuildJournal class.
-class XPointBuildJournal(ATCTContent, HistoryAwareMixin):
+# the PPMBuildJournal class.
+class PPMBuildJournal(ATCTContent, HistoryAwareMixin):
 
-    schema = XPointBuildJournalSchema
+    schema = PPMBuildJournalSchema
 
     meta_type = 'BuildJournal'
     archetype_name = 'BuildJournal'
@@ -94,4 +95,4 @@ class XPointBuildJournal(ATCTContent, HistoryAwareMixin):
 
     security = ClassSecurityInfo()
 
-registerType(XPointBuildJournal, PROJECTNAME)
+registerType(PPMBuildJournal, PROJECTNAME)

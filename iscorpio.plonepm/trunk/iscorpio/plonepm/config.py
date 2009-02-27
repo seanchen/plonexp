@@ -1,7 +1,7 @@
 
 # config.py
 
-# configuration constants for XPoint Consulting Project Management.
+# configuration constants for Plone Project Management.
 
 # project name.
 PROJECTNAME = "PlonePM"

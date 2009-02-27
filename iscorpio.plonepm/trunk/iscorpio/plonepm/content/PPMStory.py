@@ -1,7 +1,7 @@
 
-# XPointStory.py
+# PPMStory.py
 
-__doc__ = """XPointStory defines a story for a software project in Agile approach."""
+__doc__ = """PPMStory defines a story for a software project in Agile approach."""
 __author__ = 'iScorpio <iscorpio@users.sourceforge.net>'
 __docformat__ = 'plaintext'
 
@@ -29,7 +29,7 @@ from iscorpio.plonepm.config import PROJECTNAME
 from iscorpio.plonepm.content.base import XPPMBase
 
 # the schema for story.
-XPointStorySchema = ATFolderSchema.copy() + Schema((
+PPMStorySchema = ATFolderSchema.copy() + Schema((
 
         # scope details
         TextField(
@@ -84,19 +84,19 @@ XPointStorySchema = ATFolderSchema.copy() + Schema((
     )
 
 # finalize the schema.
-finalizeATCTSchema(XPointStorySchema)
+finalizeATCTSchema(PPMStorySchema)
 
 # set the description field invisible.
-XPointStorySchema['description'].widget.visible = False
+PPMStorySchema['description'].widget.visible = False
 
 # the class.
-class XPointStory(XPPMBase, ATFolder, HistoryAwareMixin):
+class PPMStory(XPPMBase, ATFolder, HistoryAwareMixin):
 
-    schema = XPointStorySchema
+    schema = PPMStorySchema
 
-    meta_type = "XPointStory"
-    portal_type = "XPointStory"
-    archetypes_type = "XPointStory"
+    meta_type = "PPMStory"
+    portal_type = "PPMStory"
+    archetypes_type = "PPMStory"
 
     __implements__ = (ATFolder.__implements__,
                       HistoryAwareMixin.__implements__,
@@ -105,7 +105,7 @@ class XPointStory(XPPMBase, ATFolder, HistoryAwareMixin):
     # set up the prefix for auto generated ids.
     xppm_id_prefix = 'xps'
     # the logger.
-    log = logging.getLogger("PlonePM XPointStory")
+    log = logging.getLogger("PlonePM PPMStory")
     # preparing class security info for methods.
     security = ClassSecurityInfo()
 
@@ -123,4 +123,4 @@ class XPointStory(XPPMBase, ATFolder, HistoryAwareMixin):
         return DisplayList(ret)
 
 # register to the plone add-on product.
-registerType(XPointStory, PROJECTNAME)
+registerType(PPMStory, PROJECTNAME)

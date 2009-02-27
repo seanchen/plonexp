@@ -2,22 +2,22 @@
 
 <object name="portal_types" meta_type="Plone Types Tool">
 
-  <object name="XPointProject"
+  <object name="PPMProject"
           meta_type="Factory-based Type Information with dynamic views"/>
-  <object name="XPointMetadata"
+  <object name="PPMMetadata"
           meta_type="Factory-based Type Information with dynamic views"/>
-  <object name="XPointStory"
+  <object name="PPMStory"
           meta_type="Factory-based Type Information with dynamic views"/>
-  <object name="XPointFuncSpec"
+  <object name="PPMFuncSpec"
           meta_type="Factory-based Type Information with dynamic views"/>
-  <object name="XPointFuncReq"
+  <object name="PPMFuncReq"
           meta_type="Factory-based Type Information with dynamic views"/>
-  <object name="XPointSysReq"
+  <object name="PPMSysReq"
           meta_type="Factory-based Type Information with dynamic views"/>
-  <object name="XPointUseCase"
+  <object name="PPMUseCase"
           meta_type="Factory-based Type Information with dynamic views"/>
-  <object name="XPointArtifact"
+  <object name="PPMArtifact"
           meta_type="Factory-based Type Information with dynamic views"/>
-  <object name="XPointResponse"
+  <object name="PPMResponse"
           meta_type="Factory-based Type Information with dynamic views"/>
 </object>

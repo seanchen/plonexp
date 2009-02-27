@@ -1,10 +1,10 @@
 # import the package.
-import XPointProject
-import XPointMetadata
-import XPointFuncReq
-import XPointFuncSpec
-import XPointStory
-import XPointSysReq
-import XPointUseCase
-import XPointArtifact
-import XPointResponse
+import PPMProject
+import PPMMetadata
+import PPMFuncReq
+import PPMFuncSpec
+import PPMStory
+import PPMSysReq
+import PPMUseCase
+import PPMArtifact
+import PPMResponse

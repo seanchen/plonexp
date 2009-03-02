@@ -1,26 +1,26 @@
-"""This is an integration "unit" test. It uses PloneTestCase, but does not
-use doctest syntax.
+# testAtctType.py
 
-You will find lots of examples of this type of test in CMFPlone/tests, for 
-example.
+""" we will do the basic unit test for the new content types based on
+ATContentTypes.
 """
 
 import unittest
 
-from Interface.Verify import verifyObject
-
-from Products.ATContentTypes.interfaces import IATFolder
 from Products.ATContentTypes.tests.atcttestcase import ATCTTypeTestCase
-from Products.CMFCore.utils import getToolByName
-
-# for Zope 3.
-from Products.ATContentTypes.interface import IATFolder as Z3IATFolder
-from zope.interface.verify import verifyObject as Z3verifyObject
+from Products.ATContentTypes.tests.test_atfolder import TestSiteATFolder
+from Products.ATContentTypes.tests.test_atdocument import TestSiteATDocument
 
 from iscorpio.plonepm.content.PPMProject import PPMProject
+from iscorpio.plonepm.content.PPMFuncSpec import PPMFuncSpec
+from iscorpio.plonepm.content.PPMMetadata import PPMMetadata
+from iscorpio.plonepm.content.PPMArtifact import PPMArtifact
+
 from iscorpio.plonepm.tests.base import PlonepmTestCase
 
-class TestPPMProject(ATCTTypeTestCase):
+# test cases list
+tests = []
+
+class TestPPMProject(TestSiteATFolder):
     """ Testing basics about the AT Content Types within this product.
     """
 
@@ -31,14 +31,37 @@ class TestPPMProject(ATCTTypeTestCase):
     meta_type = 'PPMProject'
     icon = 'XPProject_icon.gif'
 
-    def test_implementsATFolder(self):
-        iface = IATFolder
-        self.failUnless(iface.isImplementedBy(self._ATCT))
-        self.failUnless(verifyObject(iface, self._ATCT))
+tests.append(TestPPMProject)
 
-    def test_Z3implementsATFolder(self):
-        iface = Z3IATFolder
-        self.failUnless(Z3verifyObject(iface, self._ATCT))
+class TestPPMFuncSpec(TestSiteATFolder):
+
+    klass = PPMFuncSpec
+    portal_type = "PPMFuncSpec"
+    title = 'XP Function Spec'
+    meta_type = "PPMFuncSpec"
+    icon = 'xppm_fsd_icon.gif'
+
+tests.append(TestPPMFuncSpec)
+
+class TestPPMArtifact(TestSiteATFolder):
+
+    klass = PPMArtifact
+    portal_type = 'PPMArtifact'
+    title = 'XP Artifact'
+    meta_type = 'PPMArtifact'
+    icon = 'xppm_artifact_icon.gif'
+
+tests.append(TestPPMArtifact)
+
+class TestPPMMetadata(ATCTTypeTestCase):
+
+    klass = PPMMetadata
+    portal_type = 'PPMMetadata'
+    title = 'XP Metadata'
+    meta_type = 'PPMMetadata'
+    icon = 'xppm_metadata_icon.gif'
+
+tests.append(TestPPMMetadata)
 
 # making test suite.
 def test_suite():
@@ -46,5 +69,7 @@ def test_suite():
     above
     """
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(TestPPMProject))
+    for test in tests:
+        suite.addTest(unittest.makeSuite(test))
+
     return suite

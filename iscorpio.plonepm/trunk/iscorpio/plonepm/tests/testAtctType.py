@@ -11,9 +11,16 @@ from Products.ATContentTypes.tests.test_atfolder import TestSiteATFolder
 from Products.ATContentTypes.tests.test_atdocument import TestSiteATDocument
 
 from iscorpio.plonepm.content.PPMProject import PPMProject
-from iscorpio.plonepm.content.PPMFuncSpec import PPMFuncSpec
 from iscorpio.plonepm.content.PPMMetadata import PPMMetadata
+
 from iscorpio.plonepm.content.PPMArtifact import PPMArtifact
+from iscorpio.plonepm.content.PPMResponse import PPMResponse
+
+from iscorpio.plonepm.content.PPMFuncSpec import PPMFuncSpec
+from iscorpio.plonepm.content.PPMFuncReq import PPMFuncReq
+from iscorpio.plonepm.content.PPMSysReq import PPMSysReq
+from iscorpio.plonepm.content.PPMUseCase import PPMUseCase
+from iscorpio.plonepm.content.PPMStory import PPMStory
 
 from iscorpio.plonepm.tests.base import PlonepmTestCase
 
@@ -33,6 +40,16 @@ class TestPPMProject(TestSiteATFolder):
 
 tests.append(TestPPMProject)
 
+class TestPPMMetadata(ATCTTypeTestCase):
+
+    klass = PPMMetadata
+    portal_type = 'PPMMetadata'
+    title = 'XP Metadata'
+    meta_type = 'PPMMetadata'
+    icon = 'xppm_metadata_icon.gif'
+
+tests.append(TestPPMMetadata)
+
 class TestPPMFuncSpec(TestSiteATFolder):
 
     klass = PPMFuncSpec
@@ -42,6 +59,46 @@ class TestPPMFuncSpec(TestSiteATFolder):
     icon = 'xppm_fsd_icon.gif'
 
 tests.append(TestPPMFuncSpec)
+
+class TestPPMFuncReq(ATCTTypeTestCase):
+
+    klass = PPMFuncReq
+    portal_type = "PPMFuncReq"
+    title = 'XP Function Requirement'
+    meta_type = "PPMFuncReq"
+    icon = 'xppm_fr_icon.gif'
+
+tests.append(TestPPMFuncReq)
+
+class TestPPMSysReq(ATCTTypeTestCase):
+
+    klass = PPMSysReq
+    portal_type = "PPMSysReq"
+    title = 'XP System Requirement'
+    meta_type = "PPMSysReq"
+    icon = 'xppm_sr_icon.gif'
+
+tests.append(TestPPMSysReq)
+
+class TestPPMUseCase(ATCTTypeTestCase):
+
+    klass = PPMUseCase
+    portal_type = "PPMUseCase"
+    title = 'XP Use Case'
+    meta_type = "PPMUseCase"
+    icon = 'xppm_usecase_icon.gif'
+
+tests.append(TestPPMUseCase)
+
+class TestPPMStory(TestSiteATFolder):
+
+    klass = PPMStory
+    portal_type = "PPMStory"
+    title = 'XP Story'
+    meta_type = "PPMStory"
+    icon = 'xppm_story_icon.gif'
+
+tests.append(TestPPMStory)
 
 class TestPPMArtifact(TestSiteATFolder):
 
@@ -53,15 +110,15 @@ class TestPPMArtifact(TestSiteATFolder):
 
 tests.append(TestPPMArtifact)
 
-class TestPPMMetadata(ATCTTypeTestCase):
-
-    klass = PPMMetadata
-    portal_type = 'PPMMetadata'
-    title = 'XP Metadata'
-    meta_type = 'PPMMetadata'
-    icon = 'xppm_metadata_icon.gif'
-
-tests.append(TestPPMMetadata)
+#class TestPPMResponse(ATCTTypeTestCase):
+#
+#    klass = PPMResponse
+#    portal_type = 'PPMResponse'
+#    title = 'XP Response'
+#    meta_type = 'PPMResponse'
+#    icon = 'xppm_response_icon.gif'
+#
+#tests.append(TestPPMResponse)
 
 # making test suite.
 def test_suite():

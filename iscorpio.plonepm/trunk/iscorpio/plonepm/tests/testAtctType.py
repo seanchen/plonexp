@@ -108,6 +108,12 @@ class TestPPMArtifact(TestSiteATFolder):
     meta_type = 'PPMArtifact'
     icon = 'xppm_artifact_icon.gif'
 
+    # test create response.
+    def testCreateResponse(self):
+
+        response = self._createType(self._ATCT, 'PPMResponse', 'resp')
+        print 'The response: %s' % response
+
 tests.append(TestPPMArtifact)
 
 #class TestPPMResponse(ATCTTypeTestCase):

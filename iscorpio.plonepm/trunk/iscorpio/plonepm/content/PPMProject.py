@@ -7,6 +7,8 @@ __docformat__ = 'plaintext'
 
 import logging
 
+from zope.interface import implements
+
 from AccessControl import ClassSecurityInfo
 # from Archetypes
 from Products.Archetypes.public import Schema
@@ -29,6 +31,7 @@ from Products.CMFCore.utils import getToolByName
 
 # the configruation info for this project.
 from iscorpio.plonepm.config import PROJECTNAME
+from iscorpio.plonepm.interfaces import IPPMProject
 
 # define a PPMProject as a folder in plone site.
 PPMProjectSchema = ATFolderSchema.copy() + Schema((
@@ -95,6 +98,10 @@ class PPMProject(ATFolder):
     """
 
     schema = PPMProjectSchema
+
+    __implements__ = (ATFolder.__implements__,
+                      )
+    implements(IPPMProject)
 
     # type, name
     meta_type = 'PPMProject'

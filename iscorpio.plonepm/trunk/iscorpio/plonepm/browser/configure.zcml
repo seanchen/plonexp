@@ -1,0 +1,19 @@
+<configure
+   xmlns="http://namespaces.zope.org/zope"
+   xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+   xmlns:five="http://namespaces.zope.org/five"
+   xmlns:i18n="http://namespaces.zope.org/i18n"
+   xmlns:browser="http://namespaces.zope.org/browser"
+   i18n_domain="iscorpio.plonepm"
+>
+
+  <!-- the default view for a project -->
+  <browser:page
+     name="project_view"
+     for="..interfaces.IPPMProject"
+     class=".project.ProjectView"
+     template="project.pt"
+     permission="zope2.View"
+  />
+
+</configure>

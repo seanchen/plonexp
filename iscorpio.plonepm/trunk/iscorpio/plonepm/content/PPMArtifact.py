@@ -161,23 +161,23 @@ class PPMArtifact(XPPMBase, ATFolder, HistoryAwareMixin):
     def vocabulary_priorities(self):
         """ returns all priority options as a vocabulary.
         """
-        return DisplayList(self.getMetadataByType('priority'))
+        return DisplayList(self.getMetadata('priority'))
 
     def vocabulary_categories(self):
         """ return all category options as a vocabulary.
         """
-        return DisplayList(self.getMetadataByType('category'))
+        return DisplayList(self.getMetadata('category'))
 
     def vocabulary_artifactStatus(self):
         """ return all status options as a vocabulary.
         """
         
-        return DisplayList(self.getMetadataByType('status'))
+        return DisplayList(self.getMetadata('status'))
 
     def vocabulary_artifactTag(self):
         """ return all tags options as a vocabulary.
         """
-        return DisplayList(self.getMetadataByType('tag'))
+        return DisplayList(self.getMetadata('tag'))
 
 # register to the plone add-on product.
 registerType(PPMArtifact, PROJECTNAME)

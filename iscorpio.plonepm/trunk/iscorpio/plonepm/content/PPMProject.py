@@ -170,17 +170,16 @@ class PPMProject(ATFolder):
         """
         return self.xpCatalogSearch(portal_type='PPMSysReq')
 
-    security.declarePublic('getMetadataByType')
-    def getMetadataByType(self, type=None):
+    security.declarePublic('getMetadata')
+    def getMetadata(self, type=None):
         """ this will return a catalog search result based on the
-        given metadata type.
+        given metadata type.  If the no type provide, all metadata
+        will be returned.
         """
-        if type is None:
-            return []
-
         query = {}
         query['portal_type'] = 'PPMMetadata'
-        query['getXppm_metadata_type'] = type
+        if type:
+            query['getXppm_metadata_type'] = type
 
         metadata = [(one.id, one.Title) for one in self.xpCatalogSearch(query)]
         self.log.debug("Metadata for type %s: %s", type, metadata)

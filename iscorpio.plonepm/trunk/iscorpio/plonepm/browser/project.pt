@@ -43,6 +43,18 @@
     project body
   </metal:field>
 
+  <dl tal:define="metadata view/getMetadata">
+    <tal:metadata repeat="meta metadata">
+      <dt>
+        <span tal:replace="meta/Title"/>
+      </dt>
+      <dd>
+        <span tal:replace="meta/Description"/> -
+        <span tal:replace="meta/getXppm_metadata_type"/>
+      </dd>
+    </tal:metadata>
+  </dl>
+
   <!-- footer. -->
   <div metal:use-macro="here/document_relateditems/macros/relatedItems">
     Show related items if they exist

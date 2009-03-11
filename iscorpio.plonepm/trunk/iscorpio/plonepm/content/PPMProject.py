@@ -181,8 +181,12 @@ class PPMProject(ATFolder):
         if type:
             query['getXppm_metadata_type'] = type
 
-        metadata = [(one.id, one.Title) for one in self.xpCatalogSearch(query)]
-        self.log.debug("Metadata for type %s: %s", type, metadata)
+        return self.xpCatalogSearch(query)
+
+    security.declarePublic('getMetadataTupleList')
+    def getMetadataTupleList(self, type=None):
+
+        metadata = [(one.id, one.Title) for one in self.getMetadata(type)]
         return metadata
 
     security.declarePublic('getMetadataById')

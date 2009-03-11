@@ -19,4 +19,8 @@ class ProjectView(BrowserView):
         self.context = context
         self.request = request
 
-    # 
+    # return all metata data definition as a dict
+    def getMetadata(self):
+
+        context = aq_inner(self.context)
+        return context.getMetadata()

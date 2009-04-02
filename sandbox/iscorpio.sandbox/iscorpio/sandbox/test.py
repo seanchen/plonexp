@@ -98,3 +98,7 @@ selfservice.Put(theEntry, theEntry.GetEditLink().href)
 url = 'http://www.dssfeedback.com/forums/attachment.php?attachmentid=19857&d=1233716275'
 response, content = http.request(url, 'GET', headers=headers)
 print 'attach files: %s' % len(content)
+
+pdf = open('./test.zip', 'w')
+pdf.write(content)
+pdf.close()

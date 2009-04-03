@@ -232,32 +232,40 @@ class MoviesCalendar:
         return self.service.Post(entry, 
           '/feeds/' + self.blog_id + '/posts/default')
 
-    def blogerLogin(self):
+    def blogerLogin(self, user, password):
 
-        self.service = service.GDataService('user', 'password')
-        self.service.source = 'Blogger_Python_Sample-1.0'
-        self.service.service = 'blogger'
-        self.service.server = 'www.blogger.com'
-        self.service.ProgrammaticLogin()
+        self.gdService = service.GDataService(user, password)
+        self.gdService.source = 'Blogger_Python_Sample-1.0'
+        self.gdService.service = 'blogger'
+        self.gdService.server = 'www.blogger.com'
+        self.gdService.ProgrammaticLogin()
 
     def getOneBlog(self, id=0):
 
         # Get the blog ID for the first blog.
-        feed = self.service.Get('/feeds/default/blogs')
-        self_link = feed.entry[id].GetSelfLink()
-        if self_link:
-            self.blog_id = self_link.href.split('/')[-1]
+        feed = self.gdService.Get('/feeds/default/blogs')
+        selfLink = feed.entry[id].GetSelfLink()
+        if selfLink:
+            self.blogId = selfLink.href.split('/')[-1]
 
-    def updatePost(self, start_time, end_time, new_content):
+    # date time format should be like
+    # '2008-02-17T14:00:00-08:00'
+    def updatePost(self, user, password, startTime, endTime, newContent):
 
-        self.blogerLogin()
+        self.blogerLogin(user, password)
         self.getOneBlog(0)
 
         # find the update entry.
         query = service.Query()
-        query.feed = '/feeds/' + self.blog_id + '/posts/default'
-        query.updated_min = start_time
-        query.updated_max = end_time
+        query.feed = '/feeds/' + self.blogId + '/posts/default'
+        query.published_min = startTime
+        query.published_max = endTime
         feed = self.service.Get(query.ToUri())
 
-        feed.content = atom.Content(content_type='html', text=new_content)
+        # should only have one entry.  anyway we will only get the first entry.
+        theEntry = feed.entry[0]
+
+        theEntry.content = atom.Content(content_type='html', text=newContent)
+        self.gdService.Put(theEntry, theEntry.GetEditLink().href)
+
+        

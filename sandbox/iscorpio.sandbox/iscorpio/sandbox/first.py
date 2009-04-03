@@ -32,3 +32,15 @@ if __name__ == "__main__":
     commands.getoutput("mv %s/* %s/%s" %
                        (SPOOL_FOLDER, BACKUP_FOLDER, timestamp))
 
+
+import smtplib
+
+class GmailHandler:
+
+    def gmailSmtp(self):
+
+        session = smtplib.SMTP('smtp.gmail.com', 587)
+        session.ehlo()
+        session.starttls()
+        session.ehlo()
+        print session.login('usr', 'password')

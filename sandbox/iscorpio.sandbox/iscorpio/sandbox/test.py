@@ -46,6 +46,24 @@ keys['BELL0901'] = re.findall('<!-- XXX --> ([0-9A-F]* [New]*)', content)
 keys['BELL0907'] = re.findall('<!-- PPP --> ([0-9A-F]* [New]*)', content)
 print keys
 
+key0 = keys['DISH0101'][0].split(' ')
+key1 = keys['DISH0101'][1].split(' ')
+dish0101 = '<strong>DISH 0101</strong><br/><em>key0 </em><strong>%s</strong><br/>%s<br/><em>key1 </em><strong>%s</strong><br/>%s<br/>' % (key0[1], key0[0], key1[1], key1[0])
+
+key0 = keys['DISH0106'][0].split(' ')
+key1 = keys['DISH0106'][1].split(' ')
+dish0106 = '<strong>DISH 0106</strong><br/><em>key0 </em><strong>%s</strong><br/>%s<br/><em>key1 </em><strong>%s</strong><br/>%s<br/>' % (key0[1], key0[0], key1[1], key1[0])
+
+key0 = keys['BELL0901'][0].split(' ')
+key1 = keys['BELL0901'][1].split(' ')
+bell0901 = '<strong>BELL 0901</strong><br/><em>key0 </em><strong>%s</strong><br/>%s<br/><em>key1 </em><strong>%s</strong><br/>%s<br/>' % (key0[1], key0[0], key1[1], key1[0])
+
+key0 = keys['BELL0907'][0].split(' ')
+key1 = keys['BELL0907'][1].split(' ')
+bell0907 = '<strong>BELL 0907</strong><br/><em>key0 </em><strong>%s</strong><br/>%s<br/><em>key1 </em><strong>%s</strong><br/>%s<br/>' % (key0[1], key0[0], key1[1], key1[0])
+
+new_content = dish0101 + dish0106 + bell0901 + bell0907
+
 # login...
 selfservice = service.GDataService('user', 'password')
 selfservice.source = 'Blogger_Python_Sample-1.0'
@@ -72,33 +90,14 @@ print feed.title.text
 print feed.entry
 for entry in feed.entry:
     print '\t' + entry.title.text
+# should have only one entry.
 theEntry = feed.entry[0]
 
-key0 = keys['DISH0101'][0].split(' ')
-key1 = keys['DISH0101'][1].split(' ')
-dish0101 = '<strong>DISH 0101</strong><br/><em>key0 %s</em><br/>%s<br/><em>key1 %s</em><br/>%s<br/>' % (key0[1], key0[0], key1[1], key1[0])
-
-key0 = keys['DISH0106'][0].split(' ')
-key1 = keys['DISH0106'][1].split(' ')
-dish0106 = '<strong>DISH 0106</strong><br/><em>key0 %s</em><br/>%s<br/><em>key1 %s</em><br/>%s<br/>' % (key0[1], key0[0], key1[1], key1[0])
-
-key0 = keys['BELL0901'][0].split(' ')
-key1 = keys['BELL0901'][1].split(' ')
-bell0901 = '<strong>BELL 0901</strong><br/><em>key0 %s</em><br/>%s<br/><em>key1 %s</em><br/>%s<br/>' % (key0[1], key0[0], key1[1], key1[0])
-
-key0 = keys['BELL0907'][0].split(' ')
-key1 = keys['BELL0907'][1].split(' ')
-bell0907 = '<strong>BELL 0907</strong><br/><em>key0 %s</em><br/>%s<br/><em>key1 %s</em><br/>%s<br/>' % (key0[1], key0[0], key1[1], key1[0])
-
-new_content = dish0101 + dish0106 + bell0901 + bell0907
-
+# update the post on server side.
 theEntry.content = atom.Content(content_type='html', text=new_content)
 selfservice.Put(theEntry, theEntry.GetEditLink().href)
 
+# try to download the attachment!
 url = 'http://www.dssfeedback.com/forums/attachment.php?attachmentid=19857&d=1233716275'
 response, content = http.request(url, 'GET', headers=headers)
 print 'attach files: %s' % len(content)
-
-pdf = open('./test.zip', 'w')
-pdf.write(content)
-pdf.close()

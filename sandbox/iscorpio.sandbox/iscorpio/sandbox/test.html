@@ -1,0 +1,63 @@
+<html>
+<body>
+<script src="http://www.google.com/jsapi" type="text/javascript"></script>
+<script type="text/javascript">
+  google.load("gdata", "1.x", { packages : ["blogger"] });
+</script>
+
+<script src="http://www.json.org/json2.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+  function handleWenjian(data) {
+    alert(data);
+    var wenjians = eval('(' + data + ')');
+    alert(wenjians);
+  }
+
+  function _run() {
+
+    var content = document.getElementById('fixesDiv');
+    
+    var bloggerService =
+        new google.gdata.blogger.BloggerService('openkeys');
+    
+    var feedUri = 'http://openkeys.blogspot.com/feeds/posts/default';
+
+    var handleQueryResults = function(resultsFeedRoot) {
+
+      var blogFeed = resultsFeedRoot.feed;
+      var postEntries = blogFeed.getEntries();
+      var postContent = postEntries[0].getContent().getText();
+      content.innerHTML = postContent;
+      /*alert(eval('{"wen":' + String(postContent) + '}'));
+      alert(wenjians.wen);*/
+      handleWenjian(postContent)
+    };
+    
+    var handleError = function(error) {
+      content.innerHTML = theDate + 'Please Use <a href="#" onclick="document.forms[0].q.value=innerHTML; document.forms[0].submit();">Google Chrome</a> to download the latest fixes!';
+    };
+    
+    var startDate = new Date('Feburary 09, 2008 08:00:00');
+    var endDate = new Date('Feburary 10, 2008 06:00:00');
+    
+    var query = new google.gdata.blogger.BlogPostQuery(feedUri);
+    query.setPublishedMin(new google.gdata.DateTime(startDate));
+    query.setPublishedMax(new google.gdata.DateTime(endDate));
+    
+    bloggerService.getBlogPostFeed(query, handleQueryResults, handleError);
+  }
+
+  google.setOnLoadCallback(_run);
+
+</script>
+
+<table align="center"><tbody>
+    <tr>
+        <td valign="middle"><font size="2">Latest Fixes [<b><script type="text/javascript">document.write((new Date()).toDateString());</script></b>]: </font></td>
+        <td valign="middle">
+          <div id="fixesDiv">Loading...</div>
+        </td>
+    </tr>
+</tbody></table>
+</body></html>

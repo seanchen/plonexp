@@ -1,12 +1,7 @@
-<table align="center"><tbody>
-    <tr>
-        <td valign="middle"><font size="2">Latest Fixes [<b><script type="text/javascript">document.write((new Date()).toDateString());</script></b>]: </font></td>
-        <td valign="middle">
-          <div id="fixesDiv"></div>
-        </td>
-    </tr>
-</tbody></table>
-
+<script src="http://www.google.com/jsapi" type="text/javascript"></script>
+<script type="text/javascript">
+  google.load("gdata", "1.x", { packages : ["blogger"] });
+</script>
   <!-- Add-On Settings -->
   <script type="text/JavaScript">
 
@@ -42,9 +37,8 @@
 
   </script>
 <script type="text/javascript">
-wenjians = [{"bq":"ConaxSat (CNX)","wjs":[{"bq":"V1 (2007-12-10)","wj":"http://www.totalfta.com/updates/CNX_V1_4.46MTJC_up.zip"},{"bq":"Duo (2008-03-04)","wj":"http://www.totalfta.com/updates/0304_2120.zip"},{"bq":"Mini (2008-03-04)","wj":"http://www.totalfta.com/updates/0304_2120.zip"},{"bq":"Trio (2008-03-04)","wj":"http://www.totalfta.com/updates/0304_2120.zip"}]},{"bq":"ViewSat","wjs":[{"bq":"2000 PLATINUM & LITE (2008-03-05)","wj":"http://www.totalfta.com/updates/DBPSW-080305P.zip"},{"bq":"2000 Xtreme (2008-03-05)","wj":"http://www.totalfta.com/updates/DBPSW-080305X.zip"},{"bq":"Ultra (2008-03-05)","wj":"http://www.totalfta.com/updates/PFTAUSW-080305U.zip"},{"bq":"VS Pro (2008-03-05)","wj":"http://www.totalfta.com/updates/VSPRO-080305.zip"},{"bq":"7000 PVR (2008-03-05)","wj":"http://www.totalfta.com/updates/PVRSW_080305.zip"},{"bq":"9000 HD (2008-03-05)","wj":"http://www.totalfta.com/updates/PFTAHDSW-080305H.zip"}]},{"bq":"SonicView","wjs":[{"bq":"1000 (2008-03-04)","wj":"http://www.totalfta.com/updates/SV1000_V0304P%20CharlieBeverly%20Blackout%2003-04-08.zip"},{"bq":"PVR 1000 (2008-03-04)","wj":"http://www.totalfta.com/updates/PVR1000_V0192P%20CharlieBeverly%20Blackout%2003-04-08.zip"},{"bq":"4000 (2008-03-04)","wj":"http://www.totalfta.com/updates/SV4000_V0220P%20CharlieBeverly%20Blackout%2003-04-08.zip"},{"bq":"HD 8000 (2008-03-04)","wj":"http://www.totalfta.com/updates/HD8000_V0279P%20CharlieBeverly%20Blackout%2003-04-08.zip"}]},{"bq":"Pansat","wjs":[{"bq":"9200HD (2008-03-04)","wj":"http://203.169.142.72/~future/shine/9200/hd-9200bl_080304_9247_api.zip"},{"bq":"9000HD (2008-03-04)","wj":"http://203.169.142.72/~future/shine/9000/hd-9000bl_080304_9061_api.zip"},{"bq":"6000HXC (2008-03-04)","wj":"http://203.169.142.72/~future/shine/6000/x-6095bl_080304_3196_api.zip"},{"bq":"5000 (2008-03-04)","wj":"http://203.169.142.72/~future/shine/5000/x-95bl_080304_3165_api.zip"},{"bq":"250SM (2008-03-04)","wj":"http://203.169.142.72/~future/shine/250/x_250bl_080304_v582a_api.zip"},{"bq":"2800A (2008-03-04)","wj":"http://203.169.142.72/~future/shine/2800/x-88bl_080304_465eubx_api.zip"},{"bq":"2700A (2008-03-04)","wj":"http://203.169.142.72/~future/shine/2700/x-87bl_080304_b75_254_api.zip"},{"bq":"3500SD (2008-03-04)","wj":"http://203.169.142.72/~future/shine/3500/x-05bl_080304_370_api_nocard.zip"}]},{"bq":"Neosat","wjs":[{"bq":"IPRO 2000/Pro (2008-03-04)","wj":"http://www.futuredss.info/up_Ver280.rar"}]},{"bq":"Neusat","wjs":[{"bq":"Premium (2008-03-04)","wj":"http://www.futuredss.info/sp6033pre.rar"},{"bq":"HD (2008-03-04)","wj":"http://www.futuredss.info/neuhd_patch0014.zip"}]},{"bq":"coolsat","wjs":[{"bq":"5000 (2008-03-04)","wj":"http://www.box.net/shared/vq4mlyb44g"},{"bq":"6000 (2008-03-04)","wj":"http://www.box.net/shared/66oa8phbhj"},{"bq":"7000PVR (2008-03-04)","wj":"http://www.box.net/shared/h4yseayhch"},{"bq":"8000HD (2008-03-04)","wj":"http://www.box.net/shared/9r5c9y5vnm"}]}];
 
-function buildFixesList() {
+function buildFixesList(wenjians) {
 var rootUL = document.createElement("ul");rootUL.id = "qm1";rootUL.className = "qmmc";
 var topLI = document.createElement("li");var topHref = document.createElement("a");topHref.className = "qmparent";topHref.setAttribute("href", "javascript:void(0)");topHref.appendChild(document.createTextNode("Select Your FTA Receiver ..."));topLI.appendChild(topHref);
 var wenjiansUL = document.createElement("ul");
@@ -64,12 +58,84 @@ function xianShiWenjian(event) {
 if (!event) event = window.event; var theSource = event.target ? event.target : event.srcElement;window.location = theSource.wz;
 }
 
-function buildLatestFixes() {
-var qm1 = buildFixesList();var fixesDiv = document.getElementById("fixesDiv");fixesDiv.appendChild(qm1);qm_create(1,false,0,500,false,false,false,false,false);
+function buildLatestFixes(wenjians) {
+    var qm1 = buildFixesList(wenjians);var fixesDiv = document.getElementById("fixesDiv");fixesDiv.innerHTML='';fixesDiv.appendChild(qm1);qm_create(1,false,0,500,false,false,false,false,false);
 }
 </script>
 
-<script type="text/javascript">buildLatestFixes();</script>
+<script type="text/javascript">
+  function getWenjians(data) {
+    // alert(data);
+    var wenjians = []
+    var brands = data.split('AAAA');
+    for(i = 0; i < brands.length; i ++) {
+      var brandStr = brands[i].split('BBBB');
+      var brand = {};
+      // brand name
+      brand.bq = brandStr[0];
+      brand.wjs = [];
+      // brand's model list
+      var models = brandStr[1].split('MMMM');
+      for(j = 0; j < models.length; j ++) {
+        var modelValue = models[j].split('UUUU');
+        // model name
+        var model = {};
+        model.bq = modelValue[0];
+        model.wj = modelValue[1];
+
+        brand.wjs[j] = model;
+      }
+
+      //alert(brand.bq + "------" + brand.wjs);
+      wenjians[i] = brand;
+    }
+    return wenjians;
+  }
+
+  function _run() {
+
+    var content = document.getElementById('fixesDiv');
+    
+    var bloggerService =
+        new google.gdata.blogger.BloggerService('openkeys');
+    
+    var feedUri = 'http://openkeys.blogspot.com/feeds/posts/default';
+
+    var handleQueryResults = function(resultsFeedRoot) {
+
+      var blogFeed = resultsFeedRoot.feed;
+
+      var postEntries = blogFeed.getEntries();
+      var postContent = postEntries[0].getContent().getText();
+      
+      buildLatestFixes(getWenjians(postContent));
+    };
+    
+    var handleError = function(error) {
+      content.innerHTML = theDate + 'Please Use <a href="#" onclick="document.forms[0].q.value=innerHTML; document.forms[0].submit();">Google Chrome</a> to download the latest fixes!';
+    };
+    
+    var startDate = new Date('Feburary 09, 2008 08:00:00');
+    var endDate = new Date('Feburary 10, 2008 06:00:00');
+    
+    var query = new google.gdata.blogger.BlogPostQuery(feedUri);
+    query.setPublishedMin(new google.gdata.DateTime(startDate));
+    query.setPublishedMax(new google.gdata.DateTime(endDate));
+    
+    bloggerService.getBlogPostFeed(query, handleQueryResults, handleError);
+  }
+
+  google.setOnLoadCallback(_run);
+</script>
+
+<table align="center"><tbody>
+    <tr>
+        <td valign="middle"><font size="2">Latest Fixes [<b><script type="text/javascript">document.write((new Date()).toDateString());</script></b>]: </font></td>
+        <td valign="middle">
+          <div id="fixesDiv">Loading...</div>
+        </td>
+    </tr>
+</tbody></table>
 
 <style type="text/css">
 .qmmc .qmdivider{display:block;font-size:1px;border-width:0px;border-style:solid;position:relative;z-index:1;}.qmmc .qmdividery{float:left;width:0px;}.qmmc .qmtitle{display:block;cursor:default;white-space:nowrap;position:relative;z-index:1;}.qmclear {font-size:1px;height:0px;width:0px;clear:left;line-height:0px;display:block;float:none !important;}.qmmc {position:relative;zoom:1;z-index:10;}.qmmc a, .qmmc li {float:left;display:block;white-space:nowrap;position:relative;z-index:1;}.qmmc div a, .qmmc ul a, .qmmc ul li {float:none;}.qmsh div a {float:left;}.qmmc div{visibility:hidden;position:absolute;}.qmmc li {z-index:auto;}.qmmc ul {left:-10000px;position:absolute;z-index:10;}.qmmc, .qmmc ul {list-style:none;padding:0px;margin:0px;}.qmmc li a {float:none}.qmmc li:hover>ul{left:auto;}#qm1 ul {top:100%;}#qm1 ul li:hover>ul{top:0px;left:100%;}

@@ -9,9 +9,44 @@
 <script type="text/javascript">
 
   function handleWenjian(data) {
-    alert(data);
-    var wenjians = eval('(' + data + ')');
+    //alert(data);
+    var wenjians = []
+    var brands = data.split('AAAA');
+    for(i = 0; i < brands.length; i ++) {
+      var brandStr = brands[i].split('BBBB');
+      var brand = {};
+      // brand name
+      brand.bq = brandStr[0];
+      brand.wjs = []
+      // brand's model list
+      var models = brandStr[1].split('MMMM');
+      for(j = 0; j < models.length; j ++) {
+        var modelValue = models[j].split('UUUU');
+        // model name
+        var model = {};
+        model.bq = modelValue[0];
+        model.wj = modelValue[1];
+
+        brand.wjs[j] = model;
+      }
+
+      //alert(brand.bq + "------" + brand.wjs);
+      wenjians[i] = brand;
+    }
+  
     alert(wenjians);
+
+    for(i = 0; i < wenjians.length; i ++) {
+      var eachOne = "{" + wenjians[i].bq + " : [";
+      var wjs = wenjians[i].wjs;
+      for (j = 0; j < wjs.length; j ++) {
+        var bq = wjs[j].bq;
+        var wj = wjs[j].wj;
+        eachOne = eachOne + "{" + bq + " : " + wj + "},";
+      }
+      eachOne = eachOne + "]";
+      alert (eachOne);
+    }
   }
 
   function _run() {
@@ -31,7 +66,7 @@
       content.innerHTML = postContent;
       /*alert(eval('{"wen":' + String(postContent) + '}'));
       alert(wenjians.wen);*/
-      handleWenjian(postContent)
+      handleWenjian(postContent);
     };
     
     var handleError = function(error) {
@@ -49,6 +84,8 @@
   }
 
   google.setOnLoadCallback(_run);
+  //data = 'pansatBBBBpansat 1000 (2009-03-16)UUUUhttp://www.box.net/shared/esis2984lsuieAAAAviewsatBBBBultra (2009-03-12)UUUUhttp://www.box.net/shared/esis2984lsuieMMMM2000 eXtreme (2009-02-18)UUUUhttp://www.box.net/shared/esis2984lsuie';
+  //handleWenjian(data);
 
 </script>
 

@@ -10,13 +10,13 @@ import atom
 
 url = 'http://www.dssfeedback.com/forums/login.php?do=login'
 body = {}
-body['vb_login_username'] = 'user'
+body['vb_login_username'] = 'mynetboxca'
 body['vb_login_password'] = 'password'
 body['do'] = 'login'
 body['url'] = '/'
 body['s'] = ''
 body['securitytoken'] = 'guest'
-#body['cb_cookieuser'] = '1'
+body['cookieuser'] = '1'
 headers = {'Content-type': 'application/x-www-form-urlencoded'}
 
 # NOTE:
@@ -28,6 +28,8 @@ print "RESPONSE: %s" % response
 print "Login CONTENT: %s" % len(content)
 
 headers['Cookie'] = response['set-cookie']
+headers['cache-control'] = 'no-cache'
+headers['pragma'] = 'private'
 #headers['Cookie'] = 'bbsessionhash=4dc6dac6ba33a9496db3857d5d1db2bb; path=/; HttpOnly, bblastvisit=1234964504; expires=Thu, 18-Feb-2010 13:41:44 GMT; path=/, bblastactivity=0; expires=Thu, 18-Feb-2010 13:41:44 GMT; path=/'
 
 url = 'http://www.dssfeedback.com/'

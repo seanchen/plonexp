@@ -10,7 +10,7 @@ import atom
 
 url = 'http://www.dssfeedback.com/forums/login.php?do=login'
 body = {}
-body['vb_login_username'] = 'mynetboxca'
+body['vb_login_username'] = 'user'
 body['vb_login_password'] = 'password'
 body['do'] = 'login'
 body['url'] = '/'

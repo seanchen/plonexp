@@ -63,11 +63,12 @@ for dss in dssDict.keys():
     if brandDict.has_key(values[1]):
         brand = brandDict[values[1]]
 
-    # get the model, each model a list of value, 
+    # get the model, each model a list of value, values[2] will be model name.
     model = []
     if brand.has_key(values[2]):
         model = brand[values[2]]
 
+    # [updateDate, public_link]
     model = [values[7], values[6]]
 
     brand[values[2]] = model

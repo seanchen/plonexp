@@ -22,25 +22,27 @@ for line in lines:
 print dssDict
 
 # 1. read the notification email from gmail, using IMAP.
-# 2. flag the email as readed.
-# 3. parse the email message to get brand name, model name, thread id (dssid) and new post page URL.
+# 2. parse the email message to get brand name, model name, thread id (dssid) and new post page URL.
 
-# 4. login to dssfeedback website.
-# 5. open URL for new post page. http://www.dssfeedback.com/forum/thread.php?t=dssid&goto=newpost
+# 3. login to dssfeedback website.
+# 4. open URL for new post page. http://www.dssfeedback.com/forum/thread.php?t=dssid&goto=newpost
 url = ''
 response, newPost = http.request(url, 'GET', headers=headers)
-# 6. parse the new post page to get the latest attachment URL and file name for this thread (model)
+# 5. parse the new post page to get the latest attachment URL and file name for this thread (model)
 #    http://www.dssfeedback.com/forum/attachment.php?attachmentid=1280&d=980283
 files = re.findall('<a href="(attachment.php\?attachmentid=[0-9]+\&amp;d=[0-9]+)">(.+)</a>', newPost)
 theOne = files.pop()
 attachmentUrl = 'http://www.dssfeedback.com/forum/%s' % theOne[0]
-# 7. open the URL for the latest attachment and save it as a local file with the filename.
+# 6. open the URL for the latest attachment and save it as a local file with the filename.
 response, content = http.request(attachmentUrl, 'GET', headers=headers)
 attachment = open(theOne[1], 'wb')
 attachment.write(content)
 attachment.close()
-# 8. upload into box.net
-# 9. update the dssDict with the same dssid
+# 7. upload into box.net
+# 8. update the dssDict with the same dssid:
+#    boxfileid, publiclink
+# 9. flag the email as readed.
+
 
 # 4. write everything from dssDict into the same file.
 log = open('temp', 'w')

@@ -4,6 +4,7 @@
 
 import re
 import email
+from email.message import Message
 import imaplib
 import smtplib
 
@@ -93,10 +94,22 @@ class EmailServices(object):
             result, message = self.imapSession.fetch(sequence, '(RFC822)')
             #print "===================================="
             #print message[0]
-            emailMessage = email.message_from_string(message[0][1])
-            msgs.append(emailMessage)
+            # the email.message.Message format.
+            emailMessage = EmailMessage(email.message_from_string(message[0][1]))
+            msgs.append((sequence, emailMessage))
 
         return msgs
+
+    # add flag to a message with the given sequence.
+    # this only happen after select a mailbox.
+    # there is no return value for this method, since we are using
+    # .SILENT suffix.
+    def flagMessages(self, seqs, flag):
+
+        for seq in seqs:
+            self.imapSession.store(seq, '+FLAGS.SILENT', flag)
+
+        self.imapSession.expunge()
 
     # return non flagged sent mails
     def getNotFlaggedOutMail(self):
@@ -120,7 +133,52 @@ class EmailServices(object):
 
         self.smtpSession.sendmail(fromAddr, toAddr, messageString)
 
+# email message class, a wrap class for the email.message.Message.
+# we try to provide some easy method t access and build a email
+# message.
+class EmailMessage(Message):
 
+    """
+    """
+
+    # init.
+    def __init__(self, message=None):
+
+        self.message = message
+
+        # the plain text message
+        self.textPlain = None
+        # the html text.
+        # attachments: counts, file, payload, etc.
+
+    # return the subject for this message.
+    def getSubject(self):
+
+        if self.message:
+            return self.message["Subject"]
+        else:
+            return None
+
+    # return the plain text message from a emal.message.Message.
+    def getMessageTextPlain(self):
+
+        # we load it only when we need it.
+        if self.textPlain == None:
+                
+            # we will make sure the main content type is text and
+            # the content type is plain/text
+            for part in self.message.walk():
+                if part.get_content_maintype() != 'text':
+                    continue
+                if part.get_content_type() != 'text/plain':
+                    continue
+        
+                self.textPlain = part.get_payload(decode=True)
+                break
+
+        return self.textPlain;
+
+# utility class to manage the emails in the mailing list.
 class EmailRepository(object):
 
     """
@@ -187,6 +245,25 @@ class EmailRepository(object):
             newTagList = list(set(newTagList))
 
         self.emailDict[email] = (fullName, newTagList)
+
+    # add a email string address:
+    # [full name] <emailaddress>;tag,tag
+    def tagEmailStr(self, emailStr):
+
+        emailAndTags = emailStr.split(';')
+        fullEmail = emailAndTags[0].replace('>', '').split(' <')
+        email = fullEmail[0]
+
+        fullName = None
+        if len(fullEmail) > 0:
+            email = fullEmail[1]
+            fullName = fullEmail[0]
+
+        tags = 'All'
+        if len(emailAndTags) > 0:
+            tags = emailAndTags[1]
+
+        return self.tagEmail(email, tags, fullName)
 
     # remove email, normally this is a bad email: could not deliver.
     def removeEmails(self, emailsList):

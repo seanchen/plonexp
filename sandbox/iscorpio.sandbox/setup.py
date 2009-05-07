@@ -24,6 +24,7 @@ setup(name = 'iscorpio.sandbox',
       zip_safe = False,
       install_requires = [
         'setuptools',
+        'gdata',
         # -*- Extra requirements: -*-
       ],
       entry_points = """

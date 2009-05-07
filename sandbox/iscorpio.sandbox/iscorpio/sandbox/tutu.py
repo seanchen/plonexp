@@ -8,6 +8,11 @@ from email.message import Message
 import imaplib
 import smtplib
 
+import gdata
+from gdata import service
+from gdata import blogger
+import atom
+
 IMAP_MAILHOST = 'imap.gmail.com'
 IMAP_PORT = 993
 SMTP_MAILHOST = 'smtp.gmail.com'
@@ -136,7 +141,7 @@ class EmailServices(object):
 # email message class, a wrap class for the email.message.Message.
 # we try to provide some easy method t access and build a email
 # message.
-class EmailMessage(Message):
+class EmailMessage(object):
 
     """
     """
@@ -239,6 +244,9 @@ class EmailRepository(object):
         newTagList = tags.split(',')
         if fullName == None:
             fullName = email.split('@')[0]
+            # trying to guess the full name.
+            fullName = fullName.replace('.', ' ')
+            fullName = fullName.replace('_', ' ')
         if self.emailDict.has_key(email):
             fullName, tagList = self.emailDict[email]
             newTagList.extend(tagList)
@@ -248,6 +256,8 @@ class EmailRepository(object):
 
     # add a email string address:
     # [full name] <emailaddress>;tag,tag
+    # if don't know full name, should follow this format.
+    # emailaddress;tag,tag
     def tagEmailStr(self, emailStr):
 
         emailAndTags = emailStr.split(';')
@@ -255,7 +265,7 @@ class EmailRepository(object):
         email = fullEmail[0]
 
         fullName = None
-        if len(fullEmail) > 0:
+        if len(fullEmail) > 1:
             email = fullEmail[1]
             fullName = fullEmail[0]
 
@@ -294,3 +304,116 @@ class EmailRepository(object):
 
         fileRepo.flush()
         fileRepo.close()
+
+# class to provide easy interfaces to access GDataService Blogger APIs.
+class BlogspotService(object):
+
+    """
+    the blog
+    """
+
+    # the init
+    def __init__(self, username, password):
+
+        self.gdService = service.GDataService(username, password)
+        self.gdService.source = 'Blogger_Python_Sample-1.0'
+        self.gdService.service = 'blogger'
+        self.gdService.server = 'www.blogger.com'
+        self.gdService.ProgrammaticLogin()
+
+        # keep a list of blogs.
+        self.listBlogs()
+
+    # return a list of blogs under current user.
+    def listBlogs(self):
+
+        self.blogs = []
+        feed = self.gdService.Get('/feeds/default/blogs')
+        for eachBlog in feed.entry:
+            title = eachBlog.title.text
+            link = eachBlog.GetSelfLink()
+            blogId = link.href.split('/')[-1]
+            self.blogs.append((title, blogId))
+
+        return self.blogs
+
+    # select a blog under this user by the given blog title.
+    # the title is case insenstive.
+    def selectBlog(self, title=None):
+
+        if title:
+            for blogTitle, blogId in self.blogs:
+                # should not care about case!
+                if blogTitle.upper() == title.upper():
+                    self.blogId = blogId
+                    break
+        else:
+            # returns the first blog if no title provided.
+            self.blogId = self.blogs[0][1]
+
+        self.postsUri = '/feeds/%s/posts/default' % self.blogId
+
+        return self.blogId
+
+    # create a post!
+    def createPost(self, title, content, authorName,
+                   labels=None, isDraft=False):
+
+        # Create a gdata entry.
+        entry = gdata.GDataEntry()
+        # append author.
+        entry.author.append(atom.Author(atom.Name(text=authorName)))
+        entry.title = atom.Title(title_type='xhtml', text=title)
+
+        # handle labels by using atom.Category.
+        if labels:
+            for label in labels:
+                category = atom.Category(scheme=blogger.LABEL_SCHEME,term=label)
+                entry.category.append(category)
+
+        # handle draft,
+        if isDraft:
+            control = atom.Control()
+            control.draft = atom.Draft(text='yes')
+            entry.control = control
+
+        # add content.
+        entry.content = atom.Content(content_type='html', text=content)
+
+        return self.gdService.Post(entry, self.postsUri)
+
+    # return posts a list.
+    # labels:
+    #   a list of labels.
+    # publishedDate:
+    #   (published_min, published_max)
+    def getPosts(self, labels=None, publishedDate=None, orderby=None):
+
+        posts = []
+
+        query = service.Query()
+        query.feed = self.postsUri
+        
+        # default sort option is updated.
+        query.orderby = 'updated'
+        if orderby:
+            query.orderby = orderby
+
+        # adding labels for the query.
+        if labels:
+            query.categories = labels
+
+        # adding publication range for the query.
+        if publishedDate:
+            # the time format should be like this:
+            # 2008-02-09T08:00:00-08:00
+            query.published_min = publishedDate[0]
+            query.published_max = publishedDate[1]
+
+        feed = self.gdService.Get(query.ToUri())
+
+        for entry in feed.entry:
+            
+            posts.append((entry.title.text, entry.GetSelfLink().href))
+
+        return posts

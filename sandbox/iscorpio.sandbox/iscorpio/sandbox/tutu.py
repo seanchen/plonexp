@@ -18,6 +18,14 @@ IMAP_PORT = 993
 SMTP_MAILHOST = 'smtp.gmail.com'
 SMTP_PORT = 587
 
+EMAIL_PATTERN = '%s+%s*@%s+%s*\.(?:%s|%s|%s)' % (('[_a-zA-Z0-9-]',
+                                                 '(?:\.[_a-zA-Z0-9-]+)',
+                                                 '[a-zA-Z0-9-]',
+                                                 '(?:\.[a-zA-Z0-9-]+)',
+                                                 '(?:[0-9]{1,3})',
+                                                 '(?:[a-zA-Z]{2,3})',
+                                                 '(?:aero|coop|info|museum|name)'))
+
 class EmailServices(object):
 
     """ ImapServices will provide a easy and simple interface to
@@ -183,6 +191,85 @@ class EmailMessage(object):
 
         return self.textPlain;
 
+# account monitor
+class AccountMonitor(object):
+
+    """
+    """
+
+    # init.
+    def __init__(self, fileName=None):
+
+        # the file name.
+        if fileName:
+            self.accountFileName = fileName
+
+        # the accounts list, a list of tuple:
+        # (email, password, full name)
+        self.accounts = []
+
+        self.loadAccounts()
+
+    # load the account from the file name.
+    def loadAccounts(self):
+
+        accountFile = open(self.accountFileName)
+
+        try:
+            for line in accountFile:
+                email, password, fullName = line.split('>>>>')
+                self.accounts.append((email, password, fullName))
+        finally:
+            accountFile.close()
+
+    # check undeliverying emails.
+    def checkBadEmails(self):
+
+        emailService = EmailServices()
+        badEmails = set()
+        for account in self.accounts:
+
+            emailService.startImapSession(account[0], account[1])
+            print "Checking %s ..." % account[0]
+
+            messages = emailService.getNewMessages()
+            for seq, message in messages:
+                subject = message.getSubject()
+                print "---- %s" % subject
+
+                if self.isBadResponse(subject):
+                    messageText = message.getMessageTextPlain()
+                    addrs = re.findall(EMAIL_PATTERN, messageText)
+                    for one in set(addrs):
+                        print ">>>>>>>> %s" % one
+                        badEmails.add(one)
+
+                    # flag as read.
+                    emailService.flagMessages([seq], "\\Seen")
+
+            # close imap sesion.
+            emailService.closeImapSession()
+
+        # return the bad emails set.
+        return badEmails
+
+    # check if the email subject is about a bad response.
+    def isBadResponse(self, subject):
+
+        if subject:
+            title = subject.upper()
+        else:
+            # default is good response.
+            return False
+
+        if title.find('FAILURE') >= 0 or \
+           title.find('RETURNED MAIL') >= 0 or \
+           title.find('UNDELIVER') >= 0 or \
+           title.find('DELIVERY NOTIFI') >= 0:
+            return True
+
+        return False
+
 # utility class to manage the emails in the mailing list.
 class EmailRepository(object):
 
@@ -200,13 +287,13 @@ class EmailRepository(object):
         # tag as the key and the value is a list of full email
         self.tagDict = {}
 
-        self.loadEmails(self.repoFileName)
+        self.loadEmails()
 
     # load emails, full names, tags from the given file.
-    def loadEmails(self, fileName):
+    def loadEmails(self):
 
         # load the file content into memory.
-        repoFile = open(fileName)
+        repoFile = open(self.repoFileName)
         try:
             for line in repoFile:
                 fullEmail, tags = line.split(';')
@@ -387,7 +474,7 @@ class BlogspotService(object):
     #   a list of labels.
     # publishedDate:
     #   (published_min, published_max)
-    def getPosts(self, labels=None, publishedDate=None, orderby=None):
+    def getPosts(self, labels=None, publishedDate=None, orderby=None, maxResults=25):
 
         posts = []
 
@@ -410,10 +497,41 @@ class BlogspotService(object):
             query.published_min = publishedDate[0]
             query.published_max = publishedDate[1]
 
+        query.max_results = maxResults
+
         feed = self.gdService.Get(query.ToUri())
 
         for entry in feed.entry:
             
-            posts.append((entry.title.text, entry.GetSelfLink().href))
+            posts.append((entry.title.text,
+                          entry.GetSelfLink().href,
+                          entry.GetAlternateLink().href))
 
         return posts
+
+    # update labels for posts, find all posts for the given labels and
+    # update them with the new labels.
+    def updateLabels(self, labels, newLabels):
+
+        query = service.Query()
+        query.feed = self.postsUri
+        query.max_results = 10000
+        if labels:
+            query.categories = labels
+
+        feed = self.gdService.Get(query.ToUri())
+
+        newCategory = []
+        if newLabels:
+            for label in newLabels:
+                category = atom.Category(scheme=blogger.LABEL_SCHEME,term=label)
+                newCategory.append(category)
+
+        for entry in feed.entry:
+            while len(entry.category) > 0:
+                entry.category.pop()
+            entry.category = newCategory
+            editUri = entry.GetEditLink().href
+            self.gdService.Put(entry, editUri)
+
+        return newCategory

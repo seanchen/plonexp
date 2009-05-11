@@ -26,6 +26,9 @@ EMAIL_PATTERN = '%s+%s*@%s+%s*\.(?:%s|%s|%s)' % (('[_a-zA-Z0-9-]',
                                                  '(?:[a-zA-Z]{2,3})',
                                                  '(?:aero|coop|info|museum|name)'))
 
+TO_FIRSTNAME = '[TO FIRSTNAME]'
+FROM_FIRSTNAME = '[FROM FIRSTNAME]'
+
 class EmailServices(object):
 
     """ ImapServices will provide a easy and simple interface to
@@ -198,7 +201,7 @@ class AccountMonitor(object):
     """
 
     # init.
-    def __init__(self, fileName=None):
+    def __init__(self, fileName=None, maxMessages=10):
 
         # the file name.
         if fileName:
@@ -207,6 +210,16 @@ class AccountMonitor(object):
         # the accounts list, a list of tuple:
         # (email, password, full name)
         self.accounts = []
+
+        # max emails allowed to send out for an account.
+        self.maxMessagesPerAccount = maxMessages
+        # tracking the account sending history.
+        # (account index, sending count)
+        self.accountTracking = (0, 0)
+        # current account for sending. a tuple of from email and
+        # an instance of EmailServices
+        # (from email, email servies instance)
+        self.currentAccount = None
 
         self.loadAccounts()
 
@@ -221,6 +234,49 @@ class AccountMonitor(object):
                 self.accounts.append((email, password, fullName))
         finally:
             accountFile.close()
+
+    # send email strategically
+    def sendEmails(self, toList, messageString):
+        
+        i = 0
+        self.accountTracking = (0, 0)
+        for to in toList:
+            firstName = to.split()[0]
+            toMessage = messageString.replace(TO_FIRSTNAME, firstName)
+
+            fromEmail, sender = self.getNextSender(i)
+            fromFirst = fromEmail.split()[0]
+            message = toMessage.replace(FROM_FIRSTNAME, fromFirst)
+
+            sender.sendMail(fromEmail, to, message)
+            i = i + 1
+
+    # return tuple (fromemail, emailService) for the give sequence id.
+    def getNextSender(self, index):
+
+        if self.accountTracking[1] == self.maxMessagesPerAccount:
+            # reach max.
+            # reset
+            self.accountTracking[1] = 0
+            self.accountTracking[0] = (self.accountTracking[0] + 1) % \
+                                      len(self.accounts)
+
+        if self.accountTracking[1] == 0:
+            # the first message for this account!
+            if self.currentAccount:
+                # close the current email service!
+                self.currentAccount[1].quitSmtpSession()
+            # get the account and prepare the email service.
+            email, password, fullName = self.accounts[self.accountTracking[0]]
+            fromEmail = '%s <%s>' % (fullName, email)
+            smtp = EmailServices(email, password)
+            smtp.startSmtpSession()
+            self.currentAccount = (fromEmail, smtp)
+
+        #
+        self.accountTracking[1] = self.accountTracking[1] + 1
+
+        return self.currentAccount
 
     # check undeliverying emails.
     def checkBadEmails(self):
@@ -285,6 +341,7 @@ class EmailRepository(object):
         # this dict is mainly for maintainence purpose.
         self.emailDict = {}
         # tag as the key and the value is a list of full email
+        # FistName LastName <email@example.org>
         self.tagDict = {}
 
         self.loadEmails()

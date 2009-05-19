@@ -215,7 +215,7 @@ class AccountMonitor(object):
         self.maxMessagesPerAccount = maxMessages
         # tracking the account sending history.
         # (account index, sending count)
-        self.accountTracking = (0, 0)
+        self.accountTracking = [0, 0]
         # current account for sending. a tuple of from email and
         # an instance of EmailServices
         # (from email, email servies instance)
@@ -236,26 +236,36 @@ class AccountMonitor(object):
             accountFile.close()
 
     # send email strategically
-    def sendEmails(self, toList, messageString):
-        
+    def sendEmails(self, toList, message):
+
         i = 0
-        self.accountTracking = (0, 0)
+        self.accountTracking = [0, 0]
         for to in toList:
-            firstName = to.split()[0]
-            toMessage = messageString.replace(TO_FIRSTNAME, firstName)
-
+            message.__delitem__('To')
+            message['To'] = to
             fromEmail, sender = self.getNextSender(i)
-            fromFirst = fromEmail.split()[0]
-            message = toMessage.replace(FROM_FIRSTNAME, fromFirst)
+            message.__delitem__('From')
+            message['From'] = fromEmail
 
-            sender.sendMail(fromEmail, to, message)
+            messageString = message.as_string()
+            firstName = to.split()[0]
+            messageString = messageString.replace(TO_FIRSTNAME, firstName)
+            fromFirst = fromEmail.split()[0]
+            messageString = messageString.replace(FROM_FIRSTNAME, fromFirst)
+
+            sender.sendMail(fromEmail, to, messageString)
             i = i + 1
+
+        print 'Sent %s messages from %s' % (self.accountTracking[1], self.currentAccount[0])
+        if self.currentAccount:
+            self.currentAccount[1].quitSmtpSession()
 
     # return tuple (fromemail, emailService) for the give sequence id.
     def getNextSender(self, index):
 
         if self.accountTracking[1] == self.maxMessagesPerAccount:
             # reach max.
+            print 'Sent %s messages from %s' % (self.accountTracking[1], self.currentAccount[0])
             # reset
             self.accountTracking[1] = 0
             self.accountTracking[0] = (self.accountTracking[0] + 1) % \
@@ -269,8 +279,8 @@ class AccountMonitor(object):
             # get the account and prepare the email service.
             email, password, fullName = self.accounts[self.accountTracking[0]]
             fromEmail = '%s <%s>' % (fullName, email)
-            smtp = EmailServices(email, password)
-            smtp.startSmtpSession()
+            smtp = EmailServices()
+            smtp.startSmtpSession(email, password)
             self.currentAccount = (fromEmail, smtp)
 
         #

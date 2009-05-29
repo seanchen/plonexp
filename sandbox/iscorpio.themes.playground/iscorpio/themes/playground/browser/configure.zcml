@@ -7,7 +7,7 @@
   <interface
       interface=".interfaces.IThemeSpecific"
       type="zope.publisher.interfaces.browser.IBrowserSkinType"
-      name="iscorpio_themes_playground"
+      name="Iscorpio Themes Playground"
       />
   
   <!-- Viewlets registration -->

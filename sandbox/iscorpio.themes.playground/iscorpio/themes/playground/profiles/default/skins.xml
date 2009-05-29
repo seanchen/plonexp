@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <object name="portal_skins" allow_any="False" cookie_persistence="False"
-   default_skin="iscorpio_themes_playground">
+   default_skin="Iscorpio Themes Playground">
 
  <object name="iscorpio_themes_playground_custom_images"
     meta_type="Filesystem Directory View"
@@ -12,7 +12,7 @@
     meta_type="Filesystem Directory View"
     directory="iscorpio.themes.playground:skins/iscorpio_themes_playground_styles"/>
 
- <skin-path name="iscorpio_themes_playground" based-on="Plone Default">
+ <skin-path name="Iscorpio Themes Playground" based-on="Plone Default">
   <layer name="iscorpio_themes_playground_custom_images"
      insert-after="custom"/>
   <layer name="iscorpio_themes_playground_custom_templates"

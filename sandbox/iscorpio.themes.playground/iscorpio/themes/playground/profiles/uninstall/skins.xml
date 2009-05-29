@@ -10,6 +10,6 @@
  <object name="iscorpio_themes_playground_styles"
     meta_type="Filesystem Directory View" remove="True"/>
 
- <skin-path name="iscorpio_themes_playground" remove="True"/>
+ <skin-path name="Iscorpio Themes Playground" remove="True"/>
 
 </object>

@@ -1,0 +1,2 @@
+recursive-include iscorpio *
+global-exclude *pyc

@@ -11,4 +11,12 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
+  <genericsetup:registerProfile
+      name="uninstall"
+      title="Iscorpio Themes Playground Uninstall Profile"
+      directory="profiles/uninstall"
+      description="Remove the Playground to try out Plone 3 themes."
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
 </configure>

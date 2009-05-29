@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<import-steps>
+  <import-step id="iscorpio.themes.playground.various"
+               version="20090529-01"
+               handler="iscorpio.themes.playground.setuphandlers.setupVarious"
+               title="iscorpio_themes_playground: miscellaneous import steps">
+    <dependency step="skins" />
+    Various import steps that are not handled by GS import/export
+    handlers.
+  </import-step>
+</import-steps>

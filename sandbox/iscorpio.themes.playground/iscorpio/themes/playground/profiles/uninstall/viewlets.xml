@@ -1,4 +1,6 @@
 <?xml version="1.0"?>
 <object>
 
+  <hidden manager="plone.portalheader" skinname="Iscorpio Themes Playground" purge="True" />
+
 </object>

@@ -8,23 +8,30 @@
       interface=".interfaces.IThemeSpecific"
       type="zope.publisher.interfaces.browser.IBrowserSkinType"
       name="Iscorpio Themes Playground"
-      />
+  />
   
   <!-- Viewlets registration -->
   <!-- Zope 3 browser resources -->
+  <browser:viewlet
+     name="iscorpio.themes.playground.logo"
+     manager="plone.app.layout.viewlets.interfaces.IPortalHeader"
+     layer=".interfaces.IThemeSpecific"
+     class=".viewlets.MyLogoViewlet"
+     permission="zope2.View"
+  />
 
   <!-- Resource directory for images -->
   <browser:resourceDirectory
       name="iscorpio.themes.playground.images"
       directory="images"
       layer=".interfaces.IThemeSpecific"
-      />
+  />
 
   <!-- Resource directory for stylesheets -->
   <browser:resourceDirectory
       name="iscorpio.themes.playground.stylesheets"
       directory="stylesheets"
       layer=".interfaces.IThemeSpecific"
-      />
+  />
 
 </configure>

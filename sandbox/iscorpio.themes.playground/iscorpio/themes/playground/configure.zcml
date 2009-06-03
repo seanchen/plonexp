@@ -5,7 +5,9 @@
     i18n_domain="iscorpio.themes.playground">
 
   <five:registerPackage package="." initialize=".initialize" />
+
   <include package=".browser" />
+
   <include file="skins.zcml" />
   <include file="profiles.zcml" />
 

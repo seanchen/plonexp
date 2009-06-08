@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<object name="portal_actions" meta_type="Plone Actions Tool"
+   xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+
+ <object name="object_buttons" meta_type="CMF Action Category">
+
+  <object name="actionone" meta_type="CMF Action"
+          i18n:domain="iscorpio.themes.playground">
+   <property name="title" i18n:translate="">Action One</property>
+   <property name="description" i18n:translate="">
+     this is a testing global action!
+   </property>
+   <property name="url_expr">
+     string:${globals_view/getCurrentObjectUrl}/object_actionone
+   </property>
+   <property name="icon_expr"></property>
+   <property name="available_expr">
+     python:checkPermission("Copy or Move", object) and not globals_view.isPortalOrPortalDefaultPage()
+   </property>
+   <property name="permissions">
+    <element value="View"/>
+   </property>
+   <property name="visible">True</property>
+  </object>
+
+ </object>
+</object>

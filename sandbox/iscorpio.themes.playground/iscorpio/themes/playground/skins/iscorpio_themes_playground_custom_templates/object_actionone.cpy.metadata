@@ -1,0 +1,5 @@
+[default]
+title=Action One Testing Action
+
+[actions]
+action.success=redirect_to:python:request.get('HTTP_REFERER')

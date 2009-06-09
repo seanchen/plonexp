@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '1.0'
+version = open(os.path.join('iscorpio', 'plonelab', 'version.txt')).read()
 
 setup(name='iscorpio.plonelab',
       version=version,

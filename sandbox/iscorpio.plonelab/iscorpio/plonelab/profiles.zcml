@@ -1,0 +1,23 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="iscorpio.themes.playground">
+
+  <!-- the title here will be the name on Site Setup/Add-on Produces -->
+  <genericsetup:registerProfile
+      name="default"
+      title="iScorpio PloneLab"
+      directory="profiles/default"
+      description="A lab to try out Plone 3 development."
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+  />
+
+  <genericsetup:registerProfile
+      name="uninstall"
+      title="iScorpio PloneLab Uninstall Profile"
+      directory="profiles/uninstall"
+      description="uninstall profiles for PloneLab."
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+  />
+
+</configure>

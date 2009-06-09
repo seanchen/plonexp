@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<import-steps>
+  <import-step id="iscorpio.plonelab.various"
+               version="20090609-01"
+               handler="iscorpio.plonelab.utils.setuphandlers.setupVarious"
+               title="iScorpio PloneLab: miscellaneous import steps">
+    <dependency step="skins" />
+    Various import steps that are not handled by GS import/export
+    handlers.
+  </import-step>
+</import-steps>

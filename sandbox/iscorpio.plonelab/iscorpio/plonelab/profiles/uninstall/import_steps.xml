@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<import-steps>
+  <import-step id="iscorpio.plonelab.uninstall" version="20080609-01"
+               handler="iscorpio.plonelab.utils.uninstallhandlers.uninstall"
+               title="iScorpio PloneLab: uninstall">
+    Uninstall ...
+  </import-step>
+</import-steps>

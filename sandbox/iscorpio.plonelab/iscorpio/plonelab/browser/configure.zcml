@@ -1,0 +1,24 @@
+<configure 
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser">
+
+  <browser:page
+     for="Products.CMFPlone.Portal.PloneSite"
+     name="silly-configuration"
+     class=".config.SillyConfigurationForm"
+     permission="cmf.ManagePortal"
+  />
+
+  <adapter
+     for="Products.CMFPlone.Portal.PloneSite"
+     provides=".interfaces.ISillyConfiguration"
+     factory=".config.form_adapter" 
+  />
+
+  <utility
+     provides=".interfaces.ISillyConfiguration"
+     factory=".config.SillyConfiguration"
+     name="silly_config"
+  />
+
+</configure>

@@ -21,4 +21,11 @@
      name="silly_config"
   />
 
+  <browser:page
+     for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+     class=".sillytest.SillyTest"
+     name="silly-test"
+     permission="zope2.View"
+  />
+
 </configure>

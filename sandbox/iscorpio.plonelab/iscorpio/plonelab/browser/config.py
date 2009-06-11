@@ -1,25 +1,29 @@
 # config.py
 
-from zope.formlib import form
 from zope.component import getUtility
 from zope.interface import implements
+from zope.formlib.form import FormFields
 from zope.schema.fieldproperty import FieldProperty
 from zope.i18nmessageid import MessageFactory
 
 from OFS.SimpleItem import SimpleItem
 
-from Products.Five.formlib import formbase
+from plone.app.controlpanel.form import ControlPanelForm
 
 from interfaces import ISillyConfiguration
 
 _ = MessageFactory('iscorpio.plonelab')
 
 # the form class
-class SillyConfigurationForm(formbase.EditFormBase):
+class SillyConfigurationForm(ControlPanelForm):
 
-    form_fields = form.Fields(ISillyConfiguration)
+    form_fields = FormFields(ISillyConfiguration)
 
     label = _(u"A silly settings form")
+    description = _(u'Put details description here!')
+
+    form_name = _(u'Section Name',
+                  default=u'Attributes')
 
 # the utility class to do storage.
 class SillyConfiguration(SimpleItem):

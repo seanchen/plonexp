@@ -3,16 +3,19 @@
     xmlns:browser="http://namespaces.zope.org/browser">
 
   <browser:page
-     for="Products.CMFPlone.Portal.PloneSite"
+     for="Products.CMFPlone.interfaces.IPloneSiteRoot"
      name="silly-configuration"
      class=".config.SillyConfigurationForm"
      permission="cmf.ManagePortal"
   />
 
+  <!-- adapter class will provide the function, which is specified -->
+  <!-- by "provides", for the adapted class, which is specified by -->
+  <!-- "for". -->
   <adapter
-     for="Products.CMFPlone.Portal.PloneSite"
+     for="Products.CMFPlone.interfaces.IPloneSiteRoot"
      provides=".interfaces.ISillyConfiguration"
-     factory=".config.form_adapter" 
+     factory=".config.form_adapter"
   />
 
   <utility

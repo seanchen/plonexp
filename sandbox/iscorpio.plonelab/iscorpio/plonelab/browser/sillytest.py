@@ -4,6 +4,7 @@ from zope.component import getUtility
 
 from Acquisition import aq_inner
 from Products.Five import BrowserView
+from Products.CMFCore.utils import getToolByName
 
 from interfaces import ISillyConfiguration
 
@@ -14,6 +15,9 @@ class SillyTest(BrowserView):
         context = aq_inner(self.context)
         conf = getUtility(ISillyConfiguration,
                           name='silly_config', context=context)
-        return conf.favorite_color
 
-        
+        labtool = getToolByName(context, "iscorpio_plonelab")
+
+        return 'utility: %s<br/> Tool: %s, %s' % (conf.favorite_color,
+                                                  labtool.contact_email,
+                                                  labtool.favorite_color)

@@ -3,6 +3,7 @@
 # a mailing list services.
 
 import re
+import time
 import email
 from email.message import Message
 import imaplib
@@ -116,6 +117,27 @@ class EmailServices(object):
 
         return msgs
 
+    def getMessages(self, mailbox='INBOX'):
+
+        # assume we check the new message from INBOX
+        result, response = self.imapSession.select(mailbox)
+        #print response
+        # we are in select state now.
+        result, response = self.imapSession.search(None, 'NOT', 'FLAGGED')
+        # response should be a string of message number
+        #print response
+        msgs=[]
+        for sequence in response[0].split():
+            # get the message and
+            result, message = self.imapSession.fetch(sequence, '(RFC822)')
+            #print "===================================="
+            #print message[0]
+            # the email.message.Message format.
+            emailMessage = EmailMessage(email.message_from_string(message[0][1]))
+            msgs.append((sequence, emailMessage))
+
+        return msgs
+
     # add flag to a message with the given sequence.
     # this only happen after select a mailbox.
     # there is no return value for this method, since we are using
@@ -201,7 +223,7 @@ class AccountMonitor(object):
     """
 
     # init.
-    def __init__(self, fileName=None, maxMessages=10):
+    def __init__(self, fileName=None, maxMessages=10, maxMsgEachTime=46):
 
         # the file name.
         if fileName:
@@ -213,6 +235,7 @@ class AccountMonitor(object):
 
         # max emails allowed to send out for an account.
         self.maxMessagesPerAccount = maxMessages
+        self.maxMessagesEachTime = maxMsgEachTime
         # tracking the account sending history.
         # (account index, sending count)
         self.accountTracking = [0, 0]
@@ -254,6 +277,7 @@ class AccountMonitor(object):
             messageString = messageString.replace(FROM_FIRSTNAME, fromFirst)
 
             sender.sendMail(fromEmail, to, messageString)
+            print '%4d %s --> %s' % (i, fromEmail, to)
             i = i + 1
 
         print 'Sent %s messages from %s' % (self.accountTracking[1], self.currentAccount[0])
@@ -263,9 +287,20 @@ class AccountMonitor(object):
     # return tuple (fromemail, emailService) for the give sequence id.
     def getNextSender(self, index):
 
+        if (index + 1) % self.maxMessagesEachTime == 0:
+            if self.currentAccount:
+                self.currentAccount[1].quitSmtpSession()
+            self.accountTracking[1] = 0
+            print 'Sleep at %s ...' % time.strftime('%x %X')
+            time.sleep(60 * 10)
+
         if self.accountTracking[1] == self.maxMessagesPerAccount:
             # reach max.
             print 'Sent %s messages from %s' % (self.accountTracking[1], self.currentAccount[0])
+            if self.currentAccount:
+                # close the current email service!
+                self.currentAccount[1].quitSmtpSession()
+            time.sleep(60 * 2)
             # reset
             self.accountTracking[1] = 0
             self.accountTracking[0] = (self.accountTracking[0] + 1) % \
@@ -273,9 +308,6 @@ class AccountMonitor(object):
 
         if self.accountTracking[1] == 0:
             # the first message for this account!
-            if self.currentAccount:
-                # close the current email service!
-                self.currentAccount[1].quitSmtpSession()
             # get the account and prepare the email service.
             email, password, fullName = self.accounts[self.accountTracking[0]]
             fromEmail = '%s <%s>' % (fullName, email)

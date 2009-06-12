@@ -138,6 +138,21 @@ class EmailServices(object):
 
         return msgs
 
+    # return the latest message from the mailbox. no matter it is new or not.
+    def getLatestMessage(self, mailbox='INBOX'):
+
+        emailMessage = None
+        # go to select state first.
+        result, response = self.imapSession.select(mailbox)
+        result, response = self.imapSession.search(None, 'ALL')
+        if result == 'OK' and response:
+            # only fetch the last one! sequence starts from one.
+            seqs = response[0].split()
+            result, message = self.imapSession.fetch(seqs.pop(), '(RFC822)')
+            emailMessage = EmailMessage(email.message_from_string(message[0][1]))
+
+        return emailMessage
+
     # add flag to a message with the given sequence.
     # this only happen after select a mailbox.
     # there is no return value for this method, since we are using
@@ -187,7 +202,9 @@ class EmailMessage(object):
         # the plain text message
         self.textPlain = None
         # the html text.
+
         # attachments: counts, file, payload, etc.
+        self.attachments = []
 
     # return the subject for this message.
     def getSubject(self):
@@ -215,6 +232,26 @@ class EmailMessage(object):
                 break
 
         return self.textPlain;
+
+    # return all the attachments' decoded payload as a list of tuple:
+    # (filename, payload)
+    def getAttachments(self):
+
+        for part in self.message.walk():
+
+            # the main type will tell is this part an attachment or not.
+            mainType = part.get_content_maintype()
+            if mainType == 'multipart':
+                # multipart/* are just containers, so we jump to next part.
+                continue
+
+            fileName = part.get_filename()
+            if fileName != None:
+                # we find something!
+                self.attachments.append((fileName,
+                                         part.get_payload(decode=True)))
+
+        return self.attachments
 
 # account monitor
 class AccountMonitor(object):

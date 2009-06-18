@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-06-18 12:49+0000\n"
+"POT-Creation-Date: 2009-06-18 12:45+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,22 +15,10 @@ msgstr ""
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
-"Domain: iscorpio.plonelab\n"
+"Domain: plone\n"
 
-#: iscorpio.plonelab/iscorpio/plonelab/browser/config.py:27
-msgid "A silly settings form"
-msgstr ""
-
-#: iscorpio.plonelab/iscorpio/plonelab/browser/interfaces.py:13
-msgid "Enter your favorite color"
-msgstr ""
-
-#: iscorpio.plonelab/iscorpio/plonelab/browser/config.py:28
-msgid "Put details description here!"
-msgstr ""
-
-#. Default: "Attributes"
-#: iscorpio.plonelab/iscorpio/plonelab/browser/config.py:30
-msgid "Section Name"
+#. Default: "iScorpio PloneLab"
+#: iscorpio.plonelab/iscorpio/plonelab/profiles/default/controlpanel.xml
+msgid "iScorpio PloneLab"
 msgstr ""
 

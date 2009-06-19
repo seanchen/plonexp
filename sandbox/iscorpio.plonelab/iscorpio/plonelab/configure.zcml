@@ -1,5 +1,6 @@
 <configure
    xmlns="http://namespaces.zope.org/zope"
+   xmlns:cmf="http://namespaces.zope.org/cmf"  
    xmlns:five="http://namespaces.zope.org/five"
    xmlns:i18n="http://namespaces.zope.org/i18n"
    i18n_domain="iscorpio.plonelab">
@@ -7,6 +8,12 @@
   <five:registerPackage package="." initialize=".initialize" />
 
   <i18n:registerTranslations directory="locales" />
+
+  <!-- check the following link for definition about -->
+  <!-- registerDirectory.  By default the directory will be -->
+  <!-- skins/name -->
+  <!-- http://mail.zope.org/pipermail/zope-cmf/2007-February/025650.html -->
+  <cmf:registerDirectory name="plonelab"/>
 
   <include package=".browser" />
   <include file="profiles.zcml" />

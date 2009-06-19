@@ -3,8 +3,8 @@
         cookie_persistence="False"
         default_skin="Plone Default" request_varname="plone_skin">
 
-	<object name="iscorpio_plonelab_skins"
-					meta_type="Filesystem Directory View" remove="True"
-	/>
+  <object name="iscorpio_plonelab_skins"
+          meta_type="Filesystem Directory View" remove="True"
+  />
 
 </object>

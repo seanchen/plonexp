@@ -1,7 +1,6 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
-    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
-    i18n_domain="iscorpio.themes.playground">
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup">
 
   <!-- the title here will be the name on Site Setup/Add-on Produces -->
   <genericsetup:registerProfile

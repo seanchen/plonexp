@@ -22,6 +22,11 @@ class SimpleProduct(SimpleItem.SimpleItem):
     # unique and you will see it in the dropdown selection box.
     meta_type = "iScorpio ZopeLab Simple Product"
 
+    #
+    manage_options = (
+            {'label': 'View', 'action': 'index_html',},
+        )
+
     # any object in Zope Server needs a id, which should be set during
     # initialization. 
     def __init__(self, id):

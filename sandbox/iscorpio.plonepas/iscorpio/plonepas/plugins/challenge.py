@@ -5,6 +5,7 @@ This a testing plugin to provide challenge for un-authenticated users
 """
 
 from Globals import InitializeClass
+from Globals import DTMLFile
 from Products.PluggableAuthService.utils import classImplements
 from Products.PluggableAuthService.plugins.BasePlugin import \
      BasePlugin
@@ -15,35 +16,21 @@ __author__ = "Sean Chen"
 __email__ = "chyxiang@gmail.com"
 
 # utility class to add a new RedirectChalenge instance.
-def manage_addRedirectChallenge(self, id, title='', REQUEST=None):
+def manage_addRedirectChallenge(self, id, title='', path='/', REQUEST=None):
     """
     invoked by whatever Object manager to create a Redirect challenge
     plugin.
     """
 
     # set object on the object manager.
-    self._setObject(id, RedirectChallenge(id, title))
+    self._setObject(id, RedirectChallenge(id, title, path))
 
     if REQUEST:
         REQUEST['RESPONSE'].redirect("%s/manage_workspace" % self.absolute_url(),
                                      lock=1)
 
 # the simplest form for create a new RedirectChallenge instance.
-def manage_addRedirectChallengeForm(self):
-    """
-    We only need an id to create the redirect challenge plugin for now.
-    """
-
-    return """
-    <html><body>
-      <h3>Create RedirectChallenge Plugin</h3>
-      <form name='createRC' action='manage_addRedirectChallenge'>
-        ID: <input name='id', type='text'/> <br/>
-        Title: <input name='title', type='text'/> <br/> 
-        <input type='submit', value='Add'/>
-      </form>
-    </body></html>
-    """
+manage_addRedirectChallengeForm = DTMLFile('../zmi/redirect', globals())
 
 # a very simple challenge plugin for testing.
 class RedirectChallenge(BasePlugin):
@@ -57,13 +44,14 @@ class RedirectChallenge(BasePlugin):
     meta_type = "iScorpio PAS Simple Redirect Challenge"
 
     # the initialize method.
-    def __init__(self, id, title=''):
+    def __init__(self, id, title, path):
         """
         the constructor.
         """
 
         self.id = id
         self.title = title
+        self.path = path
 
     # implements the challenge method.
     def challenge(self, request, response):
@@ -71,7 +59,7 @@ class RedirectChallenge(BasePlugin):
         Returns True if it fired, False otherwise
         """
 
-        response.redirect("http://www.google.com", lock=1)
+        response.redirect(self.path, lock=1)
         return True
 
 # make sure it implements the IChallengePlugin

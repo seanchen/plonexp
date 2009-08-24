@@ -16,6 +16,7 @@ def initialize(context):
     context.registerClass(
         simple.SimpleProduct,
         constructors = (
+            simple.manage_addSimpleProductForm,
             simple.manage_addSimpleProduct,
         )
     )

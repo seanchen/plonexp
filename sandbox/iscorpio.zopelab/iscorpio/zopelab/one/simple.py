@@ -42,13 +42,29 @@ class SimpleProduct(SimpleItem.SimpleItem):
         """
 
 # facility method to create a new instance of SimpleProduct.
-def manage_addSimpleProduct(self, REQUEST):
+def manage_addSimpleProduct(self, id, REQUEST):
     """
     This method will be called by an ObjectManager, normally a Folder,
     when we selected the 'iScorpio ZopeLab Simple Product' from the
     Add dropdown selection box.
     """
 
-    self._setObject('simple_id', SimpleProduct('simple_id'))
-    REQUEST['RESPONSE'].redirect('%s/index_html' % self.simple_id.absolute_url(),
+    self._setObject(id, SimpleProduct(id))
+    REQUEST['RESPONSE'].redirect('%s/manage_workspace' % self.absolute_url(),
                                  lock=1)
+
+# make a HTML form where user can specifiy the id for SimpleProduct.
+def manage_addSimpleProductForm(self):
+    """
+    A simple form to collect id from users for the new SimpleProduct instance.
+    """
+    return """<html>
+    <body>
+    Please fill out the following value and click Add button to create
+    a SimpleProduct object:
+    <form name='form' action='manage_addSimpleProduct'>
+      ID: <input type='text' name='id'><br>
+      <input type='submit' value='Add'>
+    </form>
+    </body></html>
+    """

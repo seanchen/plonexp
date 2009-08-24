@@ -15,14 +15,14 @@ __author__ = "Sean Chen"
 __email__ = "chyxiang@gmail.com"
 
 # utility class to add a new RedirectChalenge instance.
-def manage_addRedirectChallenge(self, id, REQUEST=None):
+def manage_addRedirectChallenge(self, id, title='', REQUEST=None):
     """
     invoked by whatever Object manager to create a Redirect challenge
     plugin.
     """
 
     # set object on the object manager.
-    self._setObject(id, RedirectChallenge(id))
+    self._setObject(id, RedirectChallenge(id, title))
 
     if REQUEST:
         REQUEST['RESPONSE'].redirect("%s/manage_workspace" % self.absolute_url(),
@@ -39,6 +39,7 @@ def manage_addRedirectChallengeForm(self):
       <h3>Create RedirectChallenge Plugin</h3>
       <form name='createRC' action='manage_addRedirectChallenge'>
         ID: <input name='id', type='text'/> <br/>
+        Title: <input name='title', type='text'/> <br/> 
         <input type='submit', value='Add'/>
       </form>
     </body></html>
@@ -56,12 +57,13 @@ class RedirectChallenge(BasePlugin):
     meta_type = "iScorpio PAS Simple Redirect Challenge"
 
     # the initialize method.
-    def __init__(self, id):
+    def __init__(self, id, title=''):
         """
         the constructor.
         """
 
         self.id = id
+        self.title = title
 
     # implements the challenge method.
     def challenge(self, request, response):

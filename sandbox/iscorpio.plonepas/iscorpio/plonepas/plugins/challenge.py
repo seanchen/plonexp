@@ -43,6 +43,20 @@ class RedirectChallenge(BasePlugin):
     # acl_users
     meta_type = "iScorpio PAS Simple Redirect Challenge"
 
+    # this will help to manage the properties on Properties tab.
+    _properties = (
+        {"id" : "title",
+         "label" : "Title",
+         "type" : "string",
+         "mode" : "w",
+         },
+        {"id" : "path",
+         "label" : "Target Path",
+         "type" : "string",
+         "mode" : "w",
+        }
+        )
+
     # the initialize method.
     def __init__(self, id, title, path):
         """

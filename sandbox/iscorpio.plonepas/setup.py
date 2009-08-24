@@ -1,12 +1,18 @@
+# setup.py
+
+"""
+Python setup script based on setuptools.
+"""
+
 from setuptools import setup, find_packages
 import os
 
-version = '1.0'
+version = open(os.path.join("iscorpio/plonepas", "version.txt")).read()
 
 setup(name='iscorpio.plonepas',
       version=version,
       description="Plone PAS Playground",
-      long_description=open("README.txt").read() + "\n" +
+      long_description=open(os.path.join("iscorpio/plonepas", "README.txt")).read() + "\n" +
                        open(os.path.join("docs", "HISTORY.txt")).read(),
       # Get more strings from http://www.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[

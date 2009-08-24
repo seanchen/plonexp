@@ -53,7 +53,7 @@ class RedirectChallenge(BasePlugin):
 
     # meta_type will be displayed in the add dropdown list on folder
     # acl_users
-    meta_type = "Simple Redirect Challenge"
+    meta_type = "iScorpio PAS Simple Redirect Challenge"
 
     # the initialize method.
     def __init__(self, id):

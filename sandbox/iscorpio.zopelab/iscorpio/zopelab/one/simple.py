@@ -23,8 +23,8 @@ class SimpleProduct(SimpleItem.SimpleItem):
     meta_type = "iScorpio ZopeLab Simple Product"
 
     #
-    manage_options = (
-            {'label': 'View', 'action': 'index_html',},
+    manage_options = SimpleItem.SimpleItem.manage_options + (
+        {'label': 'View', 'action': 'index_html',},
         )
 
     # any object in Zope Server needs a id, which should be set during

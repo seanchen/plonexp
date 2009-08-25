@@ -8,6 +8,7 @@ happens here.
 from Products.PluggableAuthService import registerMultiPlugin
 
 from plugins import challenge
+from plugins import squirrel
 
 __author__ = "Sean Chen"
 __email__ = "chyxiang@gmail.com"
@@ -16,6 +17,7 @@ __email__ = "chyxiang@gmail.com"
 # dropdown list.
 try:
     registerMultiPlugin(challenge.RedirectChallenge.meta_type)
+    registerMultiPlugin(squirrel.SquirrelPlugins.meta_type)
 except RuntimeError:
     # ignore exceptions on re-registering the plugin
     pass
@@ -31,6 +33,15 @@ def initialize(context):
         constructors=(
             challenge.manage_addRedirectChallengeForm,
             challenge.manage_addRedirectChallenge,
+        ),
+        visibility=None
+    )
+
+    context.registerClass(
+        squirrel.SquirrelPlugins,
+        constructors=(
+            squirrel.manage_addSquirrelPluginsForm,
+            squirrel.manage_addSquirrelPlugins,
         ),
         visibility=None
     )

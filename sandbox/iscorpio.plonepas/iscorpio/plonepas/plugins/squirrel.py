@@ -11,6 +11,7 @@ from AccessControl.SecurityInfo import ClassSecurityInfo
 from Products.PluggableAuthService.utils import classImplements
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
 from Products.PluggableAuthService.interfaces.plugins import IAuthenticationPlugin
+from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlugin
 
 __author__ = "Sean Chen"
 __email__ = "chyxiang@gmail.com"
@@ -74,8 +75,35 @@ class SquirrelPlugins(BasePlugin):
                                          login, password)
         return (login, login)
 
+    # IUserEnumerationPlugin
+    security.declarePrivate('enumerateUsers')
+    def enumerateUsers(self, id=None, login=None, exact_match=False,
+                       sort_by=None, max_results=None, **kw):
+        """
+        Return a list of valid users identified by this plugin.
+        """
+
+        key = id or login
+        if (not key) or (key not in ['abc', '123']):
+            return None;
+
+        return [{'id' : 'abc',
+                 'login' : 'abc',
+                 'fullname' : 'My Name',
+                 'email' : 'myemail@email.com',
+                 'pluginid' : self.getId()
+                 },
+                {'id' : '123',
+                 'login' : '123',
+                 'fullname' : '123 Name',
+                 'email' : 'email@123.com',
+                 'pluginid' : self.getId()
+                 }
+               ]
+
 # implements plugins.
 classImplements(SquirrelPlugins,
-                IAuthenticationPlugin)
+                IAuthenticationPlugin,
+                IUserEnumerationPlugin)
 
 InitializeClass(SquirrelPlugins)

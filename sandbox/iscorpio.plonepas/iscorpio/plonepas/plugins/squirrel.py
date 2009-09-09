@@ -7,6 +7,8 @@ full function.
 
 import logging
 
+from Acquisition import aq_inner, aq_parent
+
 from Globals import InitializeClass
 from Globals import DTMLFile
 from AccessControl.SecurityInfo import ClassSecurityInfo
@@ -69,10 +71,7 @@ class SquirrelPlugins(BasePlugin):
         if ('login' not in credentials) or ('password' not in credentials):
             return None
 
-        self.log.info('self is: %s' % self.__name__)
-        self.log.info('parent is: %s', self.getParentNode().__name__)
-        self.log.info('parent of parent is: %s', self.getParentNode().getParentNode().__name__)
-        app = self.getParentNode().getParentNode().getParentNode()
+        app = self.getZopeApp()
 
         login = credentials['login']
         password = credentials['password']
@@ -93,9 +92,23 @@ class SquirrelPlugins(BasePlugin):
         """
         Return a list of valid users identified by this plugin.
         """
-        app = self.getParentNode().getParentNode().getParentNode()
+        app = self.getZopeApp()
         return app.UserAdmin.acl_users.users.enumerateUsers(id, login, exact_match,
-                                                           sort_by, max_results)
+                                                            sort_by, max_results)
+
+    # return the zope root object.
+    security.declarePrivate('getZopeApp')
+    def getZopeApp(self):
+        """
+        returns the root Zope object, which should be the zope application
+        server.
+        """
+        parent = aq_parent(aq_inner(self))
+        while parent.__name__ != 'Zope':
+            self.log.info('Parent is ---- %s', parent.__name__)
+            parent = aq_parent(aq_inner(parent))
+
+        return parent
 
 # implements plugins.
 classImplements(SquirrelPlugins,

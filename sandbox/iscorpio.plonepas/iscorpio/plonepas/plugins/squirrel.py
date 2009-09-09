@@ -5,6 +5,8 @@ A simple and small PAS plugin. Give it name squirrel means small but
 full function.
 """
 
+import logging
+
 from Globals import InitializeClass
 from Globals import DTMLFile
 from AccessControl.SecurityInfo import ClassSecurityInfo
@@ -36,8 +38,17 @@ def manage_addSquirrelPlugins(self, id, title='', REQUEST=None):
 class SquirrelPlugins(BasePlugin):
     """
     a small and full function PAS plugin.
+    We are trying to forward all request to an admin product under Zope root.
+    Typically the following request:
+    - IAuthenticationPlugin.authenticateCredentials
+    - IUserEnumerationPlugin.enumerateUsers
+    If we are using cookie to save the credentials, we don't have to forward
+    the IExtractionPlugin and ICredentialsUpdatePlugin.  We can easily make
+    all sites to use the same cookie name, so all sites will extract and
+    update the same cookie.
     """
 
+    log = logging.getLogger("Squirrel Plugins")
     # meta type will show on the dropdown selection list.
     meta_type = "iScorpio PlonePAS Squirrel Plugins"
 
@@ -58,22 +69,22 @@ class SquirrelPlugins(BasePlugin):
         if ('login' not in credentials) or ('password' not in credentials):
             return None
 
-        # the fake 
-        users = {'abc' : 'bbc',
-                 '123' : 'c567'
-                 }
+        self.log.info('self is: %s' % self.__name__)
+        self.log.info('parent is: %s', self.getParentNode().__name__)
+        self.log.info('parent of parent is: %s', self.getParentNode().getParentNode().__name__)
+        app = self.getParentNode().getParentNode().getParentNode()
 
         login = credentials['login']
         password = credentials['password']
 
-        if users.get(login, None) != password:
-            return None
-
-        # using default PAS to store the credential.
-        self._getPAS().updateCredentials(self.REQUEST,
-                                         self.REQUEST.RESPONSE,
-                                         login, password)
-        return (login, login)
+        credit = app.UserAdmin.acl_users.users.authenticateCredentials(credentials)
+        return credit
+        if credit:
+            # using default PAS to store the credential.
+            self._getPAS().updateCredentials(self.REQUEST,
+                                             self.REQUEST.RESPONSE,
+                                             login, password)
+        return credit
 
     # IUserEnumerationPlugin
     security.declarePrivate('enumerateUsers')
@@ -82,24 +93,9 @@ class SquirrelPlugins(BasePlugin):
         """
         Return a list of valid users identified by this plugin.
         """
-
-        key = id or login
-        if (not key) or (key not in ['abc', '123']):
-            return None;
-
-        return [{'id' : 'abc',
-                 'login' : 'abc',
-                 'fullname' : 'My Name',
-                 'email' : 'myemail@email.com',
-                 'pluginid' : self.getId()
-                 },
-                {'id' : '123',
-                 'login' : '123',
-                 'fullname' : '123 Name',
-                 'email' : 'email@123.com',
-                 'pluginid' : self.getId()
-                 }
-               ]
+        app = self.getParentNode().getParentNode().getParentNode()
+        return app.UserAdmin.acl_users.users.enumerateUsers(id, login, exact_match,
+                                                           sort_by, max_results)
 
 # implements plugins.
 classImplements(SquirrelPlugins,

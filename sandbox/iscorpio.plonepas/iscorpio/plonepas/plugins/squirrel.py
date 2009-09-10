@@ -80,12 +80,6 @@ class SquirrelPlugins(BasePlugin):
 
         credit = app.UserAdmin.acl_users.users.authenticateCredentials(credentials)
         return credit
-        if credit:
-            # using default PAS to store the credential.
-            self.updateCredentials(self.REQUEST,
-                                   self.REQUEST.RESPONSE,
-                                   login, password)
-        return credit
 
     # IUserEnumerationPlugin
     security.declarePrivate('enumerateUsers')

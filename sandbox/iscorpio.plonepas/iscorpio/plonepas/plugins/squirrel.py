@@ -16,6 +16,8 @@ from Products.PluggableAuthService.utils import classImplements
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
 from Products.PluggableAuthService.interfaces.plugins import IAuthenticationPlugin
 from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlugin
+from Products.PluggableAuthService.interfaces.plugins import IExtractionPlugin
+from Products.PluggableAuthService.interfaces.plugins import ICredentialsUpdatePlugin
 
 __author__ = "Sean Chen"
 __email__ = "chyxiang@gmail.com"
@@ -80,9 +82,9 @@ class SquirrelPlugins(BasePlugin):
         return credit
         if credit:
             # using default PAS to store the credential.
-            self._getPAS().updateCredentials(self.REQUEST,
-                                             self.REQUEST.RESPONSE,
-                                             login, password)
+            self.updateCredentials(self.REQUEST,
+                                   self.REQUEST.RESPONSE,
+                                   login, password)
         return credit
 
     # IUserEnumerationPlugin
@@ -95,6 +97,25 @@ class SquirrelPlugins(BasePlugin):
         app = self.getZopeApp()
         return app.UserAdmin.acl_users.users.enumerateUsers(id, login, exact_match,
                                                             sort_by, max_results)
+
+    # IExtractionPlugin
+    security.declarePrivate('extractCredentials')
+    def extractCredentials(self, request):
+        """
+        forward to user admin to do the 
+        """
+        app = self.getZopeApp()
+        return app.UserAdmin.acl_users.credential_cookie_auth.extractCredentials(request)
+
+    # ICredentialsUpdatePlugin
+    security.declarePrivate('updateCredentials')
+    def updateCredentials(self, request, response, login, new_password):
+        """
+        again forward to the useradmin
+        """
+        app = self.getZopeApp()
+        return app.UserAdmin.acl_users.credential_cookie_auth.updateCredentials(request, response,
+                                                                                login, new_password)
 
     # return the zope root object.
     security.declarePrivate('getZopeApp')
@@ -113,6 +134,8 @@ class SquirrelPlugins(BasePlugin):
 # implements plugins.
 classImplements(SquirrelPlugins,
                 IAuthenticationPlugin,
-                IUserEnumerationPlugin)
+                IUserEnumerationPlugin,
+                IExtractionPlugin,
+                ICredentialsUpdatePlugin)
 
 InitializeClass(SquirrelPlugins)

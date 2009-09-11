@@ -5,6 +5,7 @@ A very simple Zope product.
 """
 
 from OFS import SimpleItem
+from Globals import InitializeClass
 
 __author__ = "Sean Chen"
 __email__ = "chyxiang@gmail.com"
@@ -45,6 +46,8 @@ class SimpleProduct(SimpleItem.SimpleItem):
         return """<html><body>Hello, Welcome to my first Simple Zope
         Product!</body></html>
         """
+
+InitializeClass(SimpleProduct)
 
 # facility method to create a new instance of SimpleProduct.
 def manage_addSimpleProduct(self, id, REQUEST):

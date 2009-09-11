@@ -18,6 +18,5 @@ def initialize(context):
         constructors = (
             simple.manage_addSimpleProductForm,
             simple.manage_addSimpleProduct,
-        ),
-        visibility = None
+        )
     )

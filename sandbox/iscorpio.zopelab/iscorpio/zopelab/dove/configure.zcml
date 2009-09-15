@@ -11,7 +11,7 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
   />
 
-  <!-- utility factory=".nest.HiddenProducts"
+  <utility factory=".nest.HiddenProducts"
            name="iscorpio.zopelab.dove"
-  / -->
+  />
 </configure>

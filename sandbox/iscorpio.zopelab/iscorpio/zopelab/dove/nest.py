@@ -7,9 +7,20 @@ work.
 
 from OFS import SimpleItem
 from Globals import InitializeClass
+from zope.interface import implements
+
+from Products.CMFQuickInstallerTool.interfaces import INonInstallable
 
 __author__ = "Sean Chen"
 __email__ = "chyxiang@gmail.com"
+
+# # hide the profile from quicker installer.
+# class HiddenProducts(object):
+#     implements(INonInstallable)
+
+#     # returns a list of product names
+#     def getNonInstallableProducts(self):
+#         return ['iscorpio.zopelab.dove']
 
 # CMFDove product class. Extends from SimpleItem to get some basic
 # behavior for work with ZMI

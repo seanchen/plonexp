@@ -1,0 +1,17 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="iscorpio.zopelab">
+
+  <genericsetup:registerProfile
+      name="dove"
+      title="CMF Dove"
+      directory="profiles/default"
+      description="Profile for a default Dove."
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+  />
+
+  <!-- utility factory=".nest.HiddenProducts"
+           name="iscorpio.zopelab.dove"
+  / -->
+</configure>

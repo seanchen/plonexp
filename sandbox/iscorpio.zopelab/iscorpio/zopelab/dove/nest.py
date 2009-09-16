@@ -5,7 +5,7 @@ a simple Zope product trying to use GenericSetup to do some initialization
 work.
 """
 
-from OFS import SimpleItem
+from OFS.Folder import Folder
 from Globals import InitializeClass
 from zope.interface import implements
 
@@ -14,17 +14,18 @@ from Products.CMFQuickInstallerTool.interfaces import INonInstallable
 __author__ = "Sean Chen"
 __email__ = "chyxiang@gmail.com"
 
-# hide the profile from quicker installer.
+# hide the profile from quicke installer.
 class HiddenProducts(object):
     implements(INonInstallable)
 
     # returns a list of product names
     def getNonInstallableProducts(self):
-        return ['iscorpio.zopelab.dove']
+        return ['iscorpio.zopelab.dove',
+                'LDAPUserFolder', 'Products.LDAPUserFolder']
 
 # CMFDove product class. Extends from SimpleItem to get some basic
 # behavior for work with ZMI
-class CMFDove(SimpleItem.SimpleItem):
+class CMFDove(Folder):
     """
     A simple Zope product leverage on GenericSetup.
     """

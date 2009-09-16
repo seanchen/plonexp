@@ -8,4 +8,4 @@ def importVarious(context):
         return
 
     portal = context.getSite()
-    #setup_localrole_plugin(portal)
+    #setup_plugin(portal)

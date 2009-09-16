@@ -24,8 +24,8 @@ def manage_addDove(self, id, title='', REQUEST=None):
     self._setObject(id, CMFDove(id, title))
 
     dove = self._getOb(id)
-    parent = aq_parent(aq_inner(self))
-    parent.Plone.portal_setup.runAllImportStepsFromProfile('profile-iscorpio.zopelab.dove:dove')
+    #parent = aq_parent(aq_inner(self))
+    #parent.Plone.portal_setup.runAllImportStepsFromProfile('profile-iscorpio.zopelab.dove:dove')
 
     if REQUEST:
         REQUEST['RESPONSE'].redirect('%s/index_html' % dove.absolute_url(),

@@ -3,12 +3,15 @@
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     i18n_domain="iscorpio.zopelab">
 
+  <!-- the provides attribute will be used to identify the -->
+  <!-- profile type: BASE or EXTENSION. Its default value  -->
+  <!-- is BASE -->
   <genericsetup:registerProfile
       name="dove"
-      title="CMF Dove"
+      title="CMF Dove Base"
       directory="profiles/default"
       description="Profile for a default Dove."
-      provides="Products.GenericSetup.interfaces.EXTENSION"
+      provides="Products.GenericSetup.interfaces.BASE"
   />
 
   <utility factory=".nest.HiddenProducts"

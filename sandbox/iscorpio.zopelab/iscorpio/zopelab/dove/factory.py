@@ -31,8 +31,9 @@ def manage_addDove(self, id, title='', REQUEST=None):
     # add generic set up tool for dove.
     dove._setObject(_SETUP_TOOL_ID, SetupTool(_SETUP_TOOL_ID))
     setup_tool = getattr(dove, _SETUP_TOOL_ID)
-    #parent = aq_parent(aq_inner(self))
-    #parent.Plone.portal_setup.runAllImportStepsFromProfile('profile-iscorpio.zopelab.dove:dove')
+    # set up the baseline context for setup tool and import
+    # the dove gs profile.
+    setup_tool.setBaselineContext('profile-%s' % _DOVE_PROFILE_ID)
     setup_tool.runAllImportStepsFromProfile('profile-%s' % _DOVE_PROFILE_ID)
 
     if REQUEST:

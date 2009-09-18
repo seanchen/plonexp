@@ -16,6 +16,7 @@ from Products.PluggableAuthService.utils import classImplements
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
 from Products.PluggableAuthService.interfaces.plugins import IAuthenticationPlugin
 from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlugin
+from Products.PluggableAuthService.interfaces.plugins import IPropertiesPlugin
 from Products.PluggableAuthService.interfaces.plugins import IExtractionPlugin
 from Products.PluggableAuthService.interfaces.plugins import ICredentialsUpdatePlugin
 
@@ -78,7 +79,8 @@ class SquirrelPlugins(BasePlugin):
         login = credentials['login']
         password = credentials['password']
 
-        credit = app.UserAdmin.acl_users.users.authenticateCredentials(credentials)
+        credit = app.UserAdmin.acl_users.source_users.authenticateCredentials(credentials)
+
         return credit
 
     # IUserEnumerationPlugin
@@ -89,7 +91,7 @@ class SquirrelPlugins(BasePlugin):
         Return a list of valid users identified by this plugin.
         """
         app = self.getZopeApp()
-        return app.UserAdmin.acl_users.users.enumerateUsers(id, login, exact_match,
+        return app.UserAdmin.acl_users.source_users.enumerateUsers(id, login, exact_match,
                                                             sort_by, max_results)
 
     # IExtractionPlugin
@@ -99,7 +101,9 @@ class SquirrelPlugins(BasePlugin):
         forward to user admin to do the 
         """
         app = self.getZopeApp()
-        return app.UserAdmin.acl_users.credential_cookie_auth.extractCredentials(request)
+        credit = app.UserAdmin.acl_users.credentials_cookie_auth.extractCredentials(request)
+        self.log.debug('extract credentials: %s', credit)
+        return credit
 
     # ICredentialsUpdatePlugin
     security.declarePrivate('updateCredentials')
@@ -108,8 +112,17 @@ class SquirrelPlugins(BasePlugin):
         again forward to the useradmin
         """
         app = self.getZopeApp()
-        return app.UserAdmin.acl_users.credential_cookie_auth.updateCredentials(request, response,
-                                                                                login, new_password)
+        return app.UserAdmin.acl_users.credentials_cookie_auth.updateCredentials(request, response,
+                                                                 login, new_password)
+
+    # returns user properties for the given user.
+    security.declarePrivate('getPropertiesForUser')
+    def getPropertiesForUser(self, user, request=None):
+        """
+        get user properties from useradmin.
+        """
+        app = self.getZopeApp()
+        return app.UserAdmin.acl_users.mutable_properties.getPropertiesForUser(user, request)
 
     # return the zope root object.
     security.declarePrivate('getZopeApp')
@@ -120,7 +133,7 @@ class SquirrelPlugins(BasePlugin):
         """
         parent = aq_parent(aq_inner(self))
         while parent.__name__ != 'Zope':
-            self.log.info('Parent is ---- %s', parent.__name__)
+            self.log.debug('Parent is ---- %s', parent.__name__)
             parent = aq_parent(aq_inner(parent))
 
         return parent
@@ -130,6 +143,7 @@ classImplements(SquirrelPlugins,
                 IAuthenticationPlugin,
                 IUserEnumerationPlugin,
                 IExtractionPlugin,
-                ICredentialsUpdatePlugin)
+                ICredentialsUpdatePlugin,
+                IPropertiesPlugin)
 
 InitializeClass(SquirrelPlugins)

@@ -161,12 +161,12 @@ class PPMArtifact(XPPMBase, ATFolder, HistoryAwareMixin):
     def vocabulary_priorities(self):
         """ returns all priority options as a vocabulary.
         """
-        return DisplayList(self.getMetadataAsTupleList('priority'))
+        return DisplayList(self.getMetadataTupleList('priority'))
 
     def vocabulary_categories(self):
         """ return all category options as a vocabulary.
         """
-        return DisplayList(self.getMetadataAsTupleList('category'))
+        return DisplayList(self.getMetadataTupleList('category'))
 
     def vocabulary_artifactStatus(self):
         """ return all status options as a vocabulary.

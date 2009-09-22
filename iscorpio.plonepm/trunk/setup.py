@@ -25,6 +25,7 @@ setup(name='iscorpio.plonepm',
       zip_safe=False,
       install_requires=[
           'setuptools',
+          'Products.DataGridField',
           # -*- Extra requirements: -*-
       ],
       entry_points="""

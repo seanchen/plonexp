@@ -3,6 +3,7 @@
   <object name="navtree_properties" meta_type="Plone Property Sheet">
     <property name="metaTypesNotToList" type="lines" purge="False">
       <element value="PPMMetadata"/>
+      <element value="PPMResponse"/>
     </property>
   </object>
 </object>

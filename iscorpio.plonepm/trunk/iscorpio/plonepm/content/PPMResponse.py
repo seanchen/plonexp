@@ -2,8 +2,6 @@
 # PPMResponse.py
 
 __doc__ = """PPMResponse defines a """
-__author__ = 'iScorpio <iscorpio@users.sourceforge.net>'
-__docformat__ = 'plaintext'
 
 import logging
 from time import strftime
@@ -36,12 +34,16 @@ from Products.CMFCore.utils import getToolByName
 from iscorpio.plonepm.config import PROJECTNAME
 from iscorpio.plonepm.content.base import XPPMBase
 
+__author__ = 'Sean Chen'
+__email__ = 'chyxiang@gmail.com'
+__docformat__ = 'plaintext'
+
 # define a PPMProject as a folder in plone site.
 PPMResponseSchema = ATCTContent.schema.copy() + Schema((
 
         # artifact details
         TextField(
-            'xppm_text',
+            'text',
             searchable = True,
             required = True,
             default_output_type = 'text/x-html-safe',
@@ -50,21 +52,6 @@ PPMResponseSchema = ATCTContent.schema.copy() + Schema((
                 description = 'Details description for your response',
                 rows = 18,
                 ),
-            ),
-
-        # artifact status
-        StringField(
-              'xppm_response_status',
-              mutator = 'setXppm_response_status',
-              searchable = False,
-              required = True,
-              vocabulary = 'vocabulary_artifactStatus',
-              widget = SelectionWidget(
-                label = "Artifact Status",
-                description = "Select new status for this artifact",
-                format = 'select',
-                ),
-              default_method = 'getCurrentArtifactStatus',
             ),
 
         # artifact category
@@ -80,6 +67,23 @@ PPMResponseSchema = ATCTContent.schema.copy() + Schema((
                 format = 'select',
                 ),
               default_method = 'getCurrentArtifactCategory',
+              schemata = 'Metadata',
+            ),
+
+        # artifact status
+        StringField(
+              'xppm_response_status',
+              mutator = 'setXppm_response_status',
+              searchable = False,
+              required = False,
+              vocabulary = 'vocabulary_artifactStatus',
+              widget = SelectionWidget(
+                label = "Artifact Status",
+                description = "Select new status for this artifact",
+                format = 'select',
+                ),
+              default_method = 'getCurrentArtifactStatus',
+              schemata = 'Metadata',
             ),
 
         # the priority
@@ -87,7 +91,7 @@ PPMResponseSchema = ATCTContent.schema.copy() + Schema((
               'xppm_response_priority',
               mutator = 'setXppm_response_priority',
               searchable = False,
-              required = True,
+              required = False,
               vocabulary = 'vocabulary_priorities',
               widget = SelectionWidget(
                   label = 'Priority',
@@ -95,44 +99,48 @@ PPMResponseSchema = ATCTContent.schema.copy() + Schema((
                   format = 'select',
                 ),
               default_method = 'getCurrentArtifactPriority',
+              schemata = 'Metadata',
             ),
 
         # tags
         LinesField(
-            'xppm_response_tags',
-            mutator = 'setXppm_response_tags',
-            vocabulary = "vocabulary_artifactTag",
-            widget = InAndOutWidget(
-                label = u'Tags',
-                description = "Please select the tags for this artifact",
-                ),
-            default_method = 'getCurrentArtifactTags',
-            #schemata = 'Properties',
+              'xppm_response_tags',
+              mutator = 'setXppm_response_tags',
+              vocabulary = "vocabulary_artifactTag",
+              widget = InAndOutWidget(
+                  label = u'Tags',
+                  description = "Please select the tags for this artifact",
+                  ),
+              default_method = 'getCurrentArtifactTags',
+              #schemata = 'Properties',
+              schemata = 'Metadata',
             ),
 
         # story
         StringField(
-            'xppm_response_story',
-            mutator = 'setXppm_response_story',
-            searchable = False,
-            required = False,
-            vocabulary = 'vocabulary_allStoriesList',
-            widget = SelectionWidget(
-                  label = 'Story',
-                  description = 'stories related to this artifact',
-                  format = 'select',
-                ),
-            default_method = 'getCurrentArtifactStory',
+              'xppm_response_story',
+              mutator = 'setXppm_response_story',
+              searchable = False,
+              required = False,
+              vocabulary = 'vocabulary_allStoriesList',
+              widget = SelectionWidget(
+                    label = 'Story',
+                    description = 'stories related to this artifact',
+                    format = 'select',
+                  ),
+              default_method = 'getCurrentArtifactStory',
+              schemata = 'Metadata',
             ),
 
         # attachment
         FileField(
-            'xppm_response_attachment',
-            widget = FileWidget(
-                label = "Attachment",
-                description = "You may upload a file here:",
-                ),
-            storage = AttributeStorage(),
+              'xppm_response_attachment',
+              widget = FileWidget(
+                  label = "Attachment",
+                  description = "You may upload a file here:",
+                  ),
+              storage = AttributeStorage(),
+              schemata = 'Metadata',
             ),
         )
     )
@@ -140,6 +148,8 @@ PPMResponseSchema = ATCTContent.schema.copy() + Schema((
 finalizeATCTSchema(PPMResponseSchema)
 
 #PPMResponseSchema.changeSchemataForField('
+# set the description field invisible.
+PPMResponseSchema['description'].widget.visible = False
 
 class PPMResponse(XPPMBase, ATCTContent, HistoryAwareMixin):
 

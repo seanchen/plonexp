@@ -2,7 +2,6 @@
 # PPMFuncReq.py
 
 __doc__ = """PPMFuncReq defines a function requirment for a software project."""
-__author__ = 'iScorpio <iscorpio@users.sourceforge.net>'
 __docformat__ = 'plaintext'
 
 import logging
@@ -20,6 +19,9 @@ PPMFuncReqSchema = XPPMDocBase.schema.copy()
 # set up label and description for generic fields.
 PPMFuncReqSchema['xppm_text'].widget.label = "Function Requirement Text"
 PPMFuncReqSchema['xppm_text'].widget.description = "The details explain of the function requirement."
+
+__author__ = 'Sean Chen'
+__email__ = 'chyxiang@gmail.com'
 
 # the classes.
 class PPMFuncReq(XPPMBase, XPPMDocBase):

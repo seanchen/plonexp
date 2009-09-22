@@ -2,7 +2,6 @@
 # PPMProject.py
 
 __doc__ = """PPMProject defines a software project in Agile approach."""
-__author__ = 'iScorpio <iscorpio@users.sourceforge.net>'
 __docformat__ = 'plaintext'
 
 import logging
@@ -33,12 +32,15 @@ from Products.CMFCore.utils import getToolByName
 from iscorpio.plonepm.config import PROJECTNAME
 from iscorpio.plonepm.interfaces import IPPMProject
 
+__author__ = 'Sean Chen'
+__email__ = 'chyxiang@gmail.com'
+
 # define a PPMProject as a folder in plone site.
 PPMProjectSchema = ATFolderSchema.copy() + Schema((
 
         # detail description for this project, it allows rich text.
         TextField(
-            'xppm_text',
+            'text',
             searchable = True,
             required = True,
             default_output_type = 'text/x-html-safe',

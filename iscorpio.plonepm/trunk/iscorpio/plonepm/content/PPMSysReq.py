@@ -2,7 +2,6 @@
 # PPMSysReq.py
 
 __doc__ = """PPMSysReq defines a system requirment for a software project."""
-__author__ = 'iScorpio <iscorpio@users.sourceforge.net>'
 __docformat__ = 'plaintext'
 
 import logging
@@ -13,6 +12,9 @@ from Products.Archetypes.public import registerType
 from iscorpio.plonepm.config import PROJECTNAME
 from iscorpio.plonepm.content.base import XPPMBase
 from iscorpio.plonepm.content.base import XPPMDocBase
+
+__author__ = 'Sean Chen'
+__email__ = 'chyxiang@gmail.com'
 
 # the function requirement schema
 PPMSysReqSchema = XPPMDocBase.schema.copy()

@@ -2,7 +2,6 @@
 # base.py
 
 __doc__ = """ this package will contain the base classes for xpoint project management."""
-__author__ = 'iScorpio <iscorpio@users.sourceforge.net>'
 __docformat__ = 'plaintext'
 
 import logging
@@ -23,6 +22,9 @@ from Products.ATContentTypes.content.base import ATCTContent
 from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 
 from Products.CMFCore.permissions import View
+
+__author__ = 'Sean Chen'
+__email__ = 'chyxiang@gmail.com'
 
 # the base class
 class XPPMBase:
@@ -54,7 +56,7 @@ XPPMDocBaseSchema = ATCTContent.schema.copy() + Schema((
 
         # the details description for a use case.
         TextField(
-            'xppm_text',
+            'text',
             searchable = True,
             required = True,
             default_output_type = 'text/x-html-safe',

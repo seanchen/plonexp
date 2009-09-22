@@ -2,7 +2,6 @@
 # PPMFuncSpec.py
 
 __doc__ = """PPMFuncSpec defines a function specification document for a software project."""
-__author__ = 'iScorpio <iscorpio@users.sourceforge.net>'
 __docformat__ = 'plaintext'
 
 import logging
@@ -23,6 +22,9 @@ from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 # the configruation info for this project.
 from iscorpio.plonepm.config import PROJECTNAME
 from iscorpio.plonepm.content.base import XPPMBase
+
+__author__ = 'Sean Chen'
+__email__ = 'chyxiang@gmail.com'
 
 # define a PPMProject as a folder in plone site.
 PPMFuncSpecSchema = ATFolderSchema.copy() + Schema((

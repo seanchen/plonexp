@@ -20,6 +20,9 @@
     <!-- the elements here should be the object name. -->
     <element value="PPMStory"/>
     <element value="PPMFuncSpec"/>
+    <element value="PPMFuncReq"/>
+    <element value="PPMSysReq"/>
+    <element value="PPMUseCase"/>
     <element value="PPMMetadata"/>
     <element value="PPMArtifact"/>
     <element value="Topic"/>

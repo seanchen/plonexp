@@ -144,7 +144,7 @@ class PPMProject(ATFolder):
         """ Returns a display list for all stories, the format is like this:
         [id, id + title].
         """
-        retList = []
+        retList = [('','')]
         stories = self.getAllStories()
         for story in stories:
             retList.append((story.id, story.id + ' ' + story.Title))

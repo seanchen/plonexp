@@ -39,7 +39,7 @@ PPMArtifactSchema = ATFolderSchema.copy() + Schema((
 
         # artifact details
         TextField(
-            'xppm_text',
+            'text',
             searchable = True,
             required = True,
             default_output_type = 'text/x-html-safe',
@@ -47,20 +47,6 @@ PPMArtifactSchema = ATFolderSchema.copy() + Schema((
                 label = 'Details',
                 description = 'Details description for this artifact',
                 rows = 18,
-                ),
-            ),
-
-        # artifact status
-        StringField(
-              'xppm_artifact_status',
-              searchable = False,
-              required = True,
-              default = '',
-              vocabulary = 'vocabulary_artifactStatus',
-              widget = SelectionWidget(
-                label = "Artifact Status",
-                description = "Select status for this artifact",
-                format = 'select',
                 ),
             ),
 
@@ -78,11 +64,26 @@ PPMArtifactSchema = ATFolderSchema.copy() + Schema((
                 ),
             ),
 
+        # artifact status
+        StringField(
+              'xppm_artifact_status',
+              searchable = False,
+              required = False,
+              default = '',
+              vocabulary = 'vocabulary_artifactStatus',
+              widget = SelectionWidget(
+                label = "Artifact Status",
+                description = "Select status for this artifact",
+                format = 'select',
+                ),
+              schemata = 'Metadata',
+            ),
+
         # the priority
         StringField(
               'xppm_artifact_priority',
               searchable = False,
-              required = True,
+              required = False,
               default = '',
               vocabulary = 'vocabulary_priorities',
               widget = SelectionWidget(
@@ -90,40 +91,44 @@ PPMArtifactSchema = ATFolderSchema.copy() + Schema((
                   description = 'Set the priority for this artifact',
                   format = 'select',
                 ),
+              schemata = 'Metadata',
             ),
 
         # story
         StringField(
-            'xppm_artifact_story',
-            searchable = False,
-            required = False,
-            vocabulary = 'vocabulary_allStoriesList',
-            widget = SelectionWidget(
-                  label = 'Story',
-                  description = 'stories related to this artifact',
-                  format = 'select',
-                ),
+              'xppm_artifact_story',
+              searchable = False,
+              required = False,
+              vocabulary = 'vocabulary_allStoriesList',
+              widget = SelectionWidget(
+                    label = 'Story',
+                    description = 'stories related to this artifact',
+                    format = 'select',
+                  ),
+              schemata = 'Metadata',
             ),
 
         # tags
         LinesField(
-            'xppm_artifact_tags',
-            vocabulary = "vocabulary_artifactTag",
-            widget = InAndOutWidget(
-                label = u'Tags',
-                description = "Please select the tags for this artifact",
-                ),
-            #schemata = 'Properties',
+              'xppm_artifact_tags',
+              vocabulary = "vocabulary_artifactTag",
+              widget = InAndOutWidget(
+                  label = u'Tags',
+                  description = "Please select the tags for this artifact",
+                  ),
+              #schemata = 'Properties',
+              schemata = 'Metadata',
             ),
 
         # attachment
         FileField(
-            'xppm_artifact_attachment',
-            widget = FileWidget(
-                label = "Attachment",
-                description = "You may upload a file here:",
-                ),
-            storage = AttributeStorage(),
+              'xppm_artifact_attachment',
+              widget = FileWidget(
+                  label = "Attachment",
+                  description = "You may upload a file here:",
+                  ),
+              storage = AttributeStorage(),
+              schemata = 'Metadata',
             ),
         )
     )
@@ -161,7 +166,7 @@ class PPMArtifact(XPPMBase, ATFolder, HistoryAwareMixin):
     def vocabulary_priorities(self):
         """ returns all priority options as a vocabulary.
         """
-        return DisplayList(self.getMetadataTupleList('priority'))
+        return DisplayList([('','')] + self.getMetadataTupleList('priority'))
 
     def vocabulary_categories(self):
         """ return all category options as a vocabulary.
@@ -172,7 +177,7 @@ class PPMArtifact(XPPMBase, ATFolder, HistoryAwareMixin):
         """ return all status options as a vocabulary.
         """
         
-        return DisplayList(self.getMetadataTupleList('status'))
+        return DisplayList([('','')] + self.getMetadataTupleList('status'))
 
     def vocabulary_artifactTag(self):
         """ return all tags options as a vocabulary.

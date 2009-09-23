@@ -36,6 +36,20 @@
     </metal:field>
   </p>
 
+  <table class="listing" width="100%"><tbody>
+    <tr>
+      <th>Estimated hours / Progress Percentage</th>
+    </tr>
+    <tr>
+      <td tal:define="estimatedHours view/getProjectEstimatedHours;
+                      progressPercent view/getProjectProgressPercent;">
+        <tal:block
+           metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_progress_bar"
+        />
+      </td>
+    </tr>
+  </tbody></table>
+
   <div tal:replace="structure provider:plone.abovecontentbody" />
 
   <!-- project body for details description about project -->

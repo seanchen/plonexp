@@ -24,6 +24,20 @@
 
   <div tal:replace="structure provider:plone.belowcontenttitle" />
 
+  <table class="listing" width="100%"><tbody>
+    <tr>
+      <th>Estimated hours / Progress Percentage</th>
+    </tr>
+    <tr>
+      <td tal:define="estimatedHours here/getXppm_story_estimated_hours;
+                      progressPercent here/getXppm_story_progress_percent;">
+        <tal:block
+           metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_progress_bar"
+        />
+      </td>
+    </tr>
+  </tbody></table>
+
   <div tal:replace="structure provider:plone.abovecontentbody" />
 
   <!-- project body for details description about project -->
@@ -31,9 +45,6 @@
     project body
   </metal:field>
 
-  <h3>Story Text</h3>
-
-	<p tal:content="view/text">Story text</p>
   <!-- footer. -->
   <div metal:use-macro="here/document_relateditems/macros/relatedItems">
     Show related items if they exist

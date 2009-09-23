@@ -56,7 +56,7 @@ XPPMDocBaseSchema = ATCTContent.schema.copy() + Schema((
 
         # the details description for a use case.
         TextField(
-            'text',
+            'xppm_text',
             searchable = True,
             required = True,
             default_output_type = 'text/x-html-safe',

@@ -16,4 +16,13 @@
      permission="zope2.View"
   />
 
+  <!-- the default view for a story -->
+  <browser:page
+     name="story_view"
+     for="..interfaces.IPPMStory"
+     class=".story.StoryView"
+     template="story_view.pt"
+     permission="zope2.View"
+  />
+
 </configure>

@@ -48,7 +48,7 @@ PPMStorySchema = ATFolderSchema.copy() + Schema((
 
         # scope details
         TextField(
-            'text',
+            'xppm_text',
             searchable = True,
             required = True,
             default_output_type = 'text/x-html-safe',

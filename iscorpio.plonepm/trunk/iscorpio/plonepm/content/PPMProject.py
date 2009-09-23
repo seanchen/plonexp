@@ -40,7 +40,7 @@ PPMProjectSchema = ATFolderSchema.copy() + Schema((
 
         # detail description for this project, it allows rich text.
         TextField(
-            'text',
+            'xppm_text',
             searchable = True,
             required = True,
             default_output_type = 'text/x-html-safe',

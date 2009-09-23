@@ -1,10 +1,14 @@
 
 # __init__.py
 
-# the interfaces package
+"""
+the interfaces package
+"""
 
-__author__ = 'iScorpio <iscorpio@users.sourceforge.net>'
+__author__ = 'Sean Chen'
+__email__ = 'chyxiang@gmail.com'
 __docformat__ = 'plaintext'
 
 
 from project import IPPMProject
+from project import IPPMStory

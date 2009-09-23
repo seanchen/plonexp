@@ -6,6 +6,7 @@ __docformat__ = 'plaintext'
 
 import logging
 
+from zope.interface import implements
 from AccessControl import ClassSecurityInfo
 # from Archetypes
 from Products.Archetypes.public import Schema
@@ -39,6 +40,7 @@ from Products.CMFCore.utils import getToolByName
 # the configruation info for this project.
 from iscorpio.plonepm.config import PROJECTNAME
 from iscorpio.plonepm.content.base import XPPMBase
+from iscorpio.plonepm.interfaces import IPPMStory
 
 __author__ = 'Sean Chen'
 __email__ = 'chyxiang@gmail.com'
@@ -195,6 +197,7 @@ class PPMStory(XPPMBase, ATFolder, HistoryAwareMixin):
     __implements__ = (ATFolder.__implements__,
                       HistoryAwareMixin.__implements__,
                       )
+    implements(IPPMStory)
 
     # set up the prefix for auto generated ids.
     xppm_id_prefix = 'xps'

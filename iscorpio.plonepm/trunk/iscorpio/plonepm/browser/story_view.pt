@@ -10,15 +10,9 @@
 <metal:block fill-slot="css_slot">
   <LINK href="xpointtaskstyle.css" type="text/css" rel="stylesheet"
         tal:attributes="href string:xpprogressbar.css"/>
-  <LINK href="xpmenu.css" type="text/css" rel="stylesheet"
-        tal:attributes="href string:xpmenu.css"/>
-  <script type="text/javascript" src="xpmenu.js" 
-        tal:attributes="src string:xpmenu.js"></script>
 </metal:block>
 
-<metal:main fill-slot="main"
-            tal:define="byType python: 'stories';
-                        byType request/byType | byType;">
+<metal:main fill-slot="main">
 
   <div tal:replace="structure provider:plone.abovecontenttitle"/>
 
@@ -30,12 +24,6 @@
 
   <div tal:replace="structure provider:plone.belowcontenttitle" />
 
-  <p class="documentDescription">
-    <metal:field use-macro="python:here.widget('description', mode='view')">
-      Description
-    </metal:field>
-  </p>
-
   <div tal:replace="structure provider:plone.abovecontentbody" />
 
   <!-- project body for details description about project -->
@@ -43,19 +31,9 @@
     project body
   </metal:field>
 
-  <h3>Project Metadata</h3>
-  <dl tal:define="metadata view/getMetadata">
-    <tal:metadata repeat="meta metadata">
-      <dt>
-        <span tal:replace="meta/Title"/>
-      </dt>
-      <dd>
-        <span tal:replace="meta/Description"/> -
-        <span tal:replace="meta/getXppm_metadata_type"/>
-      </dd>
-    </tal:metadata>
-  </dl>
+  <h3>Story Text</h3>
 
+	<p tal:content="view/text">Story text</p>
   <!-- footer. -->
   <div metal:use-macro="here/document_relateditems/macros/relatedItems">
     Show related items if they exist

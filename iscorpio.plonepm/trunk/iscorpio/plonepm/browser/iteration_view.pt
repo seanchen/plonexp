@@ -12,9 +12,7 @@
         tal:attributes="href string:xpprogressbar.css"/>
 </metal:block>
 
-<metal:main fill-slot="main"
-            tal:define="byType python: 'stories';
-                        byType request/byType | byType;">
+<metal:main fill-slot="main">
 
   <div tal:replace="structure provider:plone.abovecontenttitle"/>
 
@@ -26,19 +24,13 @@
 
   <div tal:replace="structure provider:plone.belowcontenttitle" />
 
-  <p class="documentDescription">
-    <metal:field use-macro="python:here.widget('description', mode='view')">
-      Description
-    </metal:field>
-  </p>
-
   <table class="listing" width="100%"><tbody>
     <tr>
       <th>Estimated hours / Progress Percentage</th>
     </tr>
     <tr>
-      <td tal:define="estimatedHours view/getProjectEstimatedHours;
-                      progressPercent view/getProjectProgressPercent;">
+      <td tal:define="estimatedHours view/getIterationEstimatedHours;
+                      progressPercent view/getIterationProgressPercent;">
         <tal:block
            metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_progress_bar"
         />
@@ -52,19 +44,6 @@
   <metal:field use-macro="python: here.widget('xppm_text', mode='view')">
     project body
   </metal:field>
-
-  <h3>Project Metadata</h3>
-  <dl tal:define="metadata view/getMetadata">
-    <tal:metadata repeat="meta metadata">
-      <dt>
-        <span tal:replace="meta/Title"/>
-      </dt>
-      <dd>
-        <span tal:replace="meta/Description"/> -
-        <span tal:replace="meta/getXppm_metadata_type"/>
-      </dd>
-    </tal:metadata>
-  </dl>
 
   <!-- footer. -->
   <div metal:use-macro="here/document_relateditems/macros/relatedItems">

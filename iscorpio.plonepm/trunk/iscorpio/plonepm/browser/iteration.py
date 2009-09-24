@@ -37,6 +37,21 @@ class IterationView(BrowserView):
 
         return hours
 
+    # returns the whole estimated hour for this iteration.
+    def getIterationUsedHours(self):
+        """
+        returns the amount of hours estimated for this iteration.
+        """
+
+        context = aq_inner(self.context)
+        stories = context.getIterationStories()
+        hours = 0
+        for story in stories:
+            hours = hours + \
+                    story.getObject().xppm_story_used_hours
+
+        return hours
+
     # progress percent
     def getIterationProgressPercent(self):
         """
@@ -55,4 +70,3 @@ class IterationView(BrowserView):
             progressPercent = progress / len(stories)
 
         return progressPercent
-

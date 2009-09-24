@@ -84,58 +84,70 @@
   <!-- ==================================================================== -->
 
   <!-- ==================================================================== -->
-  <!-- macro for tasks list. -->
-  <!-- parm: tasksList -->
+  <!-- macro for stories list. -->
+  <!-- parm: storiesList, totalEstimatedHours, totalProgressPercent, -->
+  <!--       totalUsedHours -->
   <!-- ==================================================================== -->
-  <tal:block metal:define-macro="xpoint_tasks_list"
+  <tal:block metal:define-macro="xppm_stories_list"
              tal:define="Batch python: modules['Products.CMFPlone'].Batch;
                          b_size python: 10;
-                         tasks_b_start python: 0;
-                         tasks_b_start request/tasks_b_start | tasks_b_start;
-                         batch python: Batch(tasksList, b_size, int(tasks_b_start), orphan=2, b_start_str='tasks_b_start');">
+                         story_b_start python: 0;
+                         story_b_start request/story_b_start | story_b_start;
+                         batch python: Batch(storiesList, b_size, int(story_b_start), orphan=2, b_start_str='story_b_start');">
     <div metal:use-macro="here/batch_macros/macros/navigation" />
     <table class="listing" width="98%"><tbody>
       <tr>
-        <th>Task</th>
+        <th>Story</th>
         <th>Owners</th>
-        <th>90% Done On</th>
+        <th>Target Date</th>
+        <th width="458">Estimated Hours / Progress </th>
         <th>Used</th>
-        <th width="458">Estimated Hours / Progress Status</th>
       </tr>
-      <!-- one row for each task. -->
-      <tal:block tal:repeat="task python: batch">
-        <tr tal:define="oddrow repeat/task/odd;
-                        url task/getURL|task/absolute_url;
-                        task_type task/portal_type;
-                        task_typeinfo python: here.portal_types.getTypeInfo(task_type);
-                        icon python: portal_url + '/' + task_typeinfo.getIcon();
-                        task_date task/getXptask_completion_date;"
+      <!-- one row for each story. -->
+      <tal:block tal:repeat="story python: batch">
+        <tr tal:define="oddrow repeat/story/odd;
+                        story python: story.getObject();
+                        url story/getURL|story/absolute_url;
+                        story_type story/portal_type;
+                        story_typeinfo python: here.portal_types.getTypeInfo(story_type);
+                        icon python: portal_url + '/' + story_typeinfo.getIcon();
+                        story_date story/getXppm_completion_date;"
             tal:attributes="class python: test(oddrow, 'odd', 'even')">
           <td>
             <a href="#" tal:attributes="href url">
               <img src="#" height="16" width="16"
                    tal:attributes="src icon"/>&nbsp;
-              <span tal:content="task/Title"/>
+              <span tal:content="story/Title"/>
             </a>
           </td>
-          <td tal:define="membersList task/getXptask_owners">
+          <td tal:define="membersList story/getXppm_story_owners">
             <tal:block
                metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_developers_list"
             />
           </td>
-          <td tal:content="python: toLocalizedTime(task_date)">
+          <td tal:content="python: toLocalizedTime(story_date)">
           </td>
-          <td>
-            <span tal:content="task/getXptask_used_hours"/> hours
-          </td>
-          <td tal:define="estimatedHours task/getXptask_estimated_hours;
-                          progressPercent task/getXptask_progress_percent;">
+          <td tal:define="estimatedHours story/getXppm_story_estimated_hours;
+                          progressPercent story/getXppm_story_progress_percent;">
             <tal:block
                metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_progress_bar"
             />
           </td>
+          <td>
+            <span tal:content="story/getXppm_story_used_hours"/> hours
+          </td>
         </tr>
       </tal:block>
+      <tr>
+        <th align="right">Overall Progress:</th>
+        <th colspan="3" tal:define="estimatedHours totalEstimatedHours;
+                        progressPercent totalProgressPercent;">
+          <tal:block
+             metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_progress_bar"
+          />
+        </th>
+        <th><span tal:content="totalUsedHours"/> hours</th>
+      </tr>
     </tbody></table>
   </tal:block>
   <!-- ==================================================================== -->

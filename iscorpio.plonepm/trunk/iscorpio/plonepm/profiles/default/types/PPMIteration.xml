@@ -1,38 +1,25 @@
 <?xml version="1.0"?>
-<!-- the object name will show on the portal_types in ZMI. -->
-<object name="PPMProject"
+<object name="PPMIteration"
         meta_type="Factory-based Type Information with dynamic views"
         i18n:domain="plone"
         xmlns:i18n="http://xml.zope.org/namespaces/i18n">
-  <!-- the properties for this type. -->
-  <!-- the title will show on the new dropdown. -->
-  <property name="title" i18n:translate="">XP Project</property>
+  <property name="title" i18n:translate="">XP Iteration</property>
   <property name="description"
-            i18n:translate="">A eXtreme Programing Project.</property>
-  <property name="content_icon">XPProject_icon.gif</property>
-  <property name="content_meta_type">PPMProject</property>
+            i18n:translate="">An Iteration Plan.</property>
+  <property name="content_icon">xppm_iteration_icon.gif</property>
+  <property name="content_meta_type">PPMIteration</property>
   <property name="product">iscorpio.plonepm</property>
-  <property name="factory">addPPMProject</property>
-  <property name="immediate_view">project_view</property>
-  <property name="global_allow">True</property>
+  <property name="factory">addPPMIteration</property>
+  <property name="immediate_view">base_view</property>
+  <property name="global_allow">False</property>
   <property name="filter_content_types">True</property>
   <property name="allowed_content_types">
-    <!-- the elements here should be the object name. -->
-    <element value="PPMIteration"/>
-    <element value="PPMStory"/>
-    <element value="PPMFuncSpec"/>
-    <element value="PPMFuncReq"/>
-    <element value="PPMSysReq"/>
-    <element value="PPMUseCase"/>
-    <element value="PPMMetadata"/>
     <element value="PPMArtifact"/>
-    <element value="Topic"/>
   </property>
   <property name="allow_discussion">False</property>
-  <property name="default_view">project_view</property>
+  <property name="default_view">base_view</property>
   <property name="view_methods">
-    <element value="project_view"/>
-    <element value="folder_listing"/>
+    <element value="base_view"/>
   </property>
 
   <!-- alias -->

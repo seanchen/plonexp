@@ -149,9 +149,22 @@ class PPMProject(ATFolder):
         retList = [('','')]
         stories = self.getAllStories()
         for story in stories:
-            retList.append((story.id, story.id + ' ' + story.Title))
+            retList.append((story.id, story.id + ' - ' + story.Title))
 
         self.log.debug('we got %s stories', len(retList))
+        return DisplayList(retList)
+
+    security.declarePublic('vocabulary_iterations')
+    def vocabulary_iterations(self):
+        """
+        returns all iterations for this project as display list.
+        """
+        retList = []
+        iterations = self.xpCatalogSearch(portal_type='PPMIteration')
+        for iteration in iterations:
+            retList.append((iteration.id,
+                            iteration.id + ' - ' + iteration.Title))
+
         return DisplayList(retList)
 
     security.declarePublic('getProjectDevelopers')
@@ -161,14 +174,21 @@ class PPMProject(ATFolder):
         return self.getXppm_developers()
 
     security.declarePublic('getAllStories')
-    def getAllStories(self):
+    def getAllStories(self, iteration=None):
         """ Return all Stories in this project.
         """
-        return self.xpCatalogSearch(portal_type='PPMStory')
+
+        query = {}
+        query['portal_type'] = 'PPMStory'
+        if iteration:
+            query['getXppm_iteration'] = iteration
+
+        return self.xpCatalogSearch(query)
 
     security.declarePublic('getAllSysReqs')
     def getAllSysReqs(self):
-        """ Return all system requirement in this project.
+        """
+        Return all system requirement in this project.
         """
         return self.xpCatalogSearch(portal_type='PPMSysReq')
 
@@ -214,6 +234,7 @@ class PPMProject(ATFolder):
                              'text' : 'SearchableText',
                              'portal_type' : 'portal_type',
                              'metadata_type' : 'getXppm_metadata_type',
+                             'iteration' : 'getXppm_iteration',
                              }
 
         query = {}

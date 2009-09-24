@@ -25,4 +25,13 @@
      permission="zope2.View"
   />
 
+	<!-- default view for iteration -->
+	<browser:page
+     name="iteration_view"
+     for="..interfaces.IPPMIteration"
+     class=".iteration.IterationView"
+     template="iteration_view.pt"
+     permission="zope2.View"
+  />
+
 </configure>

@@ -9,8 +9,12 @@
   <index name="getXppm_metadata_type" meta_type="KeywordIndex">
     <indexed_attr value="getXppm_metadata_type"/>
   </index>
+  <index name="getXppm_iteration" meta_type="KeywordIndex">
+    <indexed_attr value="getXppm_iteration"/>
+  </index>
 
   <!-- metadata columns -->
   <column value="getXppm_status"/>
   <column value="getXppm_metadata_type"/>
+  <column value="getXppm_iteration"/>
 </object>

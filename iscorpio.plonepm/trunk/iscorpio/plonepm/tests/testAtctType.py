@@ -12,6 +12,7 @@ from Products.ATContentTypes.tests.test_atdocument import TestSiteATDocument
 
 from iscorpio.plonepm.content.PPMProject import PPMProject
 from iscorpio.plonepm.content.PPMMetadata import PPMMetadata
+from iscorpio.plonepm.content.PPMIteration import PPMIteration
 
 from iscorpio.plonepm.content.PPMArtifact import PPMArtifact
 from iscorpio.plonepm.content.PPMResponse import PPMResponse
@@ -49,6 +50,16 @@ class TestPPMMetadata(ATCTTypeTestCase):
     icon = 'xppm_metadata_icon.gif'
 
 tests.append(TestPPMMetadata)
+
+class TestPPMIteration(ATCTTypeTestCase):
+
+    klass = PPMIteration
+    portal_type = 'PPMIteration'
+    title = 'XP Iteration'
+    meta_type = 'PPMIteration'
+    icon = 'xppm_iteration_icon.gif'
+
+tests.append(TestPPMIteration)
 
 class TestPPMFuncSpec(TestSiteATFolder):
 

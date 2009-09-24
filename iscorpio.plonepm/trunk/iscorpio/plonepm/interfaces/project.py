@@ -11,6 +11,7 @@ __author__ = "Sean Chen"
 __email__ = 'chyxiang@gmail.com'
 __docformat__ = 'plaintext'
 
+# the project interface
 class IPPMProject(Interface):
     """
     defines the interfaces for a project. empty for now.
@@ -19,6 +20,7 @@ class IPPMProject(Interface):
 
 # end of class IPPMProject
 
+# the story interface
 class IPPMStory(Interface):
     """
     the interface for a story.
@@ -26,3 +28,12 @@ class IPPMStory(Interface):
     pass
 
 # end of class IPPMStory
+
+# the interation interface
+class IPPMIteration(Interface):
+    """
+    the marker interface for a interation.
+    """
+    pass
+
+# end of class IPPMIteration

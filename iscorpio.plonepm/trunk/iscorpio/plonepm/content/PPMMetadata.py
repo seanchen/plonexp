@@ -2,7 +2,6 @@
 # PPMResponse.py
 
 __doc__ = """PPMResponse defines a """
-__author__ = 'iScorpio <iscorpio@users.sourceforge.net>'
 __docformat__ = 'plaintext'
 
 import logging
@@ -25,6 +24,9 @@ from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 from iscorpio.plonepm.config import PROJECTNAME
 from iscorpio.plonepm.content.base import XPPMBase
 
+__author__ = 'Sean Chen'
+__email__ = 'chyxiang@gmail.com'
+
 # define the schema for the metadata.
 PPMMetadataSchema = ATCTContent.schema.copy() + Schema((
 
@@ -44,8 +46,8 @@ PPMMetadataSchema = ATCTContent.schema.copy() + Schema((
 finalizeATCTSchema(PPMMetadataSchema)
 
 class PPMMetadata(XPPMBase, ATCTContent, HistoryAwareMixin):
-
-    """ a metadata for PPM Project.
+    """
+    a metadata for PPM Project.
     """
 
     schema = PPMMetadataSchema

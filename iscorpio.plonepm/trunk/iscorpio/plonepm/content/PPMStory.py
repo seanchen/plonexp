@@ -23,6 +23,7 @@ from Products.Archetypes.public import DateTimeField
 from Products.Archetypes.public import CalendarWidget
 from Products.Archetypes.public import IntegerField
 from Products.Archetypes.public import IntegerWidget
+from Products.Archetypes.public import StringField
 from Products.Archetypes.public import registerType
 # from ATContentTypes
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
@@ -61,7 +62,20 @@ PPMStorySchema = ATFolderSchema.copy() + Schema((
                 ),
             ),
 
-        # 
+        # iteration plan
+        StringField(
+            'xppm_iteration',
+            searchable = False,
+            required = True,
+            vocabulary = 'vocabulary_iterations',
+            widget = SelectionWidget(
+                label = u'Iteration Plan',
+                description = u'Select the iteration plan for this story',
+                format = 'select',
+                ),
+            ),
+
+        # time tracking for this story.
         DataGridField(
             'xppm_time_tracking',
             searchable = False,
@@ -91,7 +105,7 @@ PPMStorySchema = ATFolderSchema.copy() + Schema((
             widget = CalendarWidget(
                 label = '90% Completion Deadline',
                 description = 'Specify the date when this task should be completed at less 90%',
-                starting_year = 2007,
+                #starting_year = 2007,
                 show_hm = False,
                 ),
             schemata = 'Manage',
@@ -145,8 +159,8 @@ PPMStorySchema = ATFolderSchema.copy() + Schema((
             required = False,
             vocabulary = 'vocabulary_developers',
             widget = InAndOutWidget(
-                label = 'Task Owner(s)',
-                descrpiton = "Please select owners for this task",
+                label = 'Story Owner(s)',
+                descrpiton = "Please select owners for this story",
                 ),
             schemata = 'Manage',
             ),

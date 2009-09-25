@@ -173,6 +173,15 @@ class PPMProject(ATFolder):
         """
         return self.getXppm_developers()
 
+    security.declarePublic('getAllIterations')
+    def getAllIterations(self):
+        """
+        returns all iterations in this project.
+        """
+        return self.contentValues(
+            filter = {'portal_type' : ['PPMIteration']}
+            )
+
     security.declarePublic('getAllStories')
     def getAllStories(self, iteration=None):
         """ Return all Stories in this project.

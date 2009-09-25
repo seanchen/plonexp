@@ -44,38 +44,47 @@
   <!-- macro for stories list. -->
   <!-- param: storiesList -->
   <!-- ==================================================================== -->
-  <tal:black metal:define-macro="xpoint_stories_list"
+  <tal:black metal:define-macro="xppm_iterations_list"
              tal:define="Batch python: modules['Products.CMFPlone'].Batch;
                          b_size python: 10;
                          b_start python: 0;
                          b_start request/b_start | b_start;
-                         batch python: Batch(storiesList, b_size, int(b_start), orphan=2);">
+                         batch python: Batch(iterationsList, b_size, int(b_start), orphan=2);">
     <div metal:use-macro="here/batch_macros/macros/navigation" />
     <table class="listing" width="98%"><tbody>
       <tr>
-        <th>Story</th>
-        <th width="458">Estimated hours / Progress Status</th>
+        <th>Iteration</th>
+        <th>Target Date</th>
+        <th width="268">Estimated hours / Progress Status</th>
+        <th>Used</th>
       </tr>
       <!-- one row for each story. -->
-      <tal:block tal:repeat="story python: batch">
-        <tr tal:define="oddrow repeat/story/odd;
-                        url story/getURL|story/absolute_url;
-                        story_type story/portal_type;
-                        story_typeinfo python: here.portal_types.getTypeInfo(story_type);
-                        icon python: portal_url + '/' + story_typeinfo.getIcon();"
+      <tal:block tal:repeat="iteration python: batch">
+        <tr tal:define="oddrow repeat/iteration/odd;
+                        obj python: iteration['obj'];
+                        url obj/getURL|obj/absolute_url;
+                        iteration_type obj/portal_type;
+                        iteration_typeinfo python: here.portal_types.getTypeInfo(iteration_type);
+                        icon python: portal_url + '/' + iteration_typeinfo.getIcon();
+                        iteration_date obj/getXppm_completion_date;"
             tal:attributes="class python: test(oddrow, 'odd', 'even')">
           <td>
             <a href="#" tal:attributes="href url">
-              <img src="#" height="16" width="16"
+               <img src="#" height="16" width="16"
                    tal:attributes="src icon"/>&nbsp;
-              <span tal:content="story/Title"/>
+              <span tal:content="obj/Title"/>
             </a>
           </td>
-          <td tal:define="estimatedHours python: story.getStoryEstimatedHours();
-                          progressPercent python: story.getStoryProgressPercent();">
+          <td align="center" tal:content="python: toLocalizedTime(iteration_date)">
+          </td>
+          <td tal:define="estimatedHours iteration/estimatedHours;
+                          progressPercent iteration/progressPercent;">
             <tal:block
                metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_progress_bar"
             />
+          </td>
+          <td align="center">
+            <span tal:content="iteration/usedHours" /> hours
           </td>
         </tr>
       </tal:block>
@@ -100,7 +109,7 @@
         <th>Story</th>
         <th>Owners</th>
         <th>Target Date</th>
-        <th width="458">Estimated Hours / Progress </th>
+        <th width="268">Estimated Hours / Progress </th>
         <th>Used</th>
       </tr>
       <!-- one row for each story. -->
@@ -125,7 +134,7 @@
                metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_developers_list"
             />
           </td>
-          <td tal:content="python: toLocalizedTime(story_date)">
+          <td align="center" tal:content="python: toLocalizedTime(story_date)">
           </td>
           <td tal:define="estimatedHours story/getXppm_story_estimated_hours;
                           progressPercent story/getXppm_story_progress_percent;">
@@ -133,7 +142,7 @@
                metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_progress_bar"
             />
           </td>
-          <td>
+          <td align="center">
             <span tal:content="story/getXppm_story_used_hours"/> hours
           </td>
         </tr>

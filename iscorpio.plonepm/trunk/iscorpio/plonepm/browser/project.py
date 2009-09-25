@@ -62,3 +62,40 @@ class ProjectView(BrowserView):
             progressPercent = progress / len(stories)
 
         return progressPercent
+
+    # preparing the iteration plan data for this view.
+    def getIterationData(self):
+        """
+        returns a list of interation data for the view.
+        """
+
+        context = aq_inner(self.context)
+        iterations = context.getAllIterations()
+        iterData = []
+        for iteration in iterations:
+            anIter = {}
+            anIter['obj'] = iteration
+            # stories for this iteration
+            stories = iteration.getIterationStories()
+            hours = 0
+            used = 0
+            progress = 0
+            for story in stories:
+                # estimated hours.
+                hours = hours + \
+                        story.getObject().xppm_story_estimated_hours
+                used = used + \
+                       story.getObject().xppm_story_used_hours
+                progress = progress + \
+                           story.getObject().xppm_story_progress_percent
+
+            anIter['estimatedHours'] = hours
+            anIter['usedHours'] = used
+            if len(stories) > 0:
+                anIter['progressPercent'] = progress / len(stories)
+            else:
+                anIter['progressPercent'] = 0
+
+            iterData.append(anIter)
+
+        return iterData

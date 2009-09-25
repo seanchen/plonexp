@@ -12,9 +12,7 @@
         tal:attributes="href string:xpprogressbar.css"/>
 </metal:block>
 
-<metal:main fill-slot="main"
-            tal:define="byType python: 'stories';
-                        byType request/byType | byType;">
+<metal:main fill-slot="main">
 
   <div tal:replace="structure provider:plone.abovecontenttitle"/>
 
@@ -32,20 +30,6 @@
     </metal:field>
   </p>
 
-  <table class="listing" width="100%"><tbody>
-    <tr>
-      <th>Estimated hours / Progress Percentage</th>
-    </tr>
-    <tr>
-      <td tal:define="estimatedHours view/getProjectEstimatedHours;
-                      progressPercent view/getProjectProgressPercent;">
-        <tal:block
-           metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_progress_bar"
-        />
-      </td>
-    </tr>
-  </tbody></table>
-
   <div tal:replace="structure provider:plone.abovecontentbody" />
 
   <!-- project body for details description about project -->
@@ -53,6 +37,17 @@
     project body
   </metal:field>
 
+  <!-- all interation plan. -->
+  <tal:block tal:define="iterationsList view/getIterationData;">
+    <div tal:condition="iterationsList">
+      <h2>Iteration Plan</h2>
+      <tal:block
+         metal:use-macro="here/xpointprojectmanagement_templates/macros/xppm_iterations_list"
+      />
+    </div>
+  </tal:block>
+
+  
   <h3>Project Metadata</h3>
   <dl tal:define="metadata view/getMetadata">
     <tal:metadata repeat="meta metadata">

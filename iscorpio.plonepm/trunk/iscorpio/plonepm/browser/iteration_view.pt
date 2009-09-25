@@ -31,7 +31,7 @@
     project body
   </metal:field>
 
-  <!-- all tasks list. -->
+  <!-- all stories list. -->
   <tal:block tal:define="storiesList python: here.getIterationStories();
                          totalEstimatedHours view/getIterationEstimatedHours;
                          totalProgressPercent view/getIterationProgressPercent;

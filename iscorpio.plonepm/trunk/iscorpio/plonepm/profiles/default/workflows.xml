@@ -11,6 +11,9 @@
     <type type_id="PPMStory">
       <bound-workflow workflow_id="plone_workflow"/>
     </type>
+    <type type_id="PPMIteration">
+      <bound-workflow workflow_id="plone_workflow"/>
+    </type>
     <type type_id="PPMFuncSpec">
       <bound-workflow workflow_id="plone_workflow"/>
     </type>

@@ -3,6 +3,7 @@
   <factorytypes>
     <type portal_type="PPMProject"/>
     <type portal_type="PPMMetadata"/>
+    <type portal_type="PPMIteration"/>
     <type portal_type="PPMStory"/>
     <type portal_type="PPMFuncSpec"/>
     <type portal_type="PPMFuncReq"/>

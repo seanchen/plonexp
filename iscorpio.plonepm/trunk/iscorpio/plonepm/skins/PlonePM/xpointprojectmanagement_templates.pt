@@ -149,7 +149,8 @@
       </tal:block>
       <tr>
         <th align="right">Overall Progress:</th>
-        <th colspan="3" tal:define="estimatedHours totalEstimatedHours;
+        <th colspan="3" align="left"
+            tal:define="estimatedHours totalEstimatedHours;
                         progressPercent totalProgressPercent;">
           <tal:block
              metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_progress_bar"

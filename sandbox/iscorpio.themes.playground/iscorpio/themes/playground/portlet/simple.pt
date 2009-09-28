@@ -1,0 +1,34 @@
+<dl class="portlet simplePortlet"
+    i18n:domain="plone">
+
+  <dt class="portletHeader">
+    <span class="portletTopLeft"></span>
+    Simple Header
+    <span class="portletTopRight"></span>
+  </dt>
+
+  <tal:items tal:define="plone_view context/@@plone;
+                         time view/time;
+                         toLocalizedTime nocall:plone_view/toLocalizedTime;"
+             tal:repeat="obj view/words">
+
+    <dd class="portletItem"
+        tal:define="oddrow repeat/obj/odd;"
+        tal:attributes="class python:oddrow and  'portletItem even' or 'portletItem odd'">
+
+      <tal:title content="obj">
+        Title
+      </tal:title>
+      <span class="portletItemDetails"
+            tal:content="python:toLocalizedTime(time)"
+      >May 5</span>
+    </dd>
+  </tal:items>
+
+  <dd class="portletFooter">
+    Simple Footer
+    <span class="portletBottomLeft"></span>
+    <span class="portletBottomRight"></span>
+  </dd>
+
+</dl>

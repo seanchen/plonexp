@@ -76,26 +76,26 @@ PPMStorySchema = ATFolderSchema.copy() + Schema((
             ),
 
         # time tracking for this story.
-        DataGridField(
-            'xppm_time_tracking',
-            searchable = False,
-            required = False,
-            columns = ('date', 'desc', 'hours'),
-            allow_empty_rows = False,
-            allow_insert = True,
-            allow_reorder = False,
-            allow_delete = False,
-            widget = DataGridWidget(
-                label = u'Story Time Tracking',
-                auto_insert = True,
-                description = "Tracking time spent on this story",
-                columns = {
-                    'date' : FixedColumn("Date"),
-                    'desc' : Column("Description"),
-                    'hours' : Column("Hours")
-                    },
-                ),
-            ),
+#         DataGridField(
+#             'xppm_time_tracking',
+#             searchable = False,
+#             required = False,
+#             columns = ('date', 'desc', 'hours'),
+#             allow_empty_rows = False,
+#             allow_insert = True,
+#             allow_reorder = False,
+#             allow_delete = False,
+#             widget = DataGridWidget(
+#                 label = u'Story Time Tracking',
+#                 auto_insert = True,
+#                 description = "Tracking time spent on this story",
+#                 columns = {
+#                     'date' : FixedColumn("Date"),
+#                     'desc' : Column("Description"),
+#                     'hours' : Column("Hours")
+#                     },
+#                 ),
+#             ),
 
         # planned completed date, 90% finish deadline
         DateTimeField(

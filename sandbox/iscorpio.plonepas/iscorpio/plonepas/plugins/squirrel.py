@@ -94,8 +94,8 @@ class SquirrelPlugins(BasePlugin):
         users = app.UserAdmin.acl_users.source_users.enumerateUsers(id, login, exact_match,
                                                                     sort_by, max_results, **kw)
         if (users is None) or (len(users) <= 0):
-            users = app.UserAdmin.acl_users.mutable_properties.enumerateUsers(id, login, exact_match,
-                                                                              sort_by, max_results, **kw)
+            users = app.UserAdmin.acl_users.mutable_properties.enumerateUsers(id, login, exact_match, **kw)
+
         return users
 
     # IExtractionPlugin

@@ -81,6 +81,9 @@ class SquirrelPlugins(BasePlugin):
 
         credit = app.UserAdmin.acl_users.source_users.authenticateCredentials(credentials)
 
+        if credit is None:
+            credit = app.UserAdmin.acl_users.ldap.authenticateCredentials(credentials)
+
         return credit
 
     # IUserEnumerationPlugin
@@ -90,13 +93,18 @@ class SquirrelPlugins(BasePlugin):
         """
         Return a list of valid users identified by this plugin.
         """
+
         app = self.getZopeApp()
         users = app.UserAdmin.acl_users.source_users.enumerateUsers(id, login, exact_match,
                                                                     sort_by, max_results, **kw)
-        if (users is None) or (len(users) <= 0):
-            users = app.UserAdmin.acl_users.mutable_properties.enumerateUsers(id, login, exact_match, **kw)
 
-        return users
+        if (users is None) or (len(users) <= 0):
+            users = app.UserAdmin.acl_users.mutable_properties.enumerateUsers(id, login, exact_match,
+                                                                              **kw)
+
+        ldapUsers = app.UserAdmin.acl_users.ldap.enumerateUsers(id, login, exact_match,
+                                                                sort_by, max_results, **kw)
+        return (users + ldapUsers)
 
     # IExtractionPlugin
     security.declarePrivate('extractCredentials')
@@ -126,7 +134,12 @@ class SquirrelPlugins(BasePlugin):
         get user properties from useradmin.
         """
         app = self.getZopeApp()
-        return app.UserAdmin.acl_users.mutable_properties.getPropertiesForUser(user, request)
+        properties = app.UserAdmin.acl_users.mutable_properties.getPropertiesForUser(user, request)
+
+        if properties.getProperty('fullname') == '':
+            properties = app.UserAdmin.acl_users.ldap.getPropertiesForUser(user, request)
+
+        return properties
 
     # return the zope root object.
     security.declarePrivate('getZopeApp')

@@ -1,6 +1,23 @@
 Changelog
 =========
 
+0.3 - Single Sign On with LDAP support
+--------------------------------------
+
+For this release we are tying to using LDAP server as the user account
+source for single sign on solution.  We will still leverage a Plone 
+site for the user account management.
+
+It depends on the following products:
+Products.LDAPUserFolder
+Products.LDAPMultiPlugins
+Products.PloneLDAP
+simplon.plone.ldap
+
+We need a bit patch for Products.PloneLDAP product, please check the 
+file sso.patch for details.
+
+
 0.2 - Single Sign On Solution
 -----------------------------
 
@@ -48,6 +65,3 @@ and password.
 
 Memos
 =====
-
-
-

@@ -91,8 +91,12 @@ class SquirrelPlugins(BasePlugin):
         Return a list of valid users identified by this plugin.
         """
         app = self.getZopeApp()
-        return app.UserAdmin.acl_users.source_users.enumerateUsers(id, login, exact_match,
-                                                            sort_by, max_results)
+        users = app.UserAdmin.acl_users.source_users.enumerateUsers(id, login, exact_match,
+                                                                    sort_by, max_results, **kw)
+        if (users is None) or (len(users) <= 0):
+            users = app.UserAdmin.acl_users.mutable_properties.enumerateUsers(id, login, exact_match,
+                                                                              sort_by, max_results, **kw)
+        return users
 
     # IExtractionPlugin
     security.declarePrivate('extractCredentials')

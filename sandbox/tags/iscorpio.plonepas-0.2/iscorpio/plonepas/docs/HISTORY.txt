@@ -1,0 +1,53 @@
+Changelog
+=========
+
+0.2 - Single Sign On Solution
+-----------------------------
+
+This solution will try to use a Plone site to provide centralized User 
+account management.
+
+User Admin Plone Site Configuration
+
+1. using Cookie Auth Helper from Product.PluggableAuthService instead of 
+Extended Cookie Auth Helper from Products.PlonePAS.
+
+2. deactivate all plugins for session
+
+New PAS plugins for each Plone site:
+
+1. forward the following plugins to UserAdmin:
+    - IPropertiesPlugin ==> mutable_properties
+    - IAuthenticationPlugin ==> source_users
+    - IUserEnumerationPlugin ==> source_users and mutable_properties
+    - ICredentialsUpdatePlugin ==> credentials_auth_helper
+    - IExtractionPlugin ==> credentials_auth_helper
+
+2. configure the Plone site acl_users to use the new plugins for those
+   services related to user.  Other services such as role and group should
+   remain the same as no touch!
+
+
+0.1 - Mini Single Sign On
+-------------------------
+
+* Using a CMF folder to privide centralized user account management for 
+as set of Plone sites.  Which only has 2 plugins: ZODB User Manager and
+Cookie Auth Helper.
+
+* Using credentials_cookie_auth for user authentication and credential 
+management.
+
+* Very easy Plone PAS plugin for each Plone site to forward authentication
+and credetial management services to the CMF folder.
+
+* ??? need manually create and configure plugins for acl_users.
+
+* ??? User account does NOT have any other properties other than user id 
+and password.
+
+Memos
+=====
+
+
+

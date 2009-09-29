@@ -1,0 +1,29 @@
+<dtml-var manage_page_header>
+
+<h2>Add an iScorpio PlonePAS SquirrelPlugins</h2>
+
+<p class="form-help"
+  Creating an iScorpio PlonePAS SquirrelPlugins
+</p>
+
+<form action="manage_addSquirrelPlugins" method="POST">
+  <table>
+    <tr>
+      <td class="form-label">Id</td>
+      <td><input type="text" name="id"></td>
+    </tr>
+    <tr>
+      <td class="form-label">Title</td>
+      <td><input type="text" name="title"></td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <div class="form-element">
+          <input type="submit" value="Add SquirrelPlugins"/>
+        </div>
+      </td>
+    </tr>
+  </table>
+</form>
+</body>
+</html>

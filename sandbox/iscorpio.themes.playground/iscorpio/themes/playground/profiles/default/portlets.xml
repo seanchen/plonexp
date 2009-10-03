@@ -9,4 +9,25 @@
     <for interface="plone.app.portlets.interfaces.IColumn" />
     <for interface="plone.app.portlets.interfaces.IDashboard" />
   </portlet>
+
+  <!-- asign this portlet to a forld called portlets -->
+  <assignment
+     manager="plone.rightcolumn"
+     category="context"
+     key="/Plone/portlets"
+     type="iscorpio.themes.playground.portlet.Simple"
+     name="Simple Portlet"
+     insert-before="*"
+  />
+
+  <!-- asign this portlet to a specific content type PPMProject -->
+  <assignment
+     manager="plone.leftcolumn"
+     category="content_type"
+     key="PPMProject"
+     type="iscorpio.themes.playground.portlet.Simple"
+     name="Simple Portlet"
+     insert-before="*"
+  />
+
 </portlets>

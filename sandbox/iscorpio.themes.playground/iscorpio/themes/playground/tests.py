@@ -30,13 +30,13 @@ class PlaygroundTestCase(ptc.PloneTestCase):
     base for test cases.
     """
 
-class TestSimplePortlet(PlaygroundTestCase):
-
     def afterSetUp(self):
         self.loginAsPortalOwner()
         self.portal.manage_addFolder('portlets', 'Testing Portlets')
         setup_tool = getattr(self.portal, 'portal_setup')
         setup_tool.runAllImportStepsFromProfile('profile-%s' % 'iscorpio.themes.playground:default')
+
+class TestSimplePortlet(PlaygroundTestCase):
 
     def testPortletTypeRegistered(self):
         portlet = getUtility(IPortletType, name='iscorpio.themes.playground.portlet.Simple')

@@ -11,14 +11,14 @@
   </portlet>
 
   <!-- asign this portlet to a forld called portlets -->
-  <assignment
-     manager="plone.rightcolumn"
-     category="context"
-     key="/Plone/portlets"
-     type="iscorpio.themes.playground.portlet.Simple"
-     name="Simple Portlet"
-     insert-before="*"
-  />
+  <!-- <assignment -->
+  <!--    manager="plone.rightcolumn" -->
+  <!--    category="context" -->
+  <!--    key="/Plone/portlets" -->
+  <!--    type="iscorpio.themes.playground.portlet.Simple" -->
+  <!--    name="Simple Portlet" -->
+  <!--    insert-before="*" -->
+  <!-- /> -->
 
   <!-- asign this portlet to a specific content type PPMProject -->
   <assignment

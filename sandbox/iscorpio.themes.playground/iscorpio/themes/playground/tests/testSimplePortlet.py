@@ -1,13 +1,11 @@
 
-# tests.py
+# testSimplePortlet.py
 
 """
-The unit test cases for iscorpio thems playground
+Here we testing the simple portlet.
 """
 
 import unittest
-
-from Products.PloneTestCase import PloneTestCase as ptc
 
 from zope.component import getUtility
 
@@ -20,21 +18,10 @@ from Products.GenericSetup.utils import _getDottedName
 import iscorpio.themes.playground
 from iscorpio.themes.playground.portlet import simple
 
+from base import PlaygroundTestCase
+
 __author__ = "Sean Chen"
 __email__ = "sean.chen@leocorn.com"
-
-ptc.setupPloneSite()
-
-class PlaygroundTestCase(ptc.PloneTestCase):
-    """
-    base for test cases.
-    """
-
-    def afterSetUp(self):
-        self.loginAsPortalOwner()
-        self.portal.manage_addFolder('portlets', 'Testing Portlets')
-        setup_tool = getattr(self.portal, 'portal_setup')
-        setup_tool.runAllImportStepsFromProfile('profile-%s' % 'iscorpio.themes.playground:default')
 
 class TestSimplePortlet(PlaygroundTestCase):
 

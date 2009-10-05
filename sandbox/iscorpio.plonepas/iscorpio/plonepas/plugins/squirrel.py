@@ -148,12 +148,7 @@ class SquirrelPlugins(BasePlugin):
         returns the root Zope object, which should be the zope application
         server.
         """
-        parent = aq_parent(aq_inner(self))
-        while parent.__name__ != 'Zope':
-            self.log.debug('Parent is ---- %s', parent.__name__)
-            parent = aq_parent(aq_inner(parent))
-
-        return parent
+        return self.getPhysicalRoot()
 
 # implements plugins.
 classImplements(SquirrelPlugins,

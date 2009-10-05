@@ -14,6 +14,8 @@ from zope.app.component.hooks import setHooks, setSite
 from Testing import ZopeTestCase as ztc
 
 from plone.portlets.interfaces import IPortletType
+from plone.portlets.interfaces import IPortletAssignment
+from plone.portlets.interfaces import IPortletDataProvider
 
 from Products.GenericSetup.utils import _getDottedName
 from Products.Five import zcml
@@ -24,19 +26,20 @@ from Products.PloneTestCase.layer import PloneSite
 from Products.PloneTestCase.layer import onsetup
 
 import iscorpio.themes.playground
+from iscorpio.themes.playground.portlet import simple
 
 __author__ = "Sean Chen"
 __email__ = "sean.chen@leocorn.com"
-
-ptc.setupPloneSite(extension_profiles=['iscorpio.themes.playground:default'])
 
 @onsetup
 def setup_product():
 
     fiveconfigure.debug_mode = True
-    zcml.load_config('configures.zcml', iscorpio.themes.playground)
-    fiveconfigure.debug_mode = True
-    ztc.installProduct('iscorpio.themes.playground')
+    zcml.load_config('configure.zcml', iscorpio.themes.playground)
+
+setup_product()
+#ptc.setupPloneSite(extension_profiles=['iscorpio.themes.playground:default'])
+ptc.setupPloneSite()
 
 class PlaygroundTestCase(ptc.PloneTestCase):
     """
@@ -48,6 +51,10 @@ class TestSimplePortlet(PlaygroundTestCase):
     def afterSetUp(self):
         setHooks()
         setSite(self.portal)
+        self.loginAsPortalOwner()
+        self.portal.manage_addFolder('portlets', 'Testing Portlets')
+        setup_tool = getattr(self.portal, 'portal_setup')
+        setup_tool.runAllImportStepsFromProfile('profile-%s' % 'iscorpio.themes.playground:default')
 
     def testPortletTypeRegistered(self):
         portlet = getUtility(IPortletType, name='iscorpio.themes.playground.portlet.Simple')
@@ -60,6 +67,11 @@ class TestSimplePortlet(PlaygroundTestCase):
         self.assertEquals(['plone.app.portlets.interfaces.IColumn',
                            'plone.app.portlets.interfaces.IDashboard'],
                           registered_interfaces)
+
+    def testInterfaces(self):
+        portlet = simple.SimpleAssignment()
+        self.failUnless(IPortletAssignment.providedBy(portlet))
+        self.failUnless(IPortletDataProvider.providedBy(portlet))
 
 def test_suite():
 

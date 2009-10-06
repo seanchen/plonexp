@@ -57,6 +57,35 @@ class SquirrelTestCase(IscorpioPASTestCase):
         found = plugins._getPlugins(ICredentialsUpdatePlugin)
         self.assertTrue('squirrel' in found)
 
+    # test the profile import.
+    def testImportProfile(self):
+
+        setup_tool = getattr(self.portal, 'portal_setup')
+        setup_tool.runAllImportStepsFromProfile('profile-%s' % \
+                                                'iscorpio.plonepas:default')
+
+        # make sure it is installed.
+        self.assertEquals(self.acl_users.\
+                          objectIds(['iScorpio PlonePAS Squirrel Plugins']),
+                          ['squirrel'])
+
+        plugins = self.acl_users.plugins
+        # make sure the plugins are activated.
+        found = plugins._getPlugins(IAuthenticationPlugin)
+        self.assertTrue('squirrel' in found)
+
+        found = plugins._getPlugins(IUserEnumerationPlugin)
+        self.assertTrue('squirrel' in found)
+
+        found = plugins._getPlugins(IPropertiesPlugin)
+        self.assertTrue('squirrel' in found)
+
+        found = plugins._getPlugins(IExtractionPlugin)
+        self.assertTrue('squirrel' in found)
+
+        found = plugins._getPlugins(ICredentialsUpdatePlugin)
+        self.assertTrue('squirrel' in found)
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(SquirrelTestCase))

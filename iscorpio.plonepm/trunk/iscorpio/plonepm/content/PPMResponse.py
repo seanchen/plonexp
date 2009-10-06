@@ -177,23 +177,30 @@ class PPMResponse(XPPMBase, ATCTContent, HistoryAwareMixin):
 
     security.declareProtected(permissions.View, 'getCurrentArtifactStory')
     def getCurrentArtifactStory(self):
-        return self.aq_inner.aq_parent.getXppm_artifact_story()
+        if self.aq_inner.aq_parent.portal_type == 'PPMArtifact':
+            return self.aq_inner.aq_parent.getXppm_artifact_story()
 
     security.declareProtected(permissions.View, 'getCurrentArtifactPriority')
     def getCurrentArtifactPriority(self):
-        return self.aq_inner.aq_parent.getXppm_artifact_priority()
+        if self.aq_inner.aq_parent.portal_type == 'PPMArtifact':
+            return self.aq_inner.aq_parent.getXppm_artifact_priority()
 
     security.declareProtected(permissions.View, 'getCurrentArtifactCategory')
     def getCurrentArtifactCategory(self):
-        return self.aq_inner.aq_parent.getXppm_artifact_category()
+        if self.aq_inner.aq_parent.portal_type == 'PPMArtifact':
+            return self.aq_inner.aq_parent.getXppm_artifact_category()
 
     security.declareProtected(permissions.View, 'getCurrentArtifactStatus')
     def getCurrentArtifactStatus(self):
-        return self.aq_inner.aq_parent.getXppm_artifact_status()
+        if self.aq_inner.aq_parent.portal_type == 'PPMArtifact':
+            return self.aq_inner.aq_parent.getXppm_artifact_status()
 
     security.declareProtected(permissions.View, 'getCurrentArtifactTags')
     def getCurrentArtifactTags(self):
-        return self.aq_inner.aq_parent.getXppm_artifact_tags()
+        if self.aq_inner.aq_parent.portal_type == 'PPMArtifact':
+            return self.aq_inner.aq_parent.getXppm_artifact_tags()
+        else:
+            return []
 
     # ==================
     # when we save a response, we need update the parent artifact with

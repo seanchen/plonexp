@@ -127,15 +127,15 @@ class TestPPMArtifact(TestSiteATFolder):
 
 tests.append(TestPPMArtifact)
 
-#class TestPPMResponse(ATCTTypeTestCase):
-#
-#    klass = PPMResponse
-#    portal_type = 'PPMResponse'
-#    title = 'XP Response'
-#    meta_type = 'PPMResponse'
-#    icon = 'xppm_response_icon.gif'
-#
-#tests.append(TestPPMResponse)
+class TestPPMResponse(ATCTTypeTestCase):
+
+    klass = PPMResponse
+    portal_type = 'PPMResponse'
+    title = 'XP Response'
+    meta_type = 'PPMResponse'
+    icon = 'xppm_response_icon.gif'
+
+tests.append(TestPPMResponse)
 
 # making test suite.
 def test_suite():

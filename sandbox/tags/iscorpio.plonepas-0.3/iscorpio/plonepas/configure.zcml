@@ -1,0 +1,17 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:five="http://namespaces.zope.org/five"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="iscorpio.plonepas">
+
+  <five:registerPackage package="." initialize=".initialize" />
+
+  <genericsetup:registerProfile
+     name="default"
+     title="iScorpio PlonePAS Plugins"
+     directory="profiles/default"
+     description="Extenstion profiles for iscorpio PlonePAS setup."
+     provides="Products.GenericSetup.interfaces.EXTENSION"
+  />
+
+</configure>

@@ -1,0 +1,102 @@
+Index: Products/PloneLDAP/mixins/userprops.py
+===================================================================
+--- Products/PloneLDAP/mixins/userprops.py	(revision 98466)
++++ Products/PloneLDAP/mixins/userprops.py	(working copy)
+@@ -12,7 +12,7 @@
+     def getPropertiesForUser(self, user, request=None):
+         """ Fullfill PropertiesPlugin requirements """
+         try:
+-            return LDAPPropertySheet(self.id, user)
++            return LDAPPropertySheet(self.id, self.acl_users, user)
+         except KeyError:
+             return None
+ 
+Index: Products/PloneLDAP/property.py
+===================================================================
+--- Products/PloneLDAP/property.py	(revision 98466)
++++ Products/PloneLDAP/property.py	(working copy)
+@@ -6,10 +6,11 @@
+ 
+ 
+ class LDAPPropertySheet(UserPropertySheet):
+-    def __init__(self, id, user):
++    def __init__(self, id, acl_users, user):
+         self.id=id
++        self.acl_users = acl_users
+ 
+-        acl = self._getLDAPUserFolder(user)
++        acl = self._getLDAPUserFolder()
+         self._ldapschema=[(x['ldap_name'], x['public_name'],
+                         x['multivalued'] and 'lines' or 'string') \
+                     for x in acl.getSchemaConfig().values() \
+@@ -26,7 +27,7 @@
+ 
+ 
+     def fetchLdapProperties(self, user):
+-        acl = self._getLDAPUserFolder(user)
++        acl = self._getLDAPUserFolder()
+         ldap_user = acl.getUserById(user.getId())
+         properties={}
+ 
+@@ -47,7 +48,7 @@
+ 
+ 
+     def canWriteProperty(self, user, id):
+-        acl = self._getLDAPUserFolder(user)
++        acl = self._getLDAPUserFolder()
+         return not acl.read_only
+ 
+ 
+@@ -56,7 +57,7 @@
+ 
+ 
+     def setProperties(self, user, mapping):
+-        acl = self._getLDAPUserFolder(user)
++        acl = self._getLDAPUserFolder()
+         ldap_user = acl.getUserById(user.getId())
+ 
+         schema=dict([(x[1], (x[0], x[2])) for x in self._ldapschema])
+@@ -83,13 +84,13 @@
+         self._invalidateCache(user)
+ 
+ 
+-    def _getLDAPUserFolder(self, user):
++    def _getLDAPUserFolder(self):
+         """ Safely retrieve a (LDAP)UserFolder to work with """
+-        return getattr(user.acl_users, self.id)._getLDAPUserFolder()
++        return getattr(self.acl_users, self.id)._getLDAPUserFolder()
+ 
+ 
+-    def getLDAPMultiPlugin(self, user):
+-        return aq_inner(getattr(user.acl_users, self.id))
++    def getLDAPMultiPlugin(self):
++        return aq_inner(getattr(self.acl_users, self.id))
+ 
+ 
+     def _getUserPropertyCacheKey(self, user):
+@@ -105,14 +106,14 @@
+ 
+     def _invalidateCache(self, user):
+         view_name, keywords = self._getUserPropertyCacheKey(user)
+-        ldapmp=self.getLDAPMultiPlugin(user)
++        ldapmp=self.getLDAPMultiPlugin()
+         ldapmp.ZCacheable_invalidate(view_name=view_name)
+ 
+ 
+     def _setCache(self, user, properties):
+         """Cache user properties"""
+         view_name, keywords = self._getUserPropertyCacheKey(user)
+-        ldapmp=self.getLDAPMultiPlugin(user)
++        ldapmp=self.getLDAPMultiPlugin()
+         ldapmp.ZCacheable_set(properties, view_name=view_name, keywords=keywords)
+ 
+ 
+@@ -123,7 +124,7 @@
+         has no group with such id
+         """
+         view_name, keywords = self._getUserPropertyCacheKey(user)
+-        ldapmp=self.getLDAPMultiPlugin(user)
++        ldapmp=self.getLDAPMultiPlugin()
+         result = ldapmp.ZCacheable_get( view_name=view_name
+                                     , keywords=keywords
+                                     , default=default

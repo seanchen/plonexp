@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+
+<import-steps>
+  <import-step id="iscorpio.plonepas" version="20091005-01"
+               handler="iscorpio.plonepas.setuphandlers.setupIscorpioPAS"
+               title="iScorpio PlonePAS setup">
+    <dependency step="plonepas"/>
+    PlonePAS installation step.
+  </import-step>
+</import-steps>

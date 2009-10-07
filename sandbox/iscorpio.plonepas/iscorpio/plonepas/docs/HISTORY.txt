@@ -1,6 +1,13 @@
 Changelog
 =========
 
+0.4 - Easier to Use
+------------------
+
+Trying to make it easier to use ...
+
+
+
 0.3 - Single Sign On with LDAP support
 --------------------------------------
 

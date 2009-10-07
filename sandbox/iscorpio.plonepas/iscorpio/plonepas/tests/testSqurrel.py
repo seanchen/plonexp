@@ -73,18 +73,26 @@ class SquirrelTestCase(IscorpioPASTestCase):
         # make sure the plugins are activated.
         found = plugins._getPlugins(IAuthenticationPlugin)
         self.assertTrue('squirrel' in found)
+        self.assertFalse('session' in found)
+        self.assertFalse('source_users' in found)
 
         found = plugins._getPlugins(IUserEnumerationPlugin)
         self.assertTrue('squirrel' in found)
+        self.assertFalse('source_users' in found)
 
         found = plugins._getPlugins(IPropertiesPlugin)
         self.assertTrue('squirrel' in found)
+        self.assertFalse('mutable_properties' in found)
 
         found = plugins._getPlugins(IExtractionPlugin)
         self.assertTrue('squirrel' in found)
+        self.assertFalse('session' in found)
+        self.assertFalse('credentials_cookie_auth' in found)
+        self.assertFalse('credentials_basic_auth' in found)
 
         found = plugins._getPlugins(ICredentialsUpdatePlugin)
         self.assertTrue('squirrel' in found)
+        self.assertFalse('session' in found)
 
 def test_suite():
     suite = unittest.TestSuite()

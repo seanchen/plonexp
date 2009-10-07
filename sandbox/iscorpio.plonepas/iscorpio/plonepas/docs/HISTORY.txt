@@ -17,6 +17,10 @@ simplon.plone.ldap
 We need a bit patch for Products.PloneLDAP product, please check the 
 file sso.patch for details.
 
+We also added unit test cases and GenericSetup Profiles for this
+release.  Now the a setup handler will activate and deactivate plugins
+when we install this product.
+
 
 0.2 - Single Sign On Solution
 -----------------------------

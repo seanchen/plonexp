@@ -61,7 +61,9 @@ class SimpleRenderer(Renderer):
         this portlet is always available.
         """
 
-        return True
+        context = aq_inner(self.context)
+
+        return context.portal_type == 'News Item'
 
     def words(self):
 

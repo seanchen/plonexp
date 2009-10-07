@@ -1,6 +1,7 @@
 # testAtctType.py
 
-""" we will do the basic unit test for the new content types based on
+"""
+we will do the basic unit test for the new content types based on
 ATContentTypes.
 """
 
@@ -24,6 +25,9 @@ from iscorpio.plonepm.content.PPMUseCase import PPMUseCase
 from iscorpio.plonepm.content.PPMStory import PPMStory
 
 from iscorpio.plonepm.tests.base import PlonepmTestCase
+
+__author__ = "Sean Chen"
+__email__ = "sean.chen@leocorn.com"
 
 # test cases list
 tests = []

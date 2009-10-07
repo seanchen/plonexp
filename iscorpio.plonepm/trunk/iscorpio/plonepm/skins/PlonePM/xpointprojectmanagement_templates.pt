@@ -31,9 +31,10 @@
   <tal:block metal:define-macro="xpoint_developers_list">
     <tal:block repeat="member membersList">
       <a href="#"
-         tal:define="memberInfo python: mtool.getMemberInfo(member)"
+         tal:define="memberInfo python: mtool.getMemberInfo(member);
+                     fullName memberInfo/fullname | member;"
          tal:attributes="href string:${portal_url}/author/${member}"
-         tal:content="python: memberInfo['fullname']" >
+         tal:content="string:${fullName}" >
         Tom
       </a><br/>
     </tal:block>
@@ -201,8 +202,9 @@
             </a>
           </td>
           <td tal:define="creator obj/Creator;
-                          author python: mtool.getMemberInfo(creator);">
-            <span tal:content="python: author['fullname']" />
+                          author python: mtool.getMemberInfo(creator);
+                          fullName author/fullname | creator">
+            <span tal:content="string:${fullName}" />
           </td>
           <td tal:content="python: toLocalizedTime(obj_date)">
           </td>
@@ -352,9 +354,10 @@
 
     <ul style="width:141px;">
       <tal:block tal:repeat="developer python:developersList">
-        <li tal:define="developerInfo python: mtool.getMemberInfo(developer);">
+        <li tal:define="developerInfo python: mtool.getMemberInfo(developer);
+                        fullName developerInfo/fullname | developer">
           <a tal:attributes="href python: portal_url + projectURL + '/xpointproject_member_view?developerId=' + developer"
-             tal:content="python: developerInfo['fullname']">
+             tal:content="string:${fullName}">
             full name
           </a>
         </li>

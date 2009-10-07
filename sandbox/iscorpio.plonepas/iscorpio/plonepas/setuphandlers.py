@@ -7,6 +7,12 @@ the various import handlers for iscoprio.plonepas.
 
 from StringIO import StringIO
 
+from Products.PluggableAuthService.interfaces.plugins import IAuthenticationPlugin
+from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlugin
+from Products.PluggableAuthService.interfaces.plugins import IPropertiesPlugin
+from Products.PluggableAuthService.interfaces.plugins import IExtractionPlugin
+from Products.PluggableAuthService.interfaces.plugins import ICredentialsUpdatePlugin
+
 from Products.PlonePAS.Extensions.Install import activatePluginInterfaces
 
 __author__ = "Sean Chen"
@@ -46,3 +52,20 @@ def setupIscorpioPlugins(portal, out):
 
     # activate plugin interfaces for the specified plugins.
     activatePluginInterfaces(portal, 'squirrel', out)
+
+    # deactivate other plugin interfaces' implementation.
+    # suppose we are working on a Plone site with default acl_users setting.
+    userFolder.plugins.deactivatePlugin(IAuthenticationPlugin, 'session')
+    userFolder.plugins.deactivatePlugin(IAuthenticationPlugin, 'source_users')
+
+    userFolder.plugins.deactivatePlugin(IUserEnumerationPlugin, 'source_users')
+
+    userFolder.plugins.deactivatePlugin(IPropertiesPlugin, 'mutable_properties')
+
+    userFolder.plugins.deactivatePlugin(IExtractionPlugin, 'session')
+    userFolder.plugins.deactivatePlugin(IExtractionPlugin,
+                                        'credentials_cookie_auth')
+    userFolder.plugins.deactivatePlugin(IExtractionPlugin,
+                                        'credentials_basic_auth')
+
+    userFolder.plugins.deactivatePlugin(ICredentialsUpdatePlugin, 'session')

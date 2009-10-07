@@ -1,4 +1,8 @@
-"""Test setup for integration and functional tests.
+
+# base.py
+
+"""
+Test setup for integration and functional tests.
 
 When we import PloneTestCase and then call setupPloneSite(), all of Plone's
 products are loaded, and a Plone site will be created. This happens at module
@@ -13,6 +17,9 @@ from Testing import ZopeTestCase as ztc
 
 from Products.PloneTestCase import PloneTestCase as ptc
 from Products.PloneTestCase.layer import onsetup
+
+__author__ = "Sean Chen"
+__email__ = "sean.chen@leocorn.com"
 
 #
 # When ZopeTestCase configures Zope, it will *not* auto-load products in 

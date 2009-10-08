@@ -1,0 +1,15 @@
+<configure
+    xmlns:plone="http://namespaces.plone.org/plone"
+    i18n_domain="iscorpio.themes.playground">
+
+  <include package="plone.app.portlets"/>
+
+  <plone:portlet
+     name="iscorpio.plonepm.portlet.project.simplenav"
+     interface=".interfaces.IProjectSimpleNavPortlet"
+     assignment=".projectSimpleNav.Assignment"
+     renderer=".projectSimpleNav.Renderer"
+     addview=".projectSimpleNav.AddForm"
+  />
+
+</configure>

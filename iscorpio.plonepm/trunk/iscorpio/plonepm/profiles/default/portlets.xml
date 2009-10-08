@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<portlets
+   xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+   i18n:domain="plone">
+
+  <portlet addview="iscorpio.plonepm.portlet.project.simplenav"
+           title="Overview"
+           description="A simple nav portlet for a project.">
+    <for interface="plone.app.portlets.interfaces.IColumn" />
+    <for interface="plone.app.portlets.interfaces.IDashboard" />
+  </portlet>
+
+  <!-- asign this portlet to a forld called portlets -->
+  <assignment
+     manager="plone.leftcolumn"
+     category="context"
+     key="/"
+     type="iscorpio.plonepm.portlet.project.simplenav"
+     name="Overview"
+     insert-before="*"
+  />
+
+</portlets>

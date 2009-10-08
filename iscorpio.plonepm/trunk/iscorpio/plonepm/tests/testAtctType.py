@@ -127,7 +127,7 @@ class TestPPMArtifact(TestSiteATFolder):
     def testCreateResponse(self):
 
         response = self._createType(self._ATCT, 'PPMResponse', 'resp')
-        print 'The response: %s' % response
+        #print 'The response: %s' % response
 
 tests.append(TestPPMArtifact)
 

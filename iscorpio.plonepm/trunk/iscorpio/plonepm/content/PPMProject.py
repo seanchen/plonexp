@@ -127,6 +127,13 @@ class PPMProject(ATFolder):
         self.setXppm_unique_sequence(newId)
         return newId
 
+    def getProjectRoot(self):
+        """
+        Returns the project object ieself.
+        """
+
+        return self
+
     #security.declareProtected('vocabulary_allMembersList')
     def vocabulary_allMembersList(self):
         """ Return a list of tuple (user_id, fullname, email) for all

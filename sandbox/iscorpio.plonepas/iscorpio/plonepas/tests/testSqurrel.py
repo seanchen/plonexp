@@ -94,6 +94,19 @@ class SquirrelTestCase(IscorpioPASTestCase):
         self.assertTrue('squirrel' in found)
         self.assertFalse('session' in found)
 
+    # test update the property.
+    def testChangeProperty(self):
+
+        # import the generic setup profile to install the squirrel plugin.
+        setup_tool = getattr(self.portal, 'portal_setup')
+        setup_tool.runAllImportStepsFromProfile('profile-%s' % \
+                                                'iscorpio.plonepas:default')
+
+        defaultSiteId = self.acl_users.squirrel.userSiteId
+        self.acl_users.squirrel.manage_changeProperties(userSiteId='unit')
+        self.failIfEqual(defaultSiteId,
+                         self.acl_users.squirrel.userSiteId)
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(SquirrelTestCase))

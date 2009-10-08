@@ -17,6 +17,10 @@
       <td><input type="text" name="title"></td>
     </tr>
     <tr>
+      <td class="form-label">User Management Site Id</td>
+      <td><input type="text" name="userSiteId"></td>
+    </tr>
+    <tr>
       <td colspan="2">
         <div class="form-element">
           <input type="submit" value="Add SquirrelPlugins"/>

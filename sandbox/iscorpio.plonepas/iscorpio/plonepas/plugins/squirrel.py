@@ -26,13 +26,13 @@ __email__ = "chyxiang@gmail.com"
 # the form to add a squirrel plugin.
 manage_addSquirrelPluginsForm = DTMLFile('../zmi/squirrelAdd', globals())
 
-# the factory method to add a squirrel plugin.
-def manage_addSquirrelPlugins(self, id, title='', REQUEST=None):
+# the factory method to add a squirrel pluginb.
+def manage_addSquirrelPlugins(self, id, title='', userSiteId='Plone', REQUEST=None):
     """
     Id and title will come with the HTTP request.
     """
 
-    sp = SquirrelPlugins(id, title)
+    sp = SquirrelPlugins(id, title, userSiteId)
     self._setObject(sp.getId(), sp)
 
     if REQUEST:
@@ -57,12 +57,28 @@ class SquirrelPlugins(BasePlugin):
     # meta type will show on the dropdown selection list.
     meta_type = "iScorpio PlonePAS Squirrel Plugins"
 
+    userSiteId = "Plone"
+
+    _properties = ( { 'id'    : 'title'
+                    , 'label' : 'Title'
+                    , 'type'  : 'string'
+                    , 'mode'  : 'w'
+                    }
+                  , { 'id'    : 'userSiteId'
+                    , 'label' : 'User Admin Site Id'
+                    , 'type'  : 'string'
+                    , 'mode'  : 'w'
+                    }
+                  )
+
+
     security = ClassSecurityInfo()
 
-    def __init__(self, id, title):
+    def __init__(self, id, title, userSiteId):
 
         self._setId(id)
         self.title = title
+        self.userSiteId = userSiteId
 
     # IAuthenticationPlugin
     security.declarePrivate('authenticateCredentials')
@@ -74,15 +90,13 @@ class SquirrelPlugins(BasePlugin):
         if ('login' not in credentials) or ('password' not in credentials):
             return None
 
-        app = self.getZopeApp()
-
         login = credentials['login']
         password = credentials['password']
 
-        credit = app.UserAdmin.acl_users.source_users.authenticateCredentials(credentials)
+        credit = self.getUserAdmin().source_users.authenticateCredentials(credentials)
 
         if credit is None:
-            credit = app.UserAdmin.acl_users.ldap.authenticateCredentials(credentials)
+            credit = self.getUserAdmin().ldap.authenticateCredentials(credentials)
 
         return credit
 
@@ -94,15 +108,14 @@ class SquirrelPlugins(BasePlugin):
         Return a list of valid users identified by this plugin.
         """
 
-        app = self.getZopeApp()
-        users = app.UserAdmin.acl_users.source_users.enumerateUsers(id, login, exact_match,
+        users = self.getUserAdmin().source_users.enumerateUsers(id, login, exact_match,
                                                                     sort_by, max_results, **kw)
 
         if (users is None) or (len(users) <= 0):
-            users = app.UserAdmin.acl_users.mutable_properties.enumerateUsers(id, login, exact_match,
+            users = self.getUserAdmin().mutable_properties.enumerateUsers(id, login, exact_match,
                                                                               **kw)
 
-        ldapUsers = app.UserAdmin.acl_users.ldap.enumerateUsers(id, login, exact_match,
+        ldapUsers = self.getUserAdmin().ldap.enumerateUsers(id, login, exact_match,
                                                                 sort_by, max_results, **kw)
         return (users + ldapUsers)
 
@@ -113,7 +126,7 @@ class SquirrelPlugins(BasePlugin):
         forward to user admin to do the 
         """
         app = self.getZopeApp()
-        credit = app.UserAdmin.acl_users.credentials_cookie_auth.extractCredentials(request)
+        credit = self.getUserAdmin().credentials_cookie_auth.extractCredentials(request)
         self.log.debug('extract credentials: %s', credit)
         return credit
 
@@ -124,7 +137,7 @@ class SquirrelPlugins(BasePlugin):
         again forward to the useradmin
         """
         app = self.getZopeApp()
-        return app.UserAdmin.acl_users.credentials_cookie_auth.updateCredentials(request, response,
+        return self.getUserAdmin().credentials_cookie_auth.updateCredentials(request, response,
                                                                  login, new_password)
 
     # returns user properties for the given user.
@@ -134,10 +147,10 @@ class SquirrelPlugins(BasePlugin):
         get user properties from useradmin.
         """
         app = self.getZopeApp()
-        properties = app.UserAdmin.acl_users.mutable_properties.getPropertiesForUser(user, request)
+        properties = self.getUserAdmin().mutable_properties.getPropertiesForUser(user, request)
 
         if properties.getProperty('fullname') == '':
-            properties = app.UserAdmin.acl_users.ldap.getPropertiesForUser(user, request)
+            properties = self.getUserAdmin().ldap.getPropertiesForUser(user, request)
 
         return properties
 
@@ -149,6 +162,13 @@ class SquirrelPlugins(BasePlugin):
         server.
         """
         return self.getPhysicalRoot()
+
+    security.declarePrivate('getUserAdmin')
+    def getUserAdmin(self):
+        """
+        return the user admin site's acl_users object.
+        """
+        return getattr(self.getPhysicalRoot(), self.userSiteId).acl_users
 
 # implements plugins.
 classImplements(SquirrelPlugins,

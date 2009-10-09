@@ -76,6 +76,57 @@ class TestProjectSimpleNavRenderer(PlonepmTestCase):
         renderer = self.renderer(context=metadata)
         self.failUnless(renderer.available)
 
+    def testProjectInfo(self):
+
+        self.loginAsPortalOwner()
+
+        # get project info on a project context.
+        self.portal.invokeFactory('PPMProject', 'project1')
+        project = getattr(self.portal, 'project1')
+        renderer = self.renderer(context=project)
+        info = renderer.projectInfo()
+        self.assertEquals(info['url'], project.absolute_url())
+        self.assertEquals(info['title'], 'project1')
+
+        # get project info on a metadata context
+        project.invokeFactory('PPMMetadata', 'meta1')
+        metadata = getattr(project, 'meta1')
+        renderer = self.renderer(context=metadata)
+        info = renderer.projectInfo()
+        self.assertEquals(info['url'], project.absolute_url())
+        self.assertEquals(info['title'], 'project1')
+
+    def testInterationsInfo(self):
+
+        self.loginAsPortalOwner()
+
+        # preparing the dummy data.
+        self.portal.invokeFactory('PPMProject', 'project1')
+        project = getattr(self.portal, 'project1')
+        project.invokeFactory('PPMMetadata', 'meta1')
+        metadata = getattr(project, 'meta1')
+        # preparing iteration.
+        project.invokeFactory('PPMIteration', 'iter1')
+        iteration1 = getattr(project, 'iter1')
+        project.invokeFactory('PPMIteration', 'iter2')
+        iteration2 = getattr(project, 'iter2')
+
+        renderer = self.renderer(context=project)
+        iterations = renderer.iterations()
+        self.assertEquals(len(iterations), 2)
+        self.assertEquals(iterations[0]['url'], iteration1.absolute_url())
+        self.assertEquals(iterations[0]['title'], 'iter1')
+        self.assertEquals(iterations[1]['url'], iteration2.absolute_url())
+        self.assertEquals(iterations[1]['title'], 'iter2')
+
+        renderer = self.renderer(context=metadata)
+        iterations = renderer.iterations()
+        self.assertEquals(len(iterations), 2)
+        self.assertEquals(iterations[0]['url'], iteration1.absolute_url())
+        self.assertEquals(iterations[0]['title'], 'iter1')
+        self.assertEquals(iterations[1]['url'], iteration2.absolute_url())
+        self.assertEquals(iterations[1]['title'], 'iter2')
+
 def test_suite():
 
     suite = unittest.TestSuite()

@@ -7,8 +7,6 @@ a portlet to provide simple navigation for a project.
 list each iteration, all stories, all function requirments, etc.
 """
 
-import time
-
 from zope.interface import implements
 from Acquisition import aq_inner
 
@@ -69,13 +67,23 @@ class Renderer(base.Renderer):
         else:
             return True
 
-    def words(self):
+    def projectInfo(self):
 
-        return ['Hello World', 'Morning World']
+        return {'url' : self.project.absolute_url(),
+                'title' : self.project.title or self.project.id}
 
-    def time(self):
+    def iterations(self):
 
-        return time.time()
+        infos = []
+        iterations = self.project.xpCatalogSearch(portal_type='PPMIteration')
+        for iteration in iterations:
+            obj = iteration.getObject()
+            infos.append({
+                'url' : obj.absolute_url(),
+                'title' : obj.title or obj.id,
+                })
+
+        return infos
 
 # the form for add this portlet.
 class AddForm(base.NullAddForm):

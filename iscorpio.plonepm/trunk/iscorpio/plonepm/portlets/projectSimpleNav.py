@@ -7,6 +7,8 @@ a portlet to provide simple navigation for a project.
 list each iteration, all stories, all function requirments, etc.
 """
 
+import time
+
 from zope.interface import implements
 from Acquisition import aq_inner
 

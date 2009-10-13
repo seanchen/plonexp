@@ -18,6 +18,7 @@
         tal:define="oddrow repeat/iteration/odd;"
         tal:attributes="class python:oddrow and  'portletItem even' or 'portletItem odd'">
       <a href="#" tal:attributes="href iteration/url">
+        <img src="#" width="16" height="16" tal:attributes="src iteration/icon"/>
         <span tal:content="iteration/title"/>
       </a>
     </dd>

@@ -81,6 +81,7 @@ class Renderer(base.Renderer):
             infos.append({
                 'url' : obj.absolute_url(),
                 'title' : obj.title or obj.id,
+                'icon' : obj.getIcon(),
                 })
 
         return infos

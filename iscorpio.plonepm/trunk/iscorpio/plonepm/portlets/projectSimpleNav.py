@@ -73,9 +73,15 @@ class Renderer(base.Renderer):
                 'title' : self.project.title or self.project.id}
 
     def iterations(self):
+        """
+        returns the latest active 5 iterations.
+        """
 
         infos = []
-        iterations = self.project.xpCatalogSearch(portal_type='PPMIteration')
+        iterations = self.project.xpCatalogSearch(portal_type='PPMIteration',
+                                                  sort_on='modified',
+                                                  sort_order='reverse',
+                                                  sort_limit=5)
         for iteration in iterations:
             obj = iteration.getObject()
             infos.append({
@@ -85,6 +91,27 @@ class Renderer(base.Renderer):
                 })
 
         return infos
+
+    def stories(self):
+        """
+        returns the last 5 recent changed stories.
+        """
+
+        values = []
+        stories = self.project.xpCatalogSearch(portal_type='PPMStory',
+                                               sort_on='modified',
+                                               sort_order='reverse',
+                                               sort_limit=5)
+        for story in stories:
+            obj = story.getObject()
+            #import pdb; pdb.set_trace()
+            values.append({
+                'url' : obj.absolute_url(),
+                'title' : obj.title or obj.id,
+                'icon' : obj.getIcon(),
+                })
+
+        return values
 
 # the form for add this portlet.
 class AddForm(base.NullAddForm):

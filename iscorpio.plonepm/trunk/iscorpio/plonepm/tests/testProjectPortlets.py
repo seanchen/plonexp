@@ -114,18 +114,48 @@ class TestProjectSimpleNavRenderer(PlonepmTestCase):
         renderer = self.renderer(context=project)
         iterations = renderer.iterations()
         self.assertEquals(len(iterations), 2)
-        self.assertEquals(iterations[0]['url'], iteration1.absolute_url())
-        self.assertEquals(iterations[0]['title'], 'iter1')
-        self.assertEquals(iterations[1]['url'], iteration2.absolute_url())
-        self.assertEquals(iterations[1]['title'], 'iter2')
+        self.assertEquals(iterations[0]['url'], iteration2.absolute_url())
+        self.assertEquals(iterations[0]['title'], 'iter2')
+        self.assertEquals(iterations[1]['url'], iteration1.absolute_url())
+        self.assertEquals(iterations[1]['title'], 'iter1')
 
         renderer = self.renderer(context=metadata)
         iterations = renderer.iterations()
         self.assertEquals(len(iterations), 2)
-        self.assertEquals(iterations[0]['url'], iteration1.absolute_url())
-        self.assertEquals(iterations[0]['title'], 'iter1')
-        self.assertEquals(iterations[1]['url'], iteration2.absolute_url())
-        self.assertEquals(iterations[1]['title'], 'iter2')
+        self.assertEquals(iterations[0]['url'], iteration2.absolute_url())
+        self.assertEquals(iterations[0]['title'], 'iter2')
+        self.assertEquals(iterations[1]['url'], iteration1.absolute_url())
+        self.assertEquals(iterations[1]['title'], 'iter1')
+
+    def testStoriesInfo(self):
+
+        self.loginAsPortalOwner()
+
+        # preparing the dummy data.
+        self.portal.invokeFactory('PPMProject', 'project1')
+        project = getattr(self.portal, 'project1')
+        project.invokeFactory('PPMMetadata', 'meta1')
+        metadata = getattr(project, 'meta1')
+        # preparing stories
+        project.invokeFactory('PPMStory', 'story1')
+        story1 = getattr(project, 'story1')
+        #self.portal.portal_catalog.indexObject(story1)
+        project.invokeFactory('PPMStory', 'story2')
+        story2 = getattr(project, 'story2')
+        #self.portal.portal_catalog.indexObject(story2)
+        project.invokeFactory('PPMStory', 'story3')
+        story3 = getattr(project, 'story3')
+        #self.portal.portal_catalog.indexObject(story3)
+
+        renderer = self.renderer(context=project)
+        stories = renderer.stories()
+        self.assertEquals(len(stories), 3)
+        self.assertEquals(stories[0]['url'], story3.absolute_url())
+        self.assertEquals(stories[0]['title'], 'story3')
+        self.assertEquals(stories[1]['url'], story2.absolute_url())
+        self.assertEquals(stories[1]['title'], 'story2')
+        self.assertEquals(stories[2]['url'], story1.absolute_url())
+        self.assertEquals(stories[2]['title'], 'story1')
 
 def test_suite():
 

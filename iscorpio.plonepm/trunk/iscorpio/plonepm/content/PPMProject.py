@@ -251,6 +251,9 @@ class PPMProject(ATFolder):
                              'portal_type' : 'portal_type',
                              'metadata_type' : 'getXppm_metadata_type',
                              'iteration' : 'getXppm_iteration',
+                             'sort_on' : 'sort_on',
+                             'sort_order' : 'sort_order',
+                             'sort_limit' : 'sort_limit',
                              }
 
         query = {}
@@ -261,9 +264,6 @@ class PPMProject(ATFolder):
                 query[v] = criteria[k]
             elif v in criteria:
                 query[v] = criteria[v]
-
-        query['sort_on'] = 'created'
-        #query['sort_order'] = 'reverse'
 
         catalog = getToolByName(self, 'portal_catalog')
 

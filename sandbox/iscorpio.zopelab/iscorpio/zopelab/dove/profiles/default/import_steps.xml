@@ -1,7 +1,9 @@
 <?xml version="1.0"?>
 <import-steps>
+
   <import-step id="iscorpio_zopelab_dove" version="20090911"
                handler="iscorpio.zopelab.dove.setuphandlers.importVarious"
                title="iscorpio zopelab dove various installation">
-	</import-step>
+    Special import step for zopelab. 
+  </import-step>
 </import-steps>

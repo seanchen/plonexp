@@ -14,7 +14,7 @@
       provides="Products.GenericSetup.interfaces.BASE"
   />
 
-  <utility factory=".nest.HiddenProducts"
-           name="iscorpio.zopelab.dove"
-  />
+<!--   <utility factory=".nest.HiddenProducts" -->
+<!--            name="iscorpio.zopelab.dove" -->
+<!--   /> -->
 </configure>

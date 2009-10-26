@@ -73,7 +73,8 @@ setup_product()
 ptc.setupPloneSite(products=['iscorpio.plonepm'])
 
 class PlonepmTestCase(ptc.PloneTestCase):
-    """We use this base class for all the tests in this package. If necessary,
+    """
+    We use this base class for all the tests in this package. If necessary,
     we can put common utility or setup code in here. This applies to unit 
     test cases.
     """
@@ -82,7 +83,7 @@ class PlonepmTestCase(ptc.PloneTestCase):
     title = ""
 
 class PlonepmFunctionalTestCase(ptc.FunctionalTestCase):
-    """We use this class for functional integration tests that use doctest
+    """
+    We use this class for functional integration tests that use doctest
     syntax. Again, we can put basic common utility or setup code in here.
     """
-    pass

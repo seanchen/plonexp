@@ -4,6 +4,9 @@ manager to break down a complex project to a set of stories and create
 a set of tasks for each story.  Then project manager can assign each
 task to team members.
 
+    >>> print 'Hello Plone PM'
+    Hello Plone PM
+
 Plone Project Managementprovides progress bars for each task, each
 story and the whole project.  So project managers can have a clear and
 direct view of how is this project going.

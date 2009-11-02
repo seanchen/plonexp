@@ -12,4 +12,13 @@
 
  <skin-path name="Iscorpio Themes Playground" remove="True"/>
 
+ <object name="iscorpio_frog_images"
+    meta_type="Filesystem Directory View" remove="True"/>
+ <object name="iscorpio_frog_templates"
+    meta_type="Filesystem Directory View" remove="True"/>
+ <object name="iscorpio_frog_styles"
+    meta_type="Filesystem Directory View" remove="True"/>
+
+ <skin-path name="iScorpio Themes Frog" remove="True"/>
+
 </object>

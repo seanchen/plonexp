@@ -2,6 +2,7 @@
 <object name="portal_skins" allow_any="False" cookie_persistence="False"
    default_skin="Iscorpio Themes Playground">
 
+ <!-- objects for default skin iScorpio Themes Playground -->
  <object name="iscorpio_themes_playground_custom_images"
     meta_type="Filesystem Directory View"
     directory="iscorpio.themes.playground:skins/iscorpio_themes_playground_custom_images"/>
@@ -19,6 +20,20 @@
      insert-after="iscorpio_themes_playground_custom_images"/>
   <layer name="iscorpio_themes_playground_styles"
      insert-after="iscorpio_themes_playground_custom_templates"/>
+ </skin-path>
+
+ <!-- Objects for skin Frog -->
+ <object name="iscorpio_frog_images" meta_type="Filesystem Directory View"
+         directory="iscorpio.themes.playground:skins/iscorpio_frog_images"/>
+ <object name="iscorpio_frog_styles" meta_type="Filesystem Directory View"
+         directory="iscorpio.themes.playground:skins/iscorpio_frog_styles"/>
+ <object name="iscorpio_frog_templates" meta_type="Filesystem Directory View"
+         directory="iscorpio.themes.playground:skins/iscorpio_frog_templates"/>
+
+ <skin-path name="iScorpio Themes Frog" based-on="Plone Default">
+   <layer name="iscorpio_frog_images" insert-after="custom"/>
+   <layer name="iscorpio_frog_styles" insert-after="iscorpio_frog_images"/>
+   <layer name="iscorpio_frog_templates" insert-after="iscorpio_frog_styles"/>
  </skin-path>
 
 </object>

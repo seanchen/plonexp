@@ -1,0 +1,14 @@
+/* <dtml-with base_properties> */
+
+/************* Body *************/
+
+
+/******* Portal Wrapper *******/
+/* this id will define the basic property for a plone site */
+#visual-portal-wrapper{
+width:925px;
+background:&dtml-backgroundColor;;
+margin-left:auto;
+margin-right:auto;}
+
+/* </dtml-with> */

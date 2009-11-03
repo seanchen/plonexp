@@ -10,6 +10,20 @@
     <for interface="plone.app.portlets.interfaces.IDashboard" />
   </portlet>
 
+  <!-- purge the default portlets on both left and right columns. -->
+  <assignment
+     manager="plone.leftcolumn"
+     category="context"
+     key="/"
+     purge="True"
+  />
+  <assignment
+     manager="plone.rightcolumn"
+     category="context"
+     key="/"
+     purge="True"
+  />
+
   <!-- asign this portlet to a forld called portlets -->
   <assignment
      manager="plone.leftcolumn"
@@ -19,5 +33,5 @@
      name="Overview"
      insert-before="*"
   />
-
+  
 </portlets>

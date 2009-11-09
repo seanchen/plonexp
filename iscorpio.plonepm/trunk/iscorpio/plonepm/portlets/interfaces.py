@@ -18,3 +18,9 @@ class IProjectSimpleNavPortlet(IPortletDataProvider):
     """
 
     pass
+
+# a portlet to list recent updates for this project.
+class IRecentArtifactsPortlet(IPortletDataProvider):
+    """
+    the marker interface for a portlet to list recent changed artifacts.
+    """

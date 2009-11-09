@@ -12,4 +12,12 @@
      addview=".projectSimpleNav.AddForm"
   />
 
+  <plone:portlet
+     name="iscorpio.plonepm.portlet.recent"
+     interface=".interfaces.IRecentArtifactsPortlet"
+     assignment=".recentArtifacts.Assignment"
+     renderer=".recentArtifacts.Renderer"
+     addview=".recentArtifacts.AddForm"
+  />
+
 </configure>

@@ -25,7 +25,7 @@ from iscorpio.plonepm.portlets import recentArtifacts
 from base import PlonepmTestCase
 
 __author__ = "Sean Chen"
-__email__ = "sean.chen@leocron.com"
+__email__ = "sean.chen@leocorn.com"
 
 class PlonepmPortletTestCase(PlonepmTestCase):
     """

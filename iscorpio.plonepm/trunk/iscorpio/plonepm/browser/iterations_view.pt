@@ -19,41 +19,31 @@
   <h1 class="documentFirstHeading">
     <metal:field use-macro="python:here.widget('title', mode='view')">
       Title or id
-    </metal:field>
+    </metal:field> Iterations
   </h1>
 
   <div tal:replace="structure provider:plone.belowcontenttitle" />
 
   <p class="documentDescription">
-    <metal:field use-macro="python:here.widget('description', mode='view')">
-      Description
-    </metal:field>
+    Iteration Plans
   </p>
 
   <div tal:replace="structure provider:plone.abovecontentbody" />
 
   <!-- project body for details description about project -->
-  <metal:field use-macro="python: here.widget('xppm_text', mode='view')">
-    project body
-  </metal:field>
+  <p class="documentContent">
+    We will display iteration summary by status and Release plan.
+  </p>
 
-  <h3>Project Metadata</h3>
-  <dl tal:define="metadata view/getMetadata">
-    <tal:metadata repeat="meta metadata">
-      <dt>
-        <span tal:replace="meta/Title"/>
-      </dt>
-      <dd>
-        <span tal:replace="meta/Description"/> -
-        <span tal:replace="meta/getXppm_metadata_type"/>
-      </dd>
-    </tal:metadata>
-  </dl>
-
-  <!-- footer. -->
-  <div metal:use-macro="here/document_relateditems/macros/relatedItems">
-    Show related items if they exist
-  </div>
+  <!-- all interation plan. -->
+  <tal:block tal:define="iterationsList view/getIterationData;">
+    <div tal:condition="iterationsList">
+      <h2>Iteration Plan</h2>
+      <tal:block
+         metal:use-macro="here/xpointprojectmanagement_templates/macros/xppm_iterations_list"
+      />
+    </div>
+  </tal:block>
 
   <div tal:replace="structure provider:plone.belowcontentbody" />
 

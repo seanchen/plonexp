@@ -1,5 +1,5 @@
 <dl class="portlet simplePortlet" i18n:domain="plone"
-		 tal:define="projectInfo view/projectInfo;">
+     tal:define="projectInfo view/projectInfo;">
 
   <dt class="portletHeader">
     <span class="portletTopLeft"></span>
@@ -10,15 +10,16 @@
   </dt>
 
   <dd class="portletItem">
-	<ul>
-		<li><a href="#">Releases</a></li>
-		<li><a href="#">Roadmap / Iterations</a></li>
-		<li><a href="#">Stories</a></li>
-		<li><a href="#">Artifacts / Issues</a></li>
-		<li><a href="#">Project Metadata</a></li>
-		<li><a href="#" tal:attributes="href projectInfo/svnUrl">Source Code Repository</a></li>
-		<li><a href="#" tal:attributes="href projectInfo/viewUrl">Browse Source Code</a></li>
-	</ul>
-	</dd>
+  <ul>
+    <li><a href="#">Releases</a></li>
+    <li><a href="#"
+           tal:attributes="href projectInfo/iterationsUrl">Roadmap / Iterations</a></li>
+    <li><a href="#">Stories</a></li>
+    <li><a href="#">Artifacts / Issues</a></li>
+    <li><a href="#">Project Metadata</a></li>
+    <li><a href="#" tal:attributes="href projectInfo/svnUrl">Source Code Repository</a></li>
+    <li><a href="#" tal:attributes="href projectInfo/viewUrl">Browse Source Code</a></li>
+  </ul>
+  </dd>
 
 </dl>

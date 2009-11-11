@@ -63,6 +63,11 @@ class ProjectView(BrowserView):
 
         return progressPercent
 
+class IterationsView(BrowserView):
+    """
+    A list of all iterations for this project.
+    """
+
     # preparing the iteration plan data for this view.
     def getIterationData(self):
         """

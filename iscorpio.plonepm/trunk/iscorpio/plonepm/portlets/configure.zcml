@@ -5,6 +5,14 @@
   <include package="plone.app.portlets"/>
 
   <plone:portlet
+     name="iscorpio.plonepm.portlet.project.overview"
+     interface=".interfaces.IProjectOverviewPortlet"
+     assignment=".projectOverview.Assignment"
+     renderer=".projectOverview.Renderer"
+     addview=".projectOverview.AddForm"
+  />
+
+  <plone:portlet
      name="iscorpio.plonepm.portlet.project.simplenav"
      interface=".interfaces.IProjectSimpleNavPortlet"
      assignment=".projectSimpleNav.Assignment"

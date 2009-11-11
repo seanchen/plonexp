@@ -10,6 +10,12 @@
     <for interface="plone.app.portlets.interfaces.IDashboard" />
   </portlet>
 
+  <portlet addview="iscorpio.plonepm.portlet.project.overview"
+           title="Overview"
+           description="The overview portlet for a project.">
+    <for interface="plone.app.portlets.interfaces.IColumn" />
+    <for interface="plone.app.portlets.interfaces.IDashboard" />
+  </portlet>
 
   <portlet addview="iscorpio.plonepm.portlet.recent"
            title="Recent"
@@ -37,7 +43,7 @@
      manager="plone.leftcolumn"
      category="context"
      key="/"
-     type="iscorpio.plonepm.portlet.project.simplenav"
+     type="iscorpio.plonepm.portlet.project.overview"
      name="Overview"
      insert-before="*"
   />

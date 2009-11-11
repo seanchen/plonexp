@@ -18,6 +18,8 @@ from Products.Archetypes.public import InAndOutWidget
 from Products.Archetypes.public import LinesWidget
 from Products.Archetypes.public import IntegerField
 from Products.Archetypes.public import IntegerWidget
+from Products.Archetypes.public import StringField
+from Products.Archetypes.public import StringWidget
 from Products.Archetypes.public import DisplayList
 from Products.Archetypes.public import registerType
 # from ATContentTypes
@@ -71,6 +73,28 @@ PPMProjectSchema = ATFolderSchema.copy() + Schema((
                 label = 'Project Modules',
                 description = 'Please specify the module for your project, one per line',
                 cols = 40,
+                ),
+            ),
+
+        StringField(
+            'xppm_repo_url',
+            searchable = True,
+            required = False,
+            widget = StringWidget(
+                label = 'Source Code Repository',
+                description = 'Where you keep tracking your source code for this project',
+                cols = 50,
+                ),
+            ),
+
+        StringField(
+            'xppm_browse_code_url',
+            searchable = True,
+            required = False,
+            widget = StringWidget(
+                label = 'Source Code Browoser',
+                description = 'Where you can browse your source code from Web browser',
+                cols = 50,
                 ),
             ),
 

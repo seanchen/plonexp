@@ -8,11 +8,12 @@
 
   <!-- ==================================================================== -->
   <!-- macro for progress bar with the estimate hours and progress percent. -->
-  <!-- two params: estimatedHours, progressPercent -->
+  <!-- two params: estimatedHours, usedHours, progressPercent -->
   <!-- ==================================================================== -->
   <tal:block metal:define-macro="xpoint_progress_bar">
     <div align="center"><strong>
-      <span tal:content="estimatedHours" /> hours /
+      <span tal:content="usedHours"/> /
+      <span tal:content="estimatedHours" /> hours, 
       <span tal:content="python: str(progressPercent) + '%'"/>
     </strong></div>
     <div id="XPointProgressBar">
@@ -55,9 +56,8 @@
     <table class="listing" width="98%"><tbody>
       <tr>
         <th>Iteration</th>
-        <th>Target Date</th>
-        <th width="268">Estimated hours / Progress Status</th>
-        <th>Used</th>
+        <th width="78">Target Date</th>
+        <th width="168">hours / Progress</th>
       </tr>
       <!-- one row for each story. -->
       <tal:block tal:repeat="iteration python: batch">
@@ -79,13 +79,11 @@
           <td align="center" tal:content="python: toLocalizedTime(iteration_date)">
           </td>
           <td tal:define="estimatedHours iteration/estimatedHours;
+                          usedHours iteration/usedHours;
                           progressPercent iteration/progressPercent;">
             <tal:block
                metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_progress_bar"
             />
-          </td>
-          <td align="center">
-            <span tal:content="iteration/usedHours" /> hours
           </td>
         </tr>
       </tal:block>
@@ -109,9 +107,8 @@
       <tr>
         <th>Story</th>
         <th>Owners</th>
-        <th>Target Date</th>
-        <th width="268">Estimated Hours / Progress </th>
-        <th>Used</th>
+        <th width="78">Target Date</th>
+        <th width="168">Hours / Progress</th>
       </tr>
       <!-- one row for each story. -->
       <tal:block tal:repeat="story python: batch">
@@ -138,13 +135,11 @@
           <td align="center" tal:content="python: toLocalizedTime(story_date)">
           </td>
           <td tal:define="estimatedHours story/getXppm_story_estimated_hours;
+                          usedHours story/getXppm_story_used_hours;
                           progressPercent story/getXppm_story_progress_percent;">
             <tal:block
                metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_progress_bar"
             />
-          </td>
-          <td align="center">
-            <span tal:content="story/getXppm_story_used_hours"/> hours
           </td>
         </tr>
       </tal:block>
@@ -152,12 +147,12 @@
         <th align="right">Overall Progress:</th>
         <th colspan="3" align="left"
             tal:define="estimatedHours totalEstimatedHours;
+                        usedHours totalUsedHours;
                         progressPercent totalProgressPercent;">
           <tal:block
              metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_progress_bar"
           />
         </th>
-        <th><span tal:content="totalUsedHours"/> hours</th>
       </tr>
     </tbody></table>
   </tal:block>
@@ -254,6 +249,7 @@
       </tr>
       <tr>
         <td tal:define="estimatedHours python: here.getProjectEstimatedHours();
+                        usedHours python: here.getProjectUsedHours();
                         progressPercent python: here.getProjectProgressPercent();">
           <tal:block
              metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_progress_bar"

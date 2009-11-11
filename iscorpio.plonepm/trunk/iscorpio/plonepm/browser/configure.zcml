@@ -16,6 +16,14 @@
      permission="zope2.View"
   />
 
+  <browser:page
+     name="project_iterations"
+     for="..interfaces.IPPMProject"
+     class=".project.IterationsView"
+     template="iterations_view.pt"
+     permission="zope2.View"
+  />
+
   <!-- the default view for a story -->
   <browser:page
      name="story_view"
@@ -25,8 +33,8 @@
      permission="zope2.View"
   />
 
-	<!-- default view for iteration -->
-	<browser:page
+  <!-- default view for iteration -->
+  <browser:page
      name="iteration_view"
      for="..interfaces.IPPMIteration"
      class=".iteration.IterationView"

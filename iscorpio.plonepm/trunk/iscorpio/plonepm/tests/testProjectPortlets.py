@@ -18,6 +18,7 @@ from plone.portlets.interfaces import IPortletDataProvider
 
 from Products.GenericSetup.utils import _getDottedName
 
+from iscorpio.plonepm.portlets import projectOverview
 from iscorpio.plonepm.portlets import projectSimpleNav
 from iscorpio.plonepm.portlets import recentArtifacts
 
@@ -26,65 +27,138 @@ from base import PlonepmTestCase
 __author__ = "Sean Chen"
 __email__ = "sean.chen@leocron.com"
 
-class TestProjectSimpleNavPortlet(PlonepmTestCase):
+class PlonepmPortletTestCase(PlonepmTestCase):
+    """
+    base test case for testing Plonepm Portlet.
+    """
 
-    def testRenderer(self):
+    def afterSetUp(self):
 
-        context = self.folder
-        request = self.folder.REQUEST
-        view = self.folder.restrictedTraverse('@@plone')
-        manager = getUtility(IPortletManager, name='plone.leftcolumn',
-                             context=self.portal)
-        assignment = projectSimpleNav.Assignment()
-        renderer = getMultiAdapter((context, request, view, manager,
-                                    assignment),
-                                   IPortletRenderer)
-        self.failIf(renderer.available)
-        self.failUnless(isinstance(renderer, projectSimpleNav.Renderer))
-
-class TestProjectSimpleNavRenderer(PlonepmTestCase):
+        self.loginAsPortalOwner()
 
     def renderer(self, context=None, request=None, view=None, manager=None,
                  assignment=None):
+
+        if not assignment:
+            raise AttributeError('assignment is required!')
 
         context = context or self.portal
         request = request or self.app.REQUEST
         view = view or self.portal.restrictedTraverse('@@plone')
         manager = getUtility(IPortletManager, name='plone.leftcolumn',
                              context=self.portal)
-        assignment = projectSimpleNav.Assignment()
 
         return getMultiAdapter((context, request, view, manager, assignment),
                                IPortletRenderer)
 
+class TestProjectPortlets(PlonepmTestCase):
+
+    def renderer(self, assignment):
+
+        context = self.folder
+        request = self.folder.REQUEST
+        view = self.folder.restrictedTraverse('@@plone')
+        manager = getUtility(IPortletManager, name='plone.leftcolumn',
+                             context=self.portal)
+
+        return getMultiAdapter((context, request, view, manager, assignment),
+                               IPortletRenderer)
+
+    def testRenderer(self):
+
+        renderer = self.renderer(projectSimpleNav.Assignment())
+        self.failIf(renderer.available)
+        self.failUnless(isinstance(renderer, projectSimpleNav.Renderer))
+
+        renderer = self.renderer(recentArtifacts.Assignment())
+        self.failIf(renderer.available)
+        self.failUnless(isinstance(renderer, recentArtifacts.Renderer))
+
+        renderer = self.renderer(projectOverview.Assignment())
+        self.failIf(renderer.available)
+        self.failUnless(isinstance(renderer, projectOverview.Renderer))
+
+class TestProjectOverviewRenderer(PlonepmPortletTestCase):
+
     def testAvailable(self):
 
-        self.loginAsPortalOwner()
-
         # renderer in root should not available
-        renderer = self.renderer()
+        renderer = self.renderer(assignment=projectOverview.Assignment())
         self.failIf(renderer.available)
 
         # renderer in a project
         self.portal.invokeFactory('PPMProject', 'project1')
         project = getattr(self.portal, 'project1')
-        renderer = self.renderer(context=project)
+        renderer = self.renderer(context=project,
+                                 assignment=projectOverview.Assignment())
         self.failUnless(renderer.available)
 
         # renderer in a metadata
         project.invokeFactory('PPMMetadata', 'meta1')
         metadata = getattr(project, 'meta1')
-        renderer = self.renderer(context=metadata)
+        renderer = self.renderer(context=metadata,
+                                 assignment=projectOverview.Assignment())
         self.failUnless(renderer.available)
 
     def testProjectInfo(self):
 
-        self.loginAsPortalOwner()
+        repoUrl = 'http://svn.example.com'
+        browseUrl = "http://trac.example.com"
 
         # get project info on a project context.
         self.portal.invokeFactory('PPMProject', 'project1')
         project = getattr(self.portal, 'project1')
-        renderer = self.renderer(context=project)
+        project.xppm_repo_url = repoUrl
+        project.xppm_browse_code_url = browseUrl
+
+        renderer = self.renderer(context=project,
+                                 assignment=projectOverview.Assignment())
+        info = renderer.projectInfo()
+        self.assertEquals(info['url'], project.absolute_url())
+        self.assertEquals(info['title'], 'project1')
+        self.assertEquals(info['svnUrl'], repoUrl)
+        self.assertEquals(info['viewUrl'], browseUrl)
+
+        # get project info on a metadata context
+        project.invokeFactory('PPMMetadata', 'meta1')
+        metadata = getattr(project, 'meta1')
+        renderer = self.renderer(context=metadata,
+                                 assignment=projectOverview.Assignment())
+        info = renderer.projectInfo()
+        self.assertEquals(info['url'], project.absolute_url())
+        self.assertEquals(info['title'], 'project1')
+        self.assertEquals(info['svnUrl'], repoUrl)
+        self.assertEquals(info['viewUrl'], browseUrl)
+
+class TestProjectSimpleNavRenderer(PlonepmPortletTestCase):
+
+    def testAvailable(self):
+
+        # renderer in root should not available
+        renderer = self.renderer(assignment=projectSimpleNav.Assignment())
+        self.failIf(renderer.available)
+
+        # renderer in a project
+        self.portal.invokeFactory('PPMProject', 'project1')
+        project = getattr(self.portal, 'project1')
+        renderer = self.renderer(context=project,
+                                 assignment=projectSimpleNav.Assignment())
+        self.failUnless(renderer.available)
+
+        # renderer in a metadata
+        project.invokeFactory('PPMMetadata', 'meta1')
+        metadata = getattr(project, 'meta1')
+        renderer = self.renderer(context=metadata,
+                                 assignment=projectSimpleNav.Assignment())
+        self.failUnless(renderer.available)
+
+    def testProjectInfo(self):
+
+        # get project info on a project context.
+        self.portal.invokeFactory('PPMProject', 'project1')
+        project = getattr(self.portal, 'project1')
+        renderer = self.renderer(context=project,
+                                 assignment=projectSimpleNav.Assignment())
         info = renderer.projectInfo()
         self.assertEquals(info['url'], project.absolute_url())
         self.assertEquals(info['title'], 'project1')
@@ -92,14 +166,13 @@ class TestProjectSimpleNavRenderer(PlonepmTestCase):
         # get project info on a metadata context
         project.invokeFactory('PPMMetadata', 'meta1')
         metadata = getattr(project, 'meta1')
-        renderer = self.renderer(context=metadata)
+        renderer = self.renderer(context=metadata,
+                                 assignment=projectSimpleNav.Assignment())
         info = renderer.projectInfo()
         self.assertEquals(info['url'], project.absolute_url())
         self.assertEquals(info['title'], 'project1')
 
     def testInterationsInfo(self):
-
-        self.loginAsPortalOwner()
 
         # preparing the dummy data.
         self.portal.invokeFactory('PPMProject', 'project1')
@@ -112,7 +185,8 @@ class TestProjectSimpleNavRenderer(PlonepmTestCase):
         project.invokeFactory('PPMIteration', 'iter2')
         iteration2 = getattr(project, 'iter2')
 
-        renderer = self.renderer(context=project)
+        renderer = self.renderer(context=project,
+                                 assignment=projectSimpleNav.Assignment())
         iterations = renderer.iterations()
         self.assertEquals(len(iterations), 2)
         self.assertEquals(iterations[0]['url'], iteration2.absolute_url())
@@ -120,7 +194,8 @@ class TestProjectSimpleNavRenderer(PlonepmTestCase):
         self.assertEquals(iterations[1]['url'], iteration1.absolute_url())
         self.assertEquals(iterations[1]['title'], 'iter1')
 
-        renderer = self.renderer(context=metadata)
+        renderer = self.renderer(context=metadata,
+                                 assignment=projectSimpleNav.Assignment())
         iterations = renderer.iterations()
         self.assertEquals(len(iterations), 2)
         self.assertEquals(iterations[0]['url'], iteration2.absolute_url())
@@ -129,8 +204,6 @@ class TestProjectSimpleNavRenderer(PlonepmTestCase):
         self.assertEquals(iterations[1]['title'], 'iter1')
 
     def testStoriesInfo(self):
-
-        self.loginAsPortalOwner()
 
         # preparing the dummy data.
         self.portal.invokeFactory('PPMProject', 'project1')
@@ -148,7 +221,8 @@ class TestProjectSimpleNavRenderer(PlonepmTestCase):
         story3 = getattr(project, 'story3')
         #self.portal.portal_catalog.indexObject(story3)
 
-        renderer = self.renderer(context=project)
+        renderer = self.renderer(context=project,
+                                 assignment=projectSimpleNav.Assignment())
         stories = renderer.stories()
         self.assertEquals(len(stories), 3)
         self.assertEquals(stories[0]['url'], story3.absolute_url())
@@ -158,35 +232,27 @@ class TestProjectSimpleNavRenderer(PlonepmTestCase):
         self.assertEquals(stories[2]['url'], story1.absolute_url())
         self.assertEquals(stories[2]['title'], 'story1')
 
-class TestRecentArtifactsPortlet(PlonepmTestCase):
+class TestRecentArtifactsRenderer(PlonepmPortletTestCase):
 
-    def testRenderer(self):
+    def testAvailable(self):
 
-        context = self.folder
-        request = self.folder.REQUEST
-        view = self.folder.restrictedTraverse('@@plone')
-        manager = getUtility(IPortletManager, name='plone.leftcolumn',
-                             context=self.portal)
-        assignment = recentArtifacts.Assignment()
-        renderer = getMultiAdapter((context, request, view, manager, assignment),
-                                   IPortletRenderer)
+        # renderer in root should not available
+        renderer = self.renderer(assignment=recentArtifacts.Assignment())
         self.failIf(renderer.available)
-        self.failUnless(isinstance(renderer, recentArtifacts.Renderer))
 
-class TestRecentArtifactsRenderer(PlonepmTestCase):
+        # renderer in a project
+        self.portal.invokeFactory('PPMProject', 'project1')
+        project = getattr(self.portal, 'project1')
+        renderer = self.renderer(context=project,
+                                 assignment=recentArtifacts.Assignment())
+        self.failUnless(renderer.available)
 
-    def renderer(self, context=None, request=None, view=None, manager=None,
-                 assignment=None):
-
-        context = context or self.portal
-        request = request or self.app.REQUEST
-        view = view or self.portal.restrictedTraverse('@@plone')
-        manager = getUtility(IPortletManager, name='plone.leftcolumn',
-                             context=self.portal)
-        assignment = recentArtifacts.Assignment()
-
-        return getMultiAdapter((context, request, view, manager, assignment),
-                               IPortletRenderer)
+        # renderer in a metadata
+        project.invokeFactory('PPMMetadata', 'meta1')
+        metadata = getattr(project, 'meta1')
+        renderer = self.renderer(context=metadata,
+                                 assignment=recentArtifacts.Assignment())
+        self.failUnless(renderer.available)
 
     def testArtifacts(self):
 
@@ -201,7 +267,8 @@ class TestRecentArtifactsRenderer(PlonepmTestCase):
         project.invokeFactory('PPMSysReq', 'sysReq1')
         sysReq1 = getattr(project, 'sysReq1')
 
-        renderer = self.renderer(context=project)
+        renderer = self.renderer(context=project,
+                                 assignment=recentArtifacts.Assignment())
         artifacts = renderer.artifacts()
         self.assertEquals(len(artifacts), 4)
         self.assertEquals(artifacts[0]['url'], sysReq1.absolute_url())
@@ -209,7 +276,8 @@ class TestRecentArtifactsRenderer(PlonepmTestCase):
         self.assertEquals(artifacts[2]['url'], funcReq1.absolute_url())
         self.assertEquals(artifacts[2]['title'], 'funcReq1')
 
-        renderer = self.renderer(context=story1)
+        renderer = self.renderer(context=story1,
+                                 assignment=recentArtifacts.Assignment())
         artifacts = renderer.artifacts()
         self.assertEquals(len(artifacts), 4)
         self.assertEquals(artifacts[1]['url'], iter1.absolute_url())
@@ -220,8 +288,9 @@ class TestRecentArtifactsRenderer(PlonepmTestCase):
 def test_suite():
 
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(TestProjectSimpleNavPortlet))
+    suite.addTest(unittest.makeSuite(TestProjectPortlets))
+    suite.addTest(unittest.makeSuite(TestProjectOverviewRenderer))
     suite.addTest(unittest.makeSuite(TestProjectSimpleNavRenderer))
-    suite.addTest(unittest.makeSuite(TestRecentArtifactsPortlet))
+    suite.addTest(unittest.makeSuite(TestRecentArtifactsRenderer))
 
     return suite

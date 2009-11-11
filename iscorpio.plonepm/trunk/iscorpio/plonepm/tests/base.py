@@ -10,6 +10,9 @@ level, which makes it faster to run each test, but slows down test runner
 startup.
 """
 
+from zope.component import getUtility
+from zope.component import getMultiAdapter
+
 from Products.Five import zcml
 from Products.Five import fiveconfigure
 
@@ -17,6 +20,9 @@ from Testing import ZopeTestCase as ztc
 
 from Products.PloneTestCase import PloneTestCase as ptc
 from Products.PloneTestCase.layer import onsetup
+
+from plone.portlets.interfaces import IPortletManager
+from plone.portlets.interfaces import IPortletRenderer
 
 __author__ = "Sean Chen"
 __email__ = "sean.chen@leocorn.com"
@@ -81,6 +87,30 @@ class PlonepmTestCase(ptc.PloneTestCase):
 
     portal_type = ""
     title = ""
+
+class PlonepmPortletTestCase(PlonepmTestCase):
+    """
+    base test case for testing Plonepm Portlet.
+    """
+
+    def afterSetUp(self):
+
+        self.loginAsPortalOwner()
+
+    def renderer(self, context=None, request=None, view=None, manager=None,
+                 assignment=None):
+
+        if not assignment:
+            raise AttributeError('assignment is required!')
+
+        context = context or self.portal
+        request = request or self.app.REQUEST
+        view = view or self.portal.restrictedTraverse('@@plone')
+        manager = getUtility(IPortletManager, name='plone.leftcolumn',
+                             context=self.portal)
+
+        return getMultiAdapter((context, request, view, manager, assignment),
+                               IPortletRenderer)
 
 class PlonepmFunctionalTestCase(ptc.FunctionalTestCase):
     """

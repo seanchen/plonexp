@@ -7,74 +7,31 @@ Unit testing the portlets binding to PPMProject.
 
 import unittest
 
-from zope.component import getUtility
-from zope.component import getMultiAdapter
-
-from plone.portlets.interfaces import IPortletManager
-from plone.portlets.interfaces import IPortletType
-from plone.portlets.interfaces import IPortletAssignment
-from plone.portlets.interfaces import IPortletRenderer
-from plone.portlets.interfaces import IPortletDataProvider
-
-from Products.GenericSetup.utils import _getDottedName
-
 from iscorpio.plonepm.portlets import projectOverview
 from iscorpio.plonepm.portlets import projectSimpleNav
 from iscorpio.plonepm.portlets import recentArtifacts
 
-from base import PlonepmTestCase
+from base import PlonepmPortletTestCase
 
 __author__ = "Sean Chen"
 __email__ = "sean.chen@leocorn.com"
 
-class PlonepmPortletTestCase(PlonepmTestCase):
-    """
-    base test case for testing Plonepm Portlet.
-    """
-
-    def afterSetUp(self):
-
-        self.loginAsPortalOwner()
-
-    def renderer(self, context=None, request=None, view=None, manager=None,
-                 assignment=None):
-
-        if not assignment:
-            raise AttributeError('assignment is required!')
-
-        context = context or self.portal
-        request = request or self.app.REQUEST
-        view = view or self.portal.restrictedTraverse('@@plone')
-        manager = getUtility(IPortletManager, name='plone.leftcolumn',
-                             context=self.portal)
-
-        return getMultiAdapter((context, request, view, manager, assignment),
-                               IPortletRenderer)
-
-class TestProjectPortlets(PlonepmTestCase):
-
-    def renderer(self, assignment):
-
-        context = self.folder
-        request = self.folder.REQUEST
-        view = self.folder.restrictedTraverse('@@plone')
-        manager = getUtility(IPortletManager, name='plone.leftcolumn',
-                             context=self.portal)
-
-        return getMultiAdapter((context, request, view, manager, assignment),
-                               IPortletRenderer)
+class TestProjectPortlets(PlonepmPortletTestCase):
 
     def testRenderer(self):
 
-        renderer = self.renderer(projectSimpleNav.Assignment())
+        renderer = self.renderer(context=self.folder,
+                                 assignment=projectSimpleNav.Assignment())
         self.failIf(renderer.available)
         self.failUnless(isinstance(renderer, projectSimpleNav.Renderer))
 
-        renderer = self.renderer(recentArtifacts.Assignment())
+        renderer = self.renderer(context=self.folder,
+                                 assignment=recentArtifacts.Assignment())
         self.failIf(renderer.available)
         self.failUnless(isinstance(renderer, recentArtifacts.Renderer))
 
-        renderer = self.renderer(projectOverview.Assignment())
+        renderer = self.renderer(context=self.folder,
+                                 assignment=projectOverview.Assignment())
         self.failIf(renderer.available)
         self.failUnless(isinstance(renderer, projectOverview.Renderer))
 

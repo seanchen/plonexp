@@ -31,6 +31,7 @@
     <tr class="even">
       <td width="88">Progress:</td>
       <td tal:define="estimatedHours here/getXppm_story_estimated_hours;
+                      usedHours here/getXppm_story_used_hours;
                       progressPercent here/getXppm_story_progress_percent;">
         <tal:block
            metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_progress_bar"

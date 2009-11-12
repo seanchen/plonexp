@@ -1,0 +1,19 @@
+<dl class="portlet simplePortlet" i18n:domain="plone"
+     tal:define="storyInfo view/storyInfo;">
+
+  <dt class="portletHeader">
+    <span class="portletTopLeft"></span>
+    <a href="#" tal:attributes="href storyInfo/url">
+      Story Facts
+    </a>
+    <span class="portletTopRight"></span>
+  </dt>
+
+  <dd class="portletItem">
+  <ul>
+    <li><a href="#">Iteration</a></li>
+    <li><a href="#">Colleague Stories</a></li>
+  </ul>
+  </dd>
+
+</dl>

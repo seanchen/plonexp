@@ -220,6 +220,13 @@ class PPMStory(XPPMBase, ATFolder, HistoryAwareMixin):
     # preparing class security info for methods.
     security = ClassSecurityInfo()
 
+    def getStoryRoot(self):
+        """
+        returns the story object itself.
+        """
+
+        return self
+
     security.declarePublic('vocabulary_allSysreqsList')
     def vocabulary_allSysreqsList(self):
         """ Returns a display list for all system requirement, the format is

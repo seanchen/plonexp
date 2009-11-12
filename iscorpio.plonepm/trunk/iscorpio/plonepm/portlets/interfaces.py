@@ -28,3 +28,9 @@ class IRecentArtifactsPortlet(IPortletDataProvider):
     """
     the marker interface for a portlet to list recent changed artifacts.
     """
+
+# a portlet to show summary about a story.
+class IStoryFactsPortlet(IPortletDataProvider):
+    """
+    The marker interface for the story facts portlet.
+    """

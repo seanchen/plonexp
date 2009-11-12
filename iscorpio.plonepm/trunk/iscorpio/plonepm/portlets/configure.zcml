@@ -28,4 +28,12 @@
      addview=".recentArtifacts.AddForm"
   />
 
+  <plone:portlet
+     name="iscorpio.plonepm.portlet.story.facts"
+     interface=".interfaces.IStoryFactsPortlet"
+     assignment=".storyFacts.Assignment"
+     renderer=".storyFacts.Renderer"
+     addview=".storyFacts.AddForm"
+  />
+
 </configure>

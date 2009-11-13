@@ -204,6 +204,13 @@ class PPMProject(ATFolder):
         """
         return self.getXppm_developers()
 
+    security.declarePublic('getIteration')
+    def getIteration(self, iterationId):
+        """
+        returns the iteration object for the given iteration id.
+        """
+        return getattr(self, iterationId)
+
     security.declarePublic('getAllIterations')
     def getAllIterations(self):
         """

@@ -70,8 +70,35 @@ class Renderer(base.Renderer):
         returns story title, url, hour usage, status, etc.
         """
 
+        iteration = self.story.getIteration(self.story.getXppm_iteration())
         return {'url' : self.story.absolute_url(),
+                'title' : self.story.title or self.story.id,
+                'estimatedHours' : self.story.getXppm_story_estimated_hours(),
+                'usedHours' : self.story.getXppm_story_used_hours(),
+                'progressPercent' : self.story.getXppm_story_progress_percent(),
+                'iterationTitle' : iteration.title or iteration.id,
+                'iterationUrl' : iteration.absolute_url(),
+                'iterationIcon' : iteration.getIcon(),
                }
+
+    # stories planned in the same iteration.
+    def colleagueStories(self):
+        """
+        all stories within the same iteration except itself.
+        """
+
+        values = []
+        stories = self.story.getAllStories(self.story.getXppm_iteration())
+
+        for story in stories:
+            obj = story.getObject()
+            values.append({
+                'url' : obj.absolute_url(),
+                'title' : obj.title or obj.id,
+                'icon' : obj.getIcon(),
+                })
+
+        return values
 
 # the form for add this portlet.
 class AddForm(base.NullAddForm):

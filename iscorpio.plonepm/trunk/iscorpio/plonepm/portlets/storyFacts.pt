@@ -10,10 +10,40 @@
   </dt>
 
   <dd class="portletItem">
-  <ul>
-    <li><a href="#">Iteration</a></li>
-    <li><a href="#">Colleague Stories</a></li>
-  </ul>
+    <div width="100%" align="center"><strong>
+        <span tal:content="storyInfo/title"/>
+    </strong></div>
+
+    <strong>Progress</strong><br/>
+    <span tal:define="estimatedHours storyInfo/estimatedHours;
+                      usedHours storyInfo/usedHours;
+                      progressPercent storyInfo/progressPercent">
+      <tal:block
+         metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_progress_bar"
+      />
+    </span>
+
+    <strong>Time Tracking</strong><br/>
+    <span>summary of time tracking ...</span><br/>
+
+    <strong>Artifacts</strong><br/>
+    <span>summary of artifacts for this story</span><br/>
+
+    <strong>Iteration</strong><br/>
+    <a href="#" tal:attributes="href storyInfo/iterationUrl">
+      <img src="#" width="16" height="16"
+           tal:attributes="src storyInfo/iterationIcon"/>
+      <span tal:content="storyInfo/iterationTitle"/>
+    </a>
+
+		<!-- colleague stories in the same iteration -->
+    <ul tal:repeat="story view/colleagueStories">
+      <li><a href="#" tal:attributes="href story/url">
+          <img src="#" width="16" height="16"
+               tal:attributes="src story/icon"/>
+          <span tal:content="story/title"/>
+      </a></li>
+    </ul>
   </dd>
 
 </dl>

@@ -1,7 +1,8 @@
 /* <dtml-with base_properties> */
 
 /************* Body *************/
-
+/* class name starts with . */
+/* id name starts with # */
 
 /******* Portal Wrapper *******/
 /* this id will define the basic property for a plone site */
@@ -27,11 +28,14 @@ margin-right:auto;}
 }
 
 /* update styles for portlet */
+.portletItem ul.plonepmOverview {
+  font-size: 9.5pt;
+}
+
 .portletItem ul {
   padding: 0px;
   margin: 0.5em 0 0 3em;
   list-style-image: url(&dtml-portal_url;/bullet.gif);
   list-style-type: square;
-  font-size: 9pt;
 }
 /* </dtml-with> */

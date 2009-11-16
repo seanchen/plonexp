@@ -79,7 +79,10 @@ class IterationsView(BrowserView):
         iterData = []
         for iteration in iterations:
             anIter = {}
-            anIter['obj'] = iteration
+            anIter['title'] = iteration.title or iteration.id
+            anIter['url'] = iteration.absolute_url()
+            anIter['icon'] = iteration.getIcon()
+            anIter['date'] = iteration.getXppm_completion_date()
             # stories for this iteration
             stories = iteration.getIterationStories()
             hours = 0

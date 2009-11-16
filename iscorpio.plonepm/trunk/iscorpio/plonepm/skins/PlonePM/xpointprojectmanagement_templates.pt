@@ -61,22 +61,16 @@
       </tr>
       <!-- one row for each story. -->
       <tal:block tal:repeat="iteration python: batch">
-        <tr tal:define="oddrow repeat/iteration/odd;
-                        obj python: iteration['obj'];
-                        url obj/getURL|obj/absolute_url;
-                        iteration_type obj/portal_type;
-                        iteration_typeinfo python: here.portal_types.getTypeInfo(iteration_type);
-                        icon python: portal_url + '/' + iteration_typeinfo.getIcon();
-                        iteration_date obj/getXppm_completion_date;"
+        <tr tal:define="oddrow repeat/iteration/odd;"
             tal:attributes="class python: test(oddrow, 'odd', 'even')">
           <td>
-            <a href="#" tal:attributes="href url">
+            <a href="#" tal:attributes="href iteration/url">
                <img src="#" height="16" width="16"
-                   tal:attributes="src icon"/>&nbsp;
-              <span tal:content="obj/Title"/>
+                   tal:attributes="src iteration/icon"/>&nbsp;
+              <span tal:content="iteration/title"/>
             </a>
           </td>
-          <td align="center" tal:content="python: toLocalizedTime(iteration_date)">
+          <td align="center" tal:content="python: toLocalizedTime(iteration['date'])">
           </td>
           <td tal:define="estimatedHours iteration/estimatedHours;
                           usedHours iteration/usedHours;

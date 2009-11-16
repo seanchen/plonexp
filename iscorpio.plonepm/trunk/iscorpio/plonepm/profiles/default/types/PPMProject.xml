@@ -33,6 +33,7 @@
   <property name="view_methods">
     <element value="project_view"/>
     <element value="folder_listing"/>
+    <element value="project_iterations"/>
   </property>
 
   <!-- alias -->

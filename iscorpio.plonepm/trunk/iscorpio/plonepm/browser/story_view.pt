@@ -36,6 +36,26 @@
     Show related items if they exist
   </div>
 
+  <div class="visualClear"><!----></div>
+
+<table><tbody>
+  <tr>
+    <th>When</th>
+    <th>What Done</th>
+  </tr>
+  <tr tal:repeat="timesheet view/timesheetLog">
+    <td><span tal:replace="timesheet/datetime"/></td>
+    <td><span tal:replace="timesheet/description"/>
+      (<span tal:replace="timesheet/duration"/> Hours,
+      <span tal:replace="timesheet/percentage"/>% Done)
+    </td>
+  </tr>
+</tbody></table>
+
+  <div tal:replace="structure provider:plonepm.timesheet" />
+
+  <div class="visualClear"><!----></div>
+
   <div tal:replace="structure provider:plone.belowcontentbody" />
 
 </metal:main>

@@ -5,6 +5,7 @@ __doc__ = """PPMStory defines a story for a software project in Agile approach."
 __docformat__ = 'plaintext'
 
 import logging
+from time import strftime
 
 from zope.interface import implements
 from AccessControl import ClassSecurityInfo
@@ -44,7 +45,7 @@ from iscorpio.plonepm.content.base import XPPMBase
 from iscorpio.plonepm.interfaces import IPPMStory
 
 __author__ = 'Sean Chen'
-__email__ = 'chyxiang@gmail.com'
+__email__ = 'sean.chen@leocorn.com'
 
 # the schema for story.
 PPMStorySchema = ATFolderSchema.copy() + Schema((
@@ -240,7 +241,7 @@ class PPMStory(XPPMBase, ATFolder, HistoryAwareMixin):
         self.log.debug('we got %s system requirement', len(ret))
         return DisplayList(ret)
 
-        #security.declareProtected('vocabulary_allMembersList')
+    #security.declareProtected('vocabulary_allMembersList')
     def vocabulary_developers(self):
         """ Return a list of tuple (user_id, fullname, email) for all
         the members of the portal.
@@ -254,6 +255,39 @@ class PPMStory(XPPMBase, ATFolder, HistoryAwareMixin):
                            )
 
         return DisplayList(members)
+
+    #security, 
+    def logTimesheet(self, description, duration, percentage):
+        """
+        logging the billable time as format:
+        datetime, description, duration, percentage
+        """
+
+        # current time.
+        logTime = strftime("%Y-%m-%d %H:%M:%S")
+        # TODO: should initialize this in __init__
+        try:
+            self._timesheet
+        except AttributeError:
+            self._timesheet = []
+        self._timesheet.append({'datetime' : logTime,
+                                'description' : description,
+                                'duration' : duration,
+                                'percentage' : percentage})
+
+        # update context with new spent time and progress.
+        self.xppm_story_used_hours = self.xppm_story_used_hours + duration
+        self.xppm_story_progress_percent = percentage
+
+    def getTimesheetLog(self):
+
+        # TODO: should initialize this in __init__
+        try:
+            self._timesheet
+        except AttributeError:
+            self._timesheet = []
+
+        return self._timesheet
 
 # register to the plone add-on product.
 registerType(PPMStory, PROJECTNAME)

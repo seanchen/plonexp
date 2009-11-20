@@ -28,8 +28,3 @@ class StoryView(BrowserView):
 
         context = aq_inner(self.context)
         return context.text
-
-    def timesheetLog(self):
-
-        obj = aq_inner(self.context)
-        return obj.getTimesheetLog()

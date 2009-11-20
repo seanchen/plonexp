@@ -40,6 +40,11 @@ class AddForm(BrowserView):
         # return the template defined in zcml.
         return self.template()
 
+    def timesheetLog(self):
+
+        obj = aq_inner(self.context)
+        return obj.getTimesheetLog()
+
 class BillTime(BrowserView):
     """
     This view is action view, which will perform some logic and reload

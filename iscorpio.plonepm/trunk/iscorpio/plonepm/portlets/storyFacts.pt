@@ -36,9 +36,10 @@
       <span tal:content="storyInfo/iterationTitle"/>
     </a>
 
-		<!-- colleague stories in the same iteration -->
+    <!-- colleague stories in the same iteration -->
     <ul tal:repeat="story view/colleagueStories">
-      <li><a href="#" tal:attributes="href story/url">
+      <li tal:attributes="class python: story['isSelf'] and 'currentStory' or 'colleagueStory'">
+        <a href="#" tal:attributes="href story/url">
           <img src="#" width="16" height="16"
                tal:attributes="src story/icon"/>
           <span tal:content="story/title"/>

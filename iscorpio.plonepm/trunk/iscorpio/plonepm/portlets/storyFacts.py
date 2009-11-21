@@ -96,6 +96,7 @@ class Renderer(base.Renderer):
                 'url' : obj.absolute_url(),
                 'title' : obj.title or obj.id,
                 'icon' : obj.getIcon(),
+                'isSelf' : obj.id == self.story.id,
                 })
 
         return values

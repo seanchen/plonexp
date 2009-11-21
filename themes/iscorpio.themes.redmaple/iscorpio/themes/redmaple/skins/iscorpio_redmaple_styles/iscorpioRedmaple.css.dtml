@@ -32,6 +32,15 @@ margin-right:auto;}
   font-size: 9.5pt;
 }
 
+/* try to high light the current story from colleague story */
+.portletItem li.currentStory {
+  background-color: &dtml-evenRowBackgroundColor;
+}
+
+.portletItem li.colleagueStory {
+  background-color: &dtml-oddRowBackgroundColor;
+}
+
 .portletItem ul {
   padding: 0px;
   margin: 0.5em 0 0 3em;

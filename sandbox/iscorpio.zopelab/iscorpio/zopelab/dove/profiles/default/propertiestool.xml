@@ -4,4 +4,13 @@
     <property name="name" type="string">navtree</property>
     <property name="something_new" type="boolean">True</property>
   </object>
+
+  <!-- trying to create a new property sheet. -->
+  <object name="testing_properties" meta_type="Plone Property Sheet">
+    <property name="a_boolean" type="boolean">True</property>
+    <property name="lines_list" type="lines">
+      <element value="first line"/>
+      <element value="second line"/>
+    </property>
+  </object>
 </object>

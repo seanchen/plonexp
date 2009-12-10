@@ -25,24 +25,34 @@ class HiddenProducts(object):
     def __init__(self):
 
         config = getConfiguration()
-        testing = config.product_config['testing']
-        self.site_id = testing.get('id')
+        try:
+            # try the zope configuration file first.
+            sitesAdmin = config.product_config['sites_admin']
+            self.adminSiteId = sitesAdmin.get('id')
+        except KeyError:
+            # using the default site id.
+            self.adminSiteId = 'sites_admin'
 
     # returns a list of product names
     def getNonInstallableProducts(self):
 
         app = getSiteManager().getPhysicalRoot()
-        portal_props = getToolByName(app.UserAdmin, 'portal_properties')
-        navtree_props = portal_props.navtree_properties
-        props = navtree_props.getProperty('metaTypesNotToList')
+        try:
+            # trying to looking for the admin site!
+            adminSite = getattr(app, self.adminSiteId)
+        except AttributeError:
+            # no admin site return a empty list.
+            return []
 
-        return ['iscorpio.zopelab.dove',
-                'LDAPUserFolder', 'Products.LDAPUserFolder',
-                'SimpleAttachment', 'Products.SimpleAttachment',
-                'simplon.plone.ldap',
-                'Marshall', 'Products.Marshall',
-                'plone.app.openid',
-                'NuPlone', 'Products.NuPlone']
+        # using the site_properties for now, we may create a dedicate one
+        # later.
+        site_props = adminSite.portal_properties.site_properties
+        props = site_props.getProperty('productsNotList')
+
+        if props:
+            return list(props)
+        else:
+            return []
 
 # CMFDove product class. Extends from SimpleItem to get some basic
 # behavior for work with ZMI

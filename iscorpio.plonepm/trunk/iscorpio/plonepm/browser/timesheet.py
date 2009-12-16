@@ -40,10 +40,20 @@ class AddForm(BrowserView):
         # return the template defined in zcml.
         return self.template()
 
-    def timesheetLog(self):
+    def changeLog(self):
 
         obj = aq_inner(self.context)
-        return obj.getTimesheetLog()
+        return obj.getChangeLog()
+
+    # check the permission for current user.
+    def allowBillTime(self):
+        """
+        using membership tool to check current user's permission for
+        billing time or not.
+        """
+
+        mtool = getToolByName(self, 'portal_membership')
+        return mtool.checkPermission('ModifyPortalContent', self.context)
 
 class BillTime(BrowserView):
     """
@@ -56,6 +66,7 @@ class BillTime(BrowserView):
         self.context = context
         self.request = request
 
+    # this method will be called when submit a form.
     def __call__(self):
 
         form = self.request.form

@@ -275,11 +275,16 @@ class PPMStory(XPPMBase, ATFolder, HistoryAwareMixin):
         field.set(self, owners)
 
     security.declareProtected(ModifyPortalContent, 'logTimesheet')
-    def logTimesheet(self, description, duration, percentage):
+    def logTimesheet(self, description, duration, percentage, memberId=None):
         """
         logging the billable time as format:
         datetime, description, duration, percentage
         """
+
+        if not memberId:
+            # no member specified, using the current logged in user.
+            mtool = getToolByName(self, 'portal_membership')
+            memberId = mtool.getAuthenticatedMember().getId()
 
         # current time.
         logTime = strftime("%Y-%m-%d %H:%M")
@@ -291,6 +296,7 @@ class PPMStory(XPPMBase, ATFolder, HistoryAwareMixin):
         except AttributeError:
             self._changeLog = []
         self._changeLog.append({'datetime' : logTime,
+                                'memberId' : memberId,
                                 'description' : description,
                                 'duration' : duration,
                                 'percentage' : percentage})

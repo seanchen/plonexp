@@ -55,6 +55,18 @@ class AddForm(BrowserView):
         mtool = getToolByName(self, 'portal_membership')
         return mtool.checkPermission('ModifyPortalContent', self.context)
 
+    def getMemberFullName(self, memberId):
+        """
+        return the full name for the given member's id.
+        """
+
+        mtool = getToolByName(self, 'portal_membership')
+        member = mtool.getMemberInfo(memberId)
+        if not member:
+            return memberId
+        else:
+            return member['fullname']
+
 class BillTime(BrowserView):
     """
     This view is action view, which will perform some logic and reload
@@ -78,7 +90,7 @@ class BillTime(BrowserView):
         duration = float(form.get('duration', -1))
         percentage = float(form.get('percentage', -1))
 
-        # check invalid data!
+        # TODO: check invalid data!
 
         # adding the timesheet to the context.
         context.logTimesheet(description, duration, percentage)

@@ -37,6 +37,7 @@ from Products.DataGridField import DataGridWidget
 from Products.DataGridField.Column import Column
 from Products.DataGridField.FixedColumn import FixedColumn
 
+from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.utils import getToolByName
 
 # the configruation info for this project.
@@ -116,7 +117,7 @@ PPMStorySchema = ATFolderSchema.copy() + Schema((
         IntegerField(
             'xppm_story_progress_percent',
             searchable = False,
-            required = True,
+            required = False,
             default = 0,
             # set the range from 0 to 100
             vocabulary = IntDisplayList([(i, i) for i in range(0, 101)]),
@@ -199,6 +200,9 @@ finalizeATCTSchema(PPMStorySchema)
 
 # set the description field invisible.
 PPMStorySchema['description'].widget.visible = False
+# time tracking will update the following fields.
+PPMStorySchema['xppm_story_progress_percent'].widget.visible = False
+PPMStorySchema['xppm_story_used_hours'].widget.visible = False
 
 # the class.
 class PPMStory(XPPMBase, ATFolder, HistoryAwareMixin):
@@ -256,7 +260,21 @@ class PPMStory(XPPMBase, ATFolder, HistoryAwareMixin):
 
         return DisplayList(members)
 
-    #security, 
+    security.declareProtected(ModifyPortalContent, 'setXppm_story_owners')
+    def setXppm_story_owners(self, owners):
+        """
+        mutator for field xppm_story_owners, set local role for new owners.
+        """
+
+        field = self.getField('xppm_story_owners')
+
+        for owner in owners:
+            if owner:
+                self.manage_setLocalRoles(owner, ['Editor'])
+
+        field.set(self, owners)
+
+    security.declareProtected(ModifyPortalContent, 'logTimesheet')
     def logTimesheet(self, description, duration, percentage):
         """
         logging the billable time as format:
@@ -264,30 +282,35 @@ class PPMStory(XPPMBase, ATFolder, HistoryAwareMixin):
         """
 
         # current time.
-        logTime = strftime("%Y-%m-%d %H:%M:%S")
+        logTime = strftime("%Y-%m-%d %H:%M")
+        # current user.
+        #user = 
         # TODO: should initialize this in __init__
         try:
-            self._timesheet
+            self._changeLog
         except AttributeError:
-            self._timesheet = []
-        self._timesheet.append({'datetime' : logTime,
+            self._changeLog = []
+        self._changeLog.append({'datetime' : logTime,
                                 'description' : description,
                                 'duration' : duration,
                                 'percentage' : percentage})
 
         # update context with new spent time and progress.
-        self.xppm_story_used_hours = self.xppm_story_used_hours + duration
-        self.xppm_story_progress_percent = percentage
+        self.setXppm_story_used_hours(self.xppm_story_used_hours + duration)
+        self.setXppm_story_progress_percent(percentage)
 
-    def getTimesheetLog(self):
+    def getChangeLog(self):
 
         # TODO: should initialize this in __init__
         try:
-            self._timesheet
+            self._changeLog
         except AttributeError:
-            self._timesheet = []
+            try:
+                self._changeLog = self._timesheet
+            except AttributeError:
+                self._changeLog = []
 
-        return self._timesheet
+        return self._changeLog
 
 # register to the plone add-on product.
 registerType(PPMStory, PROJECTNAME)

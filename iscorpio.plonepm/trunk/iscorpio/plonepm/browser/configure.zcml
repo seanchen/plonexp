@@ -33,7 +33,7 @@
      permission="zope2.View"
   />
 
-	<!-- TODO: using other permission like plonepm: bill time -->
+  <!-- TODO: using other permission like plonepm: bill time -->
   <browser:viewletManager
      name="plonepm.timesheet"
      provides=".interfaces.IPlonepmTimesheet"
@@ -42,12 +42,12 @@
      template="timesheet.pt"
   />
 
-	<browser:page
-		 name="add_time_bill"
-		 for="..interfaces.IPPMStory"
-		 class=".timesheet.BillTime"
-		 permission="zope2.View"
-	/>
+  <browser:page
+     name="add_time_bill"
+     for="..interfaces.IPPMStory"
+     class=".timesheet.BillTime"
+     permission="cmf.ModifyPortalContent"
+  />
 
   <!-- default view for iteration -->
   <browser:page

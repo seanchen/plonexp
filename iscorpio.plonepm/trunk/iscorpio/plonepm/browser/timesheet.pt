@@ -1,18 +1,27 @@
-<hr/>
-<table><tbody>
+<tal:tracking tal:condition="view/changeLog">
+<h2>Tracking History</h2>
+<table class="listing" width="98%"><tbody>
   <tr>
-    <th>When</th>
+    <th width="128px">When</th>
     <th>What Done</th>
   </tr>
-  <tr tal:repeat="timesheet view/timesheetLog">
-    <td><span tal:replace="timesheet/datetime"/></td>
-    <td><span tal:replace="timesheet/description"/>
-      (<span tal:replace="timesheet/duration"/> Hours,
-      <span tal:replace="timesheet/percentage"/>% Done)
-    </td>
-  </tr>
+  <tal:block tal:repeat="timesheet view/changeLog">
+    <tr tal:define="oddrow repeat/timesheet/odd;"
+        tal:attributes="class python: oddrow and 'even' or 'odd'">
+      <td align="center">
+        <span tal:replace="timesheet/datetime"/>
+      </td>
+      <td>
+        <span tal:replace="timesheet/description"/><br/>
+        -- <strong><span tal:replace="timesheet/duration"/> Hours,
+        <span tal:replace="timesheet/percentage"/>% Done</strong>
+      </td>
+    </tr>
+  </tal:block>
 </tbody></table>
+</tal:tracking>
 
+<tal:timesheet tal:condition="view/allowBillTime">
 <h3 i18n:translate="title_bill_time">Time Billing</h3>
 <form method="post" action="@@add_time_bill">
 
@@ -87,3 +96,4 @@
          i18n:domain="plone" i18n:attributes="value"/>
 
 </form>
+</tal:timesheet>

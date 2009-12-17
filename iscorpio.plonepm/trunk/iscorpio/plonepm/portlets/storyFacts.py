@@ -61,6 +61,9 @@ class Renderer(base.Renderer):
 
         if not self.story:
             return False
+        elif self.story.absolute_url().rfind('portal_factory') > -1:
+            # creating a story now, the portlet should NOT available
+            return False
         else:
             return True
 

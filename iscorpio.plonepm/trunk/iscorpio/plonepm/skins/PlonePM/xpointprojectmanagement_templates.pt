@@ -14,7 +14,7 @@
     <div align="center"><strong>
       <span tal:content="usedHours"/> /
       <span tal:content="estimatedHours" /> hours, 
-      <span tal:content="python: str(progressPercent) + '%'"/>
+      <span tal:content="python: ('%.1f' % progressPercent) + '%'"/>
     </strong></div>
     <div id="XPointProgressBar">
       <div class="fill" align="center"

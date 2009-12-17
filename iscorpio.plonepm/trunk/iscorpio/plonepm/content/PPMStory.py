@@ -25,6 +25,7 @@ from Products.Archetypes.public import CalendarWidget
 from Products.Archetypes.public import IntegerField
 from Products.Archetypes.public import IntegerWidget
 from Products.Archetypes.public import StringField
+from Products.Archetypes.public import FloatField
 from Products.Archetypes.public import registerType
 # from ATContentTypes
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
@@ -114,19 +115,11 @@ PPMStorySchema = ATFolderSchema.copy() + Schema((
             ),
 
         # Progress Status in percentage. 0% - 100%
-        IntegerField(
+        FloatField(
             'xppm_story_progress_percent',
             searchable = False,
             required = False,
-            default = 0,
-            # set the range from 0 to 100
-            vocabulary = IntDisplayList([(i, i) for i in range(0, 101)]),
-            widget = SelectionWidget(
-                label = 'Progress Status',
-                descrpiton = 'Progress status in percentage 0% - 100%',
-                format = 'select',
-                ),
-            schemata = 'Manage',
+            default = 0.0,
             ),
 
         # estimated hours for this task.
@@ -142,15 +135,11 @@ PPMStorySchema = ATFolderSchema.copy() + Schema((
             ),
 
         # used hours for this task.
-        IntegerField(
+        FloatField(
             'xppm_story_used_hours',
             searchable = False,
             required = False,
-            widget = IntegerWidget(
-                label = 'Actual Used Hours',
-                descrpiton = 'Put here the actual used hours for this task',
-                ),
-            schemata = 'Manage',
+            default = 0.0,
             ),
 
         # owner of this task.??? select from membership.

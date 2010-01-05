@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<object name="portal_skins" allow_any="False" cookie_persistence="False"
+        default_skin="Leocornus Classic Theme">
+
+  <!-- Objects for skin redmaple -->
+  <object name="leocornus_classic_images" meta_type="Filesystem Directory View"
+          directory="leocornus.themes.classic:skins/leocornus_classic_images"/>
+  <object name="leocornus_classic_styles" meta_type="Filesystem Directory View"
+          directory="leocornus.themes.classic:skins/leocornus_classic_styles"/>
+  <object name="iscorpio_frog_templates" meta_type="Filesystem Directory View"
+          directory="leocornus.themes.classic:skins/leocornus_classic_templates"/>
+
+  <skin-path name="Leocornus Classic Theme" based-on="Plone Default">
+    <layer name="leocornus_classic_images" insert-after="custom"/>
+    <layer name="leocornus_classic_styles" insert-after="leocornus_classic_images"/>
+    <layer name="leocornus_classic_templates" insert-after="leocornus_classic_styles"/>
+  </skin-path>
+
+</object>

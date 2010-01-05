@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<object name="portal_skins" meta_type="Plone Skins Tool" allow_any="False"
+        cookie_persistence="False"
+        default_skin="Plone Default" request_varname="plone_skin">
+
+  <object name="leocornus_classic_images"
+          meta_type="Filesystem Directory View" remove="True"/>
+  <object name="leocornus_classic_templates"
+          meta_type="Filesystem Directory View" remove="True"/>
+  <object name="leocornus_classic_styles"
+          meta_type="Filesystem Directory View" remove="True"/>
+
+  <skin-path name="Leocornus Classic Theme" remove="True"/>
+
+</object>

@@ -6,6 +6,8 @@
 
   <five:registerPackage package="." initialize=".initialize" />
 
+  <include package=".layout" />
+
   <include file="skins.zcml" />
   <include file="profiles.zcml" />
 

@@ -1,0 +1,7 @@
+<div class="visualNoPrint" id="classic-logo">
+  <a accesskey="1"
+     tal:attributes="href view/navigation_root_url"
+     i18n:domain="plone">
+    <img tal:replace="structure view/logo_tag" alt="" />
+  </a>
+</div>

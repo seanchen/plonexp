@@ -1,0 +1,8 @@
+<table metal:define-macro="portal_globalnav"
+       width="100%" class="visualNoPrint"><tbody>
+  <tr>
+    <td id="portal-globalnav-wrapper">
+      Global Nav Section.
+    </td>
+  </tr>
+</tbody></table>

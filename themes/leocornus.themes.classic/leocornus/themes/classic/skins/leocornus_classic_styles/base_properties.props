@@ -2,7 +2,7 @@ title:string=Leocornus Classic Theme's color, font, logo and border defaults
 
 plone_skin:string=Leocornus Classic Theme
 
-logoName:string=logo.jpg
+logoName:string=banner.gif
 
 fontFamily:string="Lucida Grande", Verdana, Lucida, Helvetica, Arial, sans-serif
 fontBaseSize:string=69%

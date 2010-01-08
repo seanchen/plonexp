@@ -7,10 +7,21 @@
 /******* Portal Wrapper *******/
 /* this id will define the basic property for a plone site */
 #visual-portal-wrapper{
-width: 868px;
-background:&dtml-backgroundColor;;
-margin-left:auto;
-margin-right:auto;}
+  width: 795px;
+  background:&dtml-backgroundColor;;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+/************* top, header, logo *****/
+
+/* portal-logo is defined in public.css */
+/* CMFPLone/skins/plone_styles/public.css.dtml */
+#classic-logo img {
+  border: 0px;
+  padding: 0px;
+  margin: 0px;
+}
 
 /* left column and right column */
 /* it is in file public.css.dtml by default */

@@ -8,7 +8,7 @@
 /* this id will define the basic property for a plone site */
 #visual-portal-wrapper{
   width: 795px;
-  background:&dtml-backgroundColor;;
+  background: &dtml-backgroundColor;;
   margin-left:auto;
   margin-right:auto;
 }
@@ -21,6 +21,18 @@
   border: 0px;
   padding: 0px;
   margin: 0px;
+}
+
+#classic-globalnav {
+  background-color: &dtml-globalBackgroundColor;;
+  border-top-color: &dtml-globalBorderColor;;
+  border-top-width: &dtml-borderWidth;;
+  border-top-style: &dtml-borderStyle;;
+  border-bottom-color: &dtml-globalBorderColor;;
+  border-bottom-width: &dtml-borderWidth;;
+  border-bottom-style: &dtml-borderStyle;;
+  line-height: 2.0em;
+  color: &dtml-globalFontColor;;
 }
 
 /* left column and right column */

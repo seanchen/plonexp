@@ -38,10 +38,13 @@
 /* left column and right column */
 /* it is in file public.css.dtml by default */
 /* Also it is also specified in columns.css.dtml */
-#portal-column-one .visualPadding,
+#portal-column-one .visualPadding {
+  margin: 0px;
+  padding: 0px 1px 0px 0px;
+}
 #portal-column-two .visualPadding {
-  /*margin: 2px;*/
-  padding: 2px;
+  margin: 0px;
+  padding: 0px 0px 0px 1px;
 }
 
 /* Only in columns.css.dtml by default */

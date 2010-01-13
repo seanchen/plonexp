@@ -1,0 +1,25 @@
+<dl class="classicPortlet frontLeftColumn"
+    i18n:domain="plone">
+  <dd class="frontLeftColumnItem">
+  <h5><a href="new_events.aspx"><span class="whiteFontColor">Events Calendar and Registration</span></a>
+  </h5>
+  <h5><a href='new_onlinecert.aspx'><span class="whiteFontColor">E-learning Customer Service Certification Programs</span></a>
+  </h5>
+  <h5><a href='new_onlinemail.aspx'><span class="whiteFontColor">E-learning Email Writing Certification Programs</span></a>
+  </h5>
+  <h5><a href='new_cert-csf.aspx'><span class="whiteFontColor">Customer Service Fundamentals Program</span></a>
+  </h5>
+  <h5><a href='new_cert-ccr.aspx'><span class="whiteFontColor">Client Care Representative Program</span></a>
+  </h5>
+  <h5><a href='new_cert-ccsap.aspx'><span class="whiteFontColor">Contact Centre Assessment</span></a>
+  </h5>
+  <h5><a href="new_training.aspx"><span class="whiteFontColor">Training</span></a>
+  </h5>
+  <h5><a href="new_training.aspx"><span class="whiteFontColor">Consulting</span></a>
+  </h5>
+  <h5><a href="forms/ICSA_Information_Package.pdf"><span class="whiteFontColor">Recruiting</span></a>
+  </h5>
+  <h5><a href="forms/ICSA_Information_Package.pdf"><span class="whiteFontColor">Keynote Speakers</span></a>
+  </h5>
+  </dd>
+</dl>

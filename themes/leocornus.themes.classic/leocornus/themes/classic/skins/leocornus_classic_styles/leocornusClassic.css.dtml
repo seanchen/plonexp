@@ -59,4 +59,42 @@
   list-style-image: url(&dtml-portal_url;/bullet.gif);
   list-style-type: square;
 }
+
+/* the following classes are for this theme only. */
+
+/* this class will override the default .portlet class, */
+/* which is defined in portlets.css.dtml */
+.classicPortlet {
+  margin: 0 0 1em 0;
+  border-bottom: &dtml-borderWidth; &dtml-borderStyle; &dtml-globalBorderColor;;
+  background-color: &dtml-backgroundColor;;
+}
+.frontLeftColumn {
+  background-color: #004584;
+  color: #FFFFFF;
+}
+
+.frontLeftColumnItem{
+  margin: 0;
+  padding: 30px 8px 28px 6px;
+  color: #FFFFFF;
+}
+
+.frontLeftColumnItem H5 {
+  font-size: 10px;
+  color: #FFFFFF;
+  height: 25;
+  background-image: url(&dtml-portal_url;/underline.gif);
+  background-repeat: no-repeat;
+  background-position: top left;
+  padding-bottom: 9px;
+}
+
+.frontLeftColumnItem a {
+  padding-left: 20px;
+}
+
+.whiteFontColor {
+  color: White; 
+}
 /* </dtml-with> */

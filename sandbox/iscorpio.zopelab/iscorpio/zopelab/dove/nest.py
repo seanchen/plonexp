@@ -19,14 +19,25 @@ __email__ = "chyxiang@gmail.com"
 
 # hide the profile from quicke installer.
 class HiddenProducts(object):
+    """
+    This will be defined as an utility in zcml file, so it will be
+    loaded when Zope Server start up.  You don't have to install
+    this product in your Plone site.
+    """
 
     implements(INonInstallable)
 
     def __init__(self):
 
+        # this object will represent the configuration ites in
+        # file zope.conf
         config = getConfiguration()
         try:
-            # try the zope configuration file first.
+            # try the zope configuration file first, the configuration
+            # should be something like this:
+            # <product-config sites_admin>
+            #   id UserAdmin
+            # </product-config>
             sitesAdmin = config.product_config['sites_admin']
             self.adminSiteId = sitesAdmin.get('id')
         except KeyError:

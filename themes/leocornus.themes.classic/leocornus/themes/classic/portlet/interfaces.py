@@ -6,6 +6,8 @@ defines the marker interfaces for portlets. A portlet should implements
 IPortletDataProvider
 """
 
+from zope.schema import Text
+
 from plone.portlets.interfaces import IPortletDataProvider
 
 __author__ = "Sean Chen"
@@ -17,3 +19,9 @@ class IFrontNaviPortlet(IPortletDataProvider):
     """
     The front navigation bar only for the homepage.
     """
+
+    navigationLinks = Text (
+        title = u"Links for your navigation portlet",
+        description = u"Please Select Navigation Links for Your Portlet",
+        required = True
+        )

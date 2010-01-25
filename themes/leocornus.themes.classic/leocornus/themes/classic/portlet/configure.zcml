@@ -10,6 +10,7 @@
      assignment=".frontNavi.Assignment"
      renderer=".frontNavi.Renderer"
      addview=".frontNavi.AddForm"
+     editview=".frontNavi.EditForm"
   />
 
 </configure>

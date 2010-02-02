@@ -1,7 +1,7 @@
-Changelog
-=========
+Change Log
+==========
 
-0.1 (Feb 14, 2009)
+0.1-dev
 ----------------
 
 * The initial import into sourceforge.net

@@ -58,6 +58,8 @@ class SillyConfiguration(SimpleItem):
     favorite_color = FieldProperty(ISillyConfiguration['favorite_color'])
     #contact_email = FieldProperty(ISillyConfiguration['contact_email'])
 
+# this will work as a factory class to binding the utility to the form,
+# it will wired with interfaces on configure.zcml
 def form_adapter(context):
 
     return getUtility(ISillyConfiguration, name="silly_config",

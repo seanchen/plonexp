@@ -30,6 +30,27 @@ class SillyConfigurationForm(ControlPanelForm):
     form_name = _(u'Section Name',
                   default=u'Attributes')
 
+class SillyConfigPropertyAdapter(SchemaAdapterBase):
+
+    adapts(IPloneSiteRoot)
+    implements(ISillyConfiguration)
+
+    def __init__(self, context):
+        super(SillyConfigPropertyAdapter, self).__init__(context)
+        properties = getToolByName(self.context,
+                                   'portal_properties')
+        self.props = getattr(properties, 'plonelab_properties')
+
+    def get_favorite_color(self):
+
+        return self.props.getProperty('favorite_color')
+
+    def set_favorite_color(self, value):
+
+        self.props.manage_changeProperties(favorite_color=value)
+
+    favorite_color = property(get_favorite_color, set_favorite_color)
+
 class SillyConfigurationAdapter(SchemaAdapterBase):
 
     adapts(IPloneSiteRoot)

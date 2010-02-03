@@ -15,7 +15,7 @@
   <adapter
      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
      provides=".interfaces.ISillyConfiguration"
-     factory=".config.SillyConfigurationAdapter"
+     factory=".config.SillyConfigPropertyAdapter"
   />
 
   <utility

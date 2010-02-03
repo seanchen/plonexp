@@ -18,6 +18,9 @@ class SillyTest(BrowserView):
 
         labtool = getToolByName(context, "iscorpio_plonelab")
 
-        return 'utility: %s<br/> Tool: %s, %s' % (conf.favorite_color,
-                                                  labtool.contact_email,
-                                                  labtool.favorite_color)
+        props = getToolByName(context, 'portal_properties').plonelab_properties
+
+        return 'utility: %s<br/> Tool: %s, %s<br/> Props: %s' % \
+               (conf.favorite_color,
+                labtool.contact_email, labtool.favorite_color,
+                props.getProperty('favorite_color'))

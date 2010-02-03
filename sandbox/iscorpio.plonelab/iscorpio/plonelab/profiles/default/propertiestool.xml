@@ -7,5 +7,6 @@
       <element value="Test Line One"/>
       <element value="Test Line Two"/>
     </property>
+    <property name="favorite_color" type="string">red</property>
   </object>
 </object>

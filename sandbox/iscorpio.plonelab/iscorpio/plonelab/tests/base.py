@@ -43,3 +43,12 @@ class IscorpioPlonelabTestCase(PloneTestCase.PloneTestCase):
     def afterSetUp(self):
 
         self.loginAsPortalOwner()
+
+class IscorpioPlonelabFunctionalTestCase(PloneTestCase.FunctionalTestCase):
+    """
+    base test case class for functional test case.
+    """
+
+    def afterSetUp(self):
+
+        self.loginAsPortalOwner()

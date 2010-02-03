@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<object name="portal_properties" meta_type="Plone Properties Tool">
+  <object name="plonelab_properties" meta_type="Plone Property Sheet">
+    <property name="title">iScorpio PloneLab properties</property>
+    <property name="testing" type="string">Testing Property</property>
+    <property name="testLines" type="lines">
+      <element value="Test Line One"/>
+      <element value="Test Line Two"/>
+    </property>
+  </object>
+</object>

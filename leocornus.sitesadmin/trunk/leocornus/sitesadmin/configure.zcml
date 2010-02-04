@@ -7,7 +7,9 @@
 
   <five:registerPackage package="." initialize=".initialize" />
 
-  <include package=".browser" />
+  <cmf:registerDirectory name="sitesadmin_images"/>
+
+  <include package=".tools" />
   <include file="profiles.zcml" />
 
 </configure>

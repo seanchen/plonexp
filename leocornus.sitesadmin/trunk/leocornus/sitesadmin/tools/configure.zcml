@@ -15,4 +15,8 @@
      factory=".sitesAdminConfig.SitesAdminConfigAdapter"
   />
 
+  <utility factory=".utilities.HiddenProducts"
+           name="sitesadmin.hiddenproducts"
+  />
+
 </configure>

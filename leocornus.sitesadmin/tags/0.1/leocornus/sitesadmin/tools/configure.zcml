@@ -1,0 +1,22 @@
+<configure 
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser">
+
+  <browser:page
+     for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+     name="sitesadmin-configuration"
+     class=".sitesAdminConfig.SitesAdminConfigForm"
+     permission="cmf.ManagePortal"
+  />
+
+  <adapter
+     for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+     provides=".interfaces.ISitesAdminConfig"
+     factory=".sitesAdminConfig.SitesAdminConfigAdapter"
+  />
+
+  <utility factory=".utilities.HiddenProducts"
+           name="sitesadmin.hiddenproducts"
+  />
+
+</configure>

@@ -10,6 +10,7 @@
   <cmf:registerDirectory name="sitesadmin_images"/>
 
   <include package=".tools" />
+  <include package=".content" />
   <include file="profiles.zcml" />
 
 </configure>

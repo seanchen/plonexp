@@ -25,4 +25,5 @@ class UserIdProvider(object):
     def getUserId(self):
         purl = getToolByName(self.context, 'portal_url')
         rel_url = purl.getRelativeUrl(self.context)
-        return rel_url.replace('/', '-')
+        pathId = rel_url.replace('/', '-')
+        return self.context.getUserName()

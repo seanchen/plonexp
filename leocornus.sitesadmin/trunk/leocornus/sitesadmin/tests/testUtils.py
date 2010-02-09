@@ -18,10 +18,10 @@ class PropertiesTestCase(SitesAdminTestCase):
     def testProperties(self):
 
         # import the iscorpio.plonelab default profiles
-        setup_tool = getattr(self.portal, 'portal_setup')
-        setup_tool.\
-            runAllImportStepsFromProfile('profile-%s' % \
-                                         'leocornus.sitesadmin:default')
+        #setup_tool = getattr(self.portal, 'portal_setup')
+        #setup_tool.\
+        #    runAllImportStepsFromProfile('profile-%s' % \
+        #                                 'leocornus.sitesadmin:default')
 
         # the testing properties.
         properties = self.portal.portal_properties.sitesadmin_properties

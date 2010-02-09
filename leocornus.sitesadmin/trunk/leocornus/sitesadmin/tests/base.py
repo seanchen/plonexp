@@ -29,11 +29,15 @@ def setup_product():
     fiveconfigure.debug_mode = True
     zcml.load_config('configure.zcml', leocornus.sitesadmin)
 
+    # we need use installProduct instead of installPackage for membrane
+    # version 1.1bx.  version 2.0 will be different.
+    ZopeTestCase.installProduct('membrane')
     ZopeTestCase.installPackage('leocornus.sitesadmin')
 
 setup_product()
 # we need a Plone site for some of the module.
-PloneTestCase.setupPloneSite(products=['leocornus.sitesadmin'])
+PloneTestCase.setupPloneSite(products=['leocornus.sitesadmin'],
+                             extension_profiles=["membrane:default"])
 
 # base test case for our product.
 class SitesAdminTestCase(PloneTestCase.PloneTestCase):

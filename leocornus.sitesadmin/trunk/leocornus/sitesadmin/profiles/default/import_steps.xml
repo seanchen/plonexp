@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<import-steps>
+
+  <import-step
+     id="membrane.dependence"
+     version="20100208-01"
+     handler="leocornus.sitesadmin.setuphandlers.setupMembrane"
+     title="SitesAdmin: setup membrane">
+    Various import step to make sure we have membrane installed.
+  </import-step>
+
+</import-steps>

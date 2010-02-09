@@ -25,6 +25,7 @@ setup(name='leocornus.sitesadmin',
       zip_safe=False,
       install_requires=[
           'setuptools',
+          'Products.membrane',
           # -*- Extra requirements: -*-
       ],
       entry_points="""

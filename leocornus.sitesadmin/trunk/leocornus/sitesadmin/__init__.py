@@ -11,7 +11,21 @@ from Products.CMFCore.permissions import AddPortalContent as ADD_CONTENT_PERMISS
 from Products.Archetypes import process_types
 from Products.Archetypes.public import listTypes
 
+from Products.PluggableAuthService import registerMultiPlugin
+
 from config import PROJECTNAME
+from plugins import ssouser
+
+__author__ = "Sean Chen"
+__email__ = "sean.chen@leocorn.com"
+
+# try to register SsouserPlugins available in add plugin selection
+# dropdown list.
+try:
+    registerMultiPlugin(ssouser.SsouserPlugins.meta_type)
+except RuntimeError:
+    # ignore exceptions on re-registering the plugin
+    pass
 
 def initialize(context):
 
@@ -19,6 +33,7 @@ def initialize(context):
     initialization ...
     """
 
+    # initialize AT content types.
     import content
     content            # make pyflakes happy
 
@@ -32,3 +47,13 @@ def initialize(context):
         extra_constructors = constructors,
         fti = ftis,
         ).initialize(context)
+
+    # register PAS plugin class.
+    context.registerClass(
+        ssouser.SsouserPlugins,
+        constructors=(
+            ssouser.manage_addSsouserPluginsForm,
+            ssouser.manage_addSsouserPlugins,
+        ),
+        visibility=None
+    )

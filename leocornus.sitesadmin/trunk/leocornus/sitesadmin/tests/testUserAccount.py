@@ -45,6 +45,7 @@ class UserAccountTest(SitesAdminTestCase):
                        'password' : 'user1password'}
         credit = self.portal.acl_users.membrane_users.authenticateCredentials(credentials)
         self.failIf(credit is None)
+        self.assertTrue('user1test' in credit)
 
 tests.append(UserAccountTest)
 

@@ -19,4 +19,13 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
   />
 
+  <!-- the profile for installing and setting up ssouser plugin -->
+  <genericsetup:registerProfile
+      name="ssouser"
+      title="Single Sign On User Plugin"
+      directory="profiles/ssouser"
+      description="install and setup single sign user plugin."
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+  />
+
 </configure>

@@ -48,6 +48,7 @@ class SitesAdminTestCase(PloneTestCase.PloneTestCase):
     def afterSetUp(self):
 
         self.loginAsPortalOwner()
+        self.acl_users = self.portal.acl_users
 
 class SitesAdminFunctionalTestCase(PloneTestCase.FunctionalTestCase):
     """

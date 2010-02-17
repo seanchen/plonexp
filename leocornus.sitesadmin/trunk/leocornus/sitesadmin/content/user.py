@@ -8,6 +8,8 @@ Here, we will define the user account managed by membrane.
 from AccessControl import ClassSecurityInfo
 from zope.interface import implements
 
+from Products.CMFCore.utils import getToolByName
+
 from Products.Archetypes.public import Schema
 from Products.Archetypes.public import StringField
 from Products.Archetypes.public import StringWidget
@@ -33,20 +35,35 @@ __author__ = "Sean Chen"
 __email__ = "sean.chen@leocorn.com"
 
 UserAccountSchema = ATCTContent.schema.copy() + Schema((
+
     StringField('userName',
                 languageIndependent = 1,
                 widget = StringWidget(description = "Username for a person.")
                ),
+
     StringField('password',
                 languageIndependent = 1,
                 widget = StringWidget(description = "Password.")
                ),
+
     StringField('fullname',
                 languageIndependent = 1,
-                #schemata='userinfo',
                 user_property=True,
                 widget = StringWidget(description = "Full name.")
                ),
+
+    StringField('email',
+                languageIndependent = 1,
+                user_property=True,
+                widget = StringWidget(description = "Email Address.")
+               ),
+
+    StringField('location',
+                languageIndependent = 1,
+                user_property=True,
+                widget = StringWidget(description = "Location.")
+               ),
+
     LinesField(
         # not 'roles' b/c 'validate_roles' exists; stoopid Archetypes
         name="roles_",
@@ -96,8 +113,31 @@ class UserAccount(ATCTContent):
     def verifyCredentials(self, credentials):
         login = credentials.get('login')
         password = credentials.get('password')
-        if login == self.getUserName() and password == self.getPassword():
-            return True
+
+        if login == self.getUserName():
+            # it is a membrane user.
+            if login.find('\\') < 0:
+                # non-ops users
+                if password == self.getPassword():
+                    return True
+            elif login.startswith('ext\\'):
+                # non-ops users.
+                if password == self.getPassword():
+                    return True
+            else:
+                # ops users.
+                ldapDomain, ldapLogin = login.split('\\')
+                # verify through ldap plugin.
+                userFolder = getToolByName(self, 'acl_users')
+                ldapCredit = {'login' : ldapLogin,
+                              'password' : password}
+                ldapUserFolder = getattr(userFolder, 'ldap_%s' % ldapDomain)
+                credit = ldapUserFolder.authenticateCredentials(ldapCredit)
+                return credit
+        else:
+            # query the LDAP.
+            # XXX Not support now!
+            return False
 
     #
     # IUserRoles implementation

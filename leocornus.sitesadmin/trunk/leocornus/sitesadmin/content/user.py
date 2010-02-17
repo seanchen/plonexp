@@ -15,6 +15,7 @@ from Products.Archetypes.public import StringField
 from Products.Archetypes.public import StringWidget
 from Products.Archetypes.public import registerType
 from Products.Archetypes.public import LinesField
+from Products.Archetypes.public import LinesWidget
 from Products.Archetypes.public import MultiSelectionWidget
 
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
@@ -62,6 +63,12 @@ UserAccountSchema = ATCTContent.schema.copy() + Schema((
                 languageIndependent = 1,
                 user_property=True,
                 widget = StringWidget(description = "Location.")
+               ),
+
+    LinesField('sites',
+               languageIndependent = 1,
+               user_property=True,
+               widget = LinesWidget(description = "How user associate with sites")
                ),
 
     LinesField(

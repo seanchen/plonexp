@@ -42,6 +42,7 @@ class UserAccountTest(SitesAdminTestCase):
         user1.setUserName("user1test")
         user1.setFullname("User Full Name")
         user1.setPassword('user1password')
+        user1.setLocation('a location')
         user1.setEmail('sean.chen@ontario.ca')
         sites = ("{'id':'gsdc/sso_test', 'roles':['Member','Reviewer'], 'groups':['testing','contributor']}",
                  "{'id':'gsdc/cts', 'roles':['Reviewer'], 'groups':['contributor']}")
@@ -59,6 +60,7 @@ class UserAccountTest(SitesAdminTestCase):
         theMember = mTool.getMemberById('user1test')
         self.assertEquals('User Full Name', theMember.getProperty('fullname'))
         self.assertEquals('sean.chen@ontario.ca', theMember.getProperty('email'))
+        self.assertEquals('a location', theMember.getProperty('location'))
         self.assertEquals(sites, theMember.getProperty("sites"))
 
 tests.append(UserAccountTest)

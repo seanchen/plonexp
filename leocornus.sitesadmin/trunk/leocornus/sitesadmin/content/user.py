@@ -37,40 +37,68 @@ __email__ = "sean.chen@leocorn.com"
 
 UserAccountSchema = ATCTContent.schema.copy() + Schema((
 
-    StringField('userName',
-                languageIndependent = 1,
-                widget = StringWidget(description = "Username for a person.")
-               ),
+    StringField(
+        'userName',
+        required = True,
+        languageIndependent = 1,
+        widget = StringWidget(
+            label = "User Login Name",
+            description = "User's login name, which is used for sign on."
+            ),
+        ),
 
-    StringField('password',
-                languageIndependent = 1,
-                widget = StringWidget(description = "Password.")
-               ),
+    StringField(
+        'password',
+        languageIndependent = 1,
+        widget = StringWidget(
+            label = "Password",
+            description = "User's Password.",
+            modes = ('edit'),
+            ),
+        ),
 
-    StringField('fullname',
-                languageIndependent = 1,
-                user_property=True,
-                widget = StringWidget(description = "Full name.")
-               ),
+    StringField(
+        'fullname',
+        languageIndependent = 1,
+        required = True,
+        user_property=True,
+        widget = StringWidget(
+            label = "Full Name",
+            description = "User's Full name."
+            ),
+        ),
 
-    StringField('email',
-                languageIndependent = 1,
-                user_property=True,
-                widget = StringWidget(description = "Email Address.")
-               ),
+    StringField(
+        'email',
+        languageIndependent = 1,
+        required = True,
+        user_property=True,
+        widget = StringWidget(
+            label="Email Address",
+            description = "User's Email Address."
+            ),
+        ),
 
-    StringField('location',
-                languageIndependent = 1,
-                user_property=True,
-                widget = StringWidget(description = "Location.")
-               ),
+    StringField(
+        'location',
+        languageIndependent = 1,
+        user_property=True,
+        widget = StringWidget(
+            label="Location",
+            description = "User's Location."
+            ),
+        ),
 
-    LinesField('sites',
-               languageIndependent = 1,
-               user_property=True,
-               widget = LinesWidget(description = "How user associate with sites")
-               ),
-
+    LinesField(
+        'sites',
+        languageIndependent = 1,
+        user_property=True,
+        widget = LinesWidget(
+            label="Sites",
+            description = "How user associate with sites",
+            ),
+        ),
+ 
     LinesField(
         # not 'roles' b/c 'validate_roles' exists; stoopid Archetypes
         name="roles_",
@@ -82,11 +110,31 @@ UserAccountSchema = ATCTContent.schema.copy() + Schema((
         widget=MultiSelectionWidget(
             label="Roles",
             description="Roles that member has.",
+            modes = (),
             ),
         ),
     ))
 
 finalizeATCTSchema(UserAccountSchema)
+
+# tweak the field loacation
+UserAccountSchema.changeSchemataForField('location', 'default')
+
+#UserAccountSchema['roles_'].widget.visible['edit'] = 'hidden'
+UserAccountSchema['description'].widget.visible['edit'] = 'invisible'
+# hide all fields for settings
+UserAccountSchema['allowDiscussion'].widget.visible['edit'] = 'invisible'
+UserAccountSchema['excludeFromNav'].widget.visible['edit'] = 'invisible'
+# hide fields for dates
+UserAccountSchema['effectiveDate'].widget.visible['edit'] = 'invisible'
+UserAccountSchema['expirationDate'].widget.visible['edit'] = 'invisible'
+# hide fields from ownership
+UserAccountSchema['creators'].widget.visible['edit'] = 'invisible'
+UserAccountSchema['contributors'].widget.visible['edit'] = 'invisible'
+UserAccountSchema['rights'].widget.visible['edit'] = 'invisible'
+# hide fields from categorization
+UserAccountSchema['relatedItems'].widget.visible['edit'] = 'invisible'
+UserAccountSchema['language'].widget.visible['edit'] = 'invisible'
 
 class UserAccount(ATCTContent):
     """

@@ -17,6 +17,8 @@ from Products.Archetypes.public import registerType
 from Products.Archetypes.public import LinesField
 from Products.Archetypes.public import LinesWidget
 from Products.Archetypes.public import MultiSelectionWidget
+from Products.Archetypes.public import TextField
+from Products.Archetypes.public import TextAreaWidget
 
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.content.base import ATCTContent
@@ -79,6 +81,15 @@ UserAccountSchema = ATCTContent.schema.copy() + Schema((
             ),
         ),
 
+    TextField(
+        'biogrphy',
+        user_property=True,
+        widget = TextAreaWidget(
+            label = "Biagraphy",
+            description = "A short overview of who you are and what you do. Will be displayed on the your author page, linked from the items you create."
+            ),
+        ),
+
     StringField(
         'location',
         languageIndependent = 1,
@@ -94,7 +105,7 @@ UserAccountSchema = ATCTContent.schema.copy() + Schema((
         languageIndependent = 1,
         user_property=True,
         widget = LinesWidget(
-            label="Sites",
+            label = "Sites",
             description = "How user associate with sites",
             ),
         ),

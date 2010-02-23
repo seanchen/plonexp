@@ -13,6 +13,7 @@ from Products.CMFCore.utils import getToolByName
 from Products.Archetypes.public import Schema
 from Products.Archetypes.public import StringField
 from Products.Archetypes.public import StringWidget
+from Products.Archetypes.public import PasswordWidget
 from Products.Archetypes.public import registerType
 from Products.Archetypes.public import LinesField
 from Products.Archetypes.public import LinesWidget
@@ -52,10 +53,9 @@ UserAccountSchema = ATCTContent.schema.copy() + Schema((
     StringField(
         'password',
         languageIndependent = 1,
-        widget = StringWidget(
+        widget = PasswordWidget(
             label = "Password",
             description = "User's Password.",
-            modes = ('edit'),
             ),
         ),
 
@@ -82,10 +82,10 @@ UserAccountSchema = ATCTContent.schema.copy() + Schema((
         ),
 
     TextField(
-        'biogrphy',
+        'description',
         user_property=True,
         widget = TextAreaWidget(
-            label = "Biagraphy",
+            label = "Biography",
             description = "A short overview of who you are and what you do. Will be displayed on the your author page, linked from the items you create."
             ),
         ),
@@ -132,7 +132,7 @@ finalizeATCTSchema(UserAccountSchema)
 UserAccountSchema.changeSchemataForField('location', 'default')
 
 #UserAccountSchema['roles_'].widget.visible['edit'] = 'hidden'
-UserAccountSchema['description'].widget.visible['edit'] = 'invisible'
+#UserAccountSchema['description'].widget.visible['edit'] = 'invisible'
 # hide all fields for settings
 UserAccountSchema['allowDiscussion'].widget.visible['edit'] = 'invisible'
 UserAccountSchema['excludeFromNav'].widget.visible['edit'] = 'invisible'

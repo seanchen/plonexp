@@ -11,7 +11,10 @@ from Products.PluggableAuthService.interfaces.plugins import IAuthenticationPlug
 from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlugin
 from Products.PluggableAuthService.interfaces.plugins import IPropertiesPlugin
 from Products.PluggableAuthService.interfaces.plugins import IExtractionPlugin
+from Products.PluggableAuthService.interfaces.plugins import IUserFactoryPlugin
 from Products.PluggableAuthService.interfaces.plugins import ICredentialsUpdatePlugin
+
+from Products.PlonePAS.interfaces.plugins import IMutablePropertiesPlugin
 
 from leocornus.sitesadmin.plugins.ssouser import SsouserPlugins
 from base import SitesAdminTestCase
@@ -46,6 +49,10 @@ class SsouserTestCase(SitesAdminTestCase):
         found = plugins._getPlugins(IUserEnumerationPlugin)
         self.assertTrue('ssouser' in found)
 
+        plugins.activatePlugin(IUserFactoryPlugin, 'ssouser')
+        found = plugins._getPlugins(IUserFactoryPlugin)
+        self.assertTrue('ssouser' in found)
+
         plugins.activatePlugin(IPropertiesPlugin, 'ssouser')
         found = plugins._getPlugins(IPropertiesPlugin)
         self.assertTrue('ssouser' in found)
@@ -57,6 +64,8 @@ class SsouserTestCase(SitesAdminTestCase):
         plugins.activatePlugin(ICredentialsUpdatePlugin, 'ssouser')
         found = plugins._getPlugins(ICredentialsUpdatePlugin)
         self.assertTrue('ssouser' in found)
+
+        IMutablePropertiesPlugin.providedBy(self.acl_users.ssouser)
 
     # test the profile import.
     def testImportProfile(self):
@@ -80,6 +89,10 @@ class SsouserTestCase(SitesAdminTestCase):
         found = plugins._getPlugins(IUserEnumerationPlugin)
         self.assertTrue('ssouser' in found)
         self.assertFalse('source_users' in found)
+
+        found = plugins._getPlugins(IUserFactoryPlugin)
+        self.assertTrue('ssouser' in found)
+        self.assertFalse('user_factory' in found)
 
         found = plugins._getPlugins(IPropertiesPlugin)
         self.assertTrue('ssouser' in found)

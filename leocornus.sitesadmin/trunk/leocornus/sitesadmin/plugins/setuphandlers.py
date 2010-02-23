@@ -9,6 +9,7 @@ from StringIO import StringIO
 
 from Products.PluggableAuthService.interfaces.plugins import IAuthenticationPlugin
 from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlugin
+from Products.PluggableAuthService.interfaces.plugins import IUserFactoryPlugin
 from Products.PluggableAuthService.interfaces.plugins import IPropertiesPlugin
 from Products.PluggableAuthService.interfaces.plugins import IExtractionPlugin
 from Products.PluggableAuthService.interfaces.plugins import ICredentialsUpdatePlugin
@@ -59,6 +60,7 @@ def setupSsouserPlugins(portal, out):
     userFolder.plugins.deactivatePlugin(IAuthenticationPlugin, 'source_users')
 
     userFolder.plugins.deactivatePlugin(IUserEnumerationPlugin, 'source_users')
+    userFolder.plugins.deactivatePlugin(IUserFactoryPlugin, 'user_factory')
 
     userFolder.plugins.deactivatePlugin(IPropertiesPlugin, 'mutable_properties')
 

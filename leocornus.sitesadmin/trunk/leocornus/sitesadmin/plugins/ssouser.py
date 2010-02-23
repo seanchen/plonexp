@@ -12,6 +12,7 @@ from Acquisition import aq_inner, aq_parent
 from Globals import InitializeClass
 from Globals import DTMLFile
 from AccessControl.SecurityInfo import ClassSecurityInfo
+
 from Products.PluggableAuthService.utils import classImplements
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
 from Products.PluggableAuthService.interfaces.plugins import IAuthenticationPlugin
@@ -19,6 +20,9 @@ from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlu
 from Products.PluggableAuthService.interfaces.plugins import IPropertiesPlugin
 from Products.PluggableAuthService.interfaces.plugins import IExtractionPlugin
 from Products.PluggableAuthService.interfaces.plugins import ICredentialsUpdatePlugin
+from Products.PluggableAuthService.interfaces.plugins import IUserFactoryPlugin
+
+from Products.PlonePAS.interfaces.plugins import IMutablePropertiesPlugin
 
 __author__ = "Sean Chen"
 __email__ = "sean.chen@leocorn.com"
@@ -113,7 +117,7 @@ class SsouserPlugins(BasePlugin):
         """
         forward to user admin to do the 
         """
-        app = self.getZopeApp()
+
         credit = self.getUserAdmin().credentials_cookie_auth.extractCredentials(request)
         self.log.debug('extract credentials: %s', credit)
         return credit
@@ -124,9 +128,19 @@ class SsouserPlugins(BasePlugin):
         """
         again forward to the useradmin
         """
-        app = self.getZopeApp()
+
         return self.getUserAdmin().credentials_cookie_auth.updateCredentials(request, response,
                                                                  login, new_password)
+
+    # IUserFactoryPlugin
+    security.declarePrivate('createUser')
+    def createUser(self, user_id, name):
+        """
+        create a new IPropertiedUser object.
+        """
+        user = self.getUserAdmin().membrane_user_factory.createUser(user_id, name)
+
+        return user
 
     # returns user properties for the given user.
     security.declarePrivate('getPropertiesForUser')
@@ -134,10 +148,25 @@ class SsouserPlugins(BasePlugin):
         """
         get user properties from useradmin.
         """
-        app = self.getZopeApp()
+
         properties = self.getUserAdmin().membrane_properties.getPropertiesForUser(user, request)
+        properties._id = self.id
 
         return properties
+
+    # set properties for user
+    security.declarePrivate('setPropertiesForUser')
+    def setPropertiesForUser(self, user, propertysheet):
+
+        self.getUserAdmin().membrane_properties.setPropertiesForUser(user,
+                                                                     propertysheet)
+
+    # delete user
+    security.declarePrivate('deleteUser')
+    def deleteUser(self, user_id):
+
+        # XXX: Not now
+        pass
 
     # return the zope root object.
     security.declarePrivate('getZopeApp')
@@ -159,8 +188,10 @@ class SsouserPlugins(BasePlugin):
 classImplements(SsouserPlugins,
                 IAuthenticationPlugin,
                 IUserEnumerationPlugin,
+                IUserFactoryPlugin,
                 IExtractionPlugin,
                 ICredentialsUpdatePlugin,
-                IPropertiesPlugin)
+                IPropertiesPlugin,
+                IMutablePropertiesPlugin)
 
 InitializeClass(SsouserPlugins)

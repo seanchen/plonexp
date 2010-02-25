@@ -1,6 +1,14 @@
 Change Log
 ==========
 
+0.3
+---
+
+  * New pas plugin in root admin site to proxy PAS service to different
+    backend plugins.  May give name plugin_proxy.
+
+  * 
+
 0.2
 ---
 

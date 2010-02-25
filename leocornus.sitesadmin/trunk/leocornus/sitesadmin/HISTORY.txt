@@ -1,7 +1,30 @@
 Change Log
 ==========
 
-0.1-dev
-----------------
+0.2
+---
 
-* The initial import into sourceforge.net
+  * Introduce membrane to manage members for Plone sites.
+
+  * New content type UserAccount for membrane user.
+
+  * Site level PAS plugin to forward all PAS services to the root
+    admin site:
+    - IAuthenticationPlugin
+    - IExtractionPlugin
+    - ICredentialsUpdatePlugin
+    - IUserEnumerationPlugin
+    - IUserFactoryPlugin
+    - IPropertiesPlugin
+    - IMutablePropertiesPlugin
+
+  * Unit test cases
+
+0.1
+---
+
+  * add sites admin property sheet in portal_properties
+
+  * add a configlet in plone control panel for sitesadmin_properties
+
+  * add an utility to hide un-necessary product

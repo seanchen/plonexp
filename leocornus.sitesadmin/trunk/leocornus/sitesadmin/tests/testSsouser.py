@@ -16,6 +16,8 @@ from Products.PluggableAuthService.interfaces.plugins import ICredentialsUpdateP
 
 from Products.PlonePAS.interfaces.plugins import IMutablePropertiesPlugin
 
+from Products.CMFCore.utils import getToolByName
+
 from leocornus.sitesadmin.plugins.ssouser import SsouserPlugins
 from base import SitesAdminTestCase
 
@@ -80,7 +82,8 @@ class SsouserTestCase(SitesAdminTestCase):
                           ['ssouser'])
 
         plugins = self.acl_users.plugins
-        # make sure the plugins are activated.
+        # make sure the ssouser plugins are activated, and ssouser should be
+        # the only active plugin.
         found = plugins._getPlugins(IAuthenticationPlugin)
         self.assertTrue('ssouser' in found)
         self.assertFalse('session' in found)
@@ -146,6 +149,52 @@ class SsouserTestCase(SitesAdminTestCase):
 
         self.failIf(credit is None)
         self.assertTrue('user1test' in credit)
+
+    # test authenticate credential
+    def testMutableProperty(self):
+
+        # install the ssouser plugin.
+        setup_tool = getattr(self.portal, 'portal_setup')
+        setup_tool.runAllImportStepsFromProfile('profile-%s' % \
+                                                'leocornus.sitesadmin:ssouser')
+
+        # deactivate all the plugins from membrane.
+        membranePlugins = {
+            'membrane_properties' : [IPropertiesPlugin],
+            'membrane_user_factory' : [IUserFactoryPlugin],
+            'membrane_users' : [IAuthenticationPlugin, IUserEnumerationPlugin],
+            }
+        self.acl_users.plugins.deactivatePlugin(IAuthenticationPlugin,
+                                                'membrane_users')
+        self.acl_users.plugins.deactivatePlugin(IUserEnumerationPlugin,
+                                                'membrane_users')
+        self.acl_users.plugins.deactivatePlugin(IPropertiesPlugin,
+                                                'membrane_properties')
+        self.acl_users.plugins.deactivatePlugin(IUserFactoryPlugin,
+                                                'membrane_user_factory')
+        # at this point, ssouer should be the only active plugin.
+
+        # preparing testing user.
+        self.portal.invokeFactory('UserAccount', 'user1')
+        user1 = getattr(self.portal, 'user1')
+        user1.setUserName("user1test")
+        user1.setPassword('user1password')
+        user1.setLocation('user1 location')
+        self.portal.membrane_tool.indexObject(user1)
+
+        # using the testing plone site as the user admin site.
+        self.acl_users.ssouser.manage_changeProperties(userSiteId='plone')
+
+        mtool = getToolByName(self.portal, 'portal_membership')
+        member = mtool.getMemberById('user1test')
+        self.failIf(member is None)
+        self.assertEquals(member.getProperty('location'), user1.getLocation())
+
+        newProps = {'location' : 'new location'}
+        member.setMemberProperties(newProps)
+
+        oneMore = mtool.getMemberById('user1test')
+        self.assertEquals(oneMore.getProperty('location'), 'new location')
 
 def test_suite():
     suite = unittest.TestSuite()

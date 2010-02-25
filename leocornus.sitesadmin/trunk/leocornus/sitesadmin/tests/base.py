@@ -38,7 +38,7 @@ PloneTestCase.setupPloneSite(products=['leocornus.sitesadmin'],
                              extension_profiles=["membrane:default"])
 
 # try to setup one more plone site for testing.
-PloneTestCase.setupPloneSite(id='sso_testing')
+PloneTestCase.setupPloneSite(id='test_install')
 
 # base test case for our product.
 class SitesAdminTestCase(PloneTestCase.PloneTestCase):

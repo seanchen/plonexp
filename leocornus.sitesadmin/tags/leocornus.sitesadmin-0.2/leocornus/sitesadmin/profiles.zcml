@@ -1,0 +1,31 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup">
+
+  <!-- the title here will be the name on Site Setup/Add-on Produces -->
+  <genericsetup:registerProfile
+      name="default"
+      title="Plone Sites Administration"
+      directory="profiles/default"
+      description="A dedicate place to manage mass Plone sites"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+  />
+
+  <genericsetup:registerProfile
+      name="uninstall"
+      title="Plone Sites Admin Uninstall Profile"
+      directory="profiles/uninstall"
+      description="uninstall profiles for sitesadmin."
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+  />
+
+  <!-- the profile for installing and setting up ssouser plugin -->
+  <genericsetup:registerProfile
+      name="ssouser"
+      title="Single Sign On User Plugin"
+      directory="profiles/ssouser"
+      description="install and setup single sign user plugin."
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+  />
+
+</configure>

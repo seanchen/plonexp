@@ -18,8 +18,6 @@ import leocornus.sitesadmin
 __author__ = "Sean Chen"
 __email__ = "sean.chen@leocorn.com"
 
-# 
-
 @onsetup
 def setup_product():
     """
@@ -38,6 +36,9 @@ setup_product()
 # we need a Plone site for some of the module.
 PloneTestCase.setupPloneSite(products=['leocornus.sitesadmin'],
                              extension_profiles=["membrane:default"])
+
+# try to setup one more plone site for testing.
+PloneTestCase.setupPloneSite(id='sso_testing')
 
 # base test case for our product.
 class SitesAdminTestCase(PloneTestCase.PloneTestCase):

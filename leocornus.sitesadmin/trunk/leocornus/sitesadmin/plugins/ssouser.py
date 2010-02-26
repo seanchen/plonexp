@@ -7,8 +7,6 @@ single sing on user PAS plugin
 
 import logging
 
-from Acquisition import aq_inner, aq_parent
-
 from Globals import InitializeClass
 from Globals import DTMLFile
 from AccessControl.SecurityInfo import ClassSecurityInfo

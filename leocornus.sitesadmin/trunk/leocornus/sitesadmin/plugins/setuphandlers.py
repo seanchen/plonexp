@@ -60,6 +60,7 @@ def setupSsouserPlugins(portal, out):
     userFolder.plugins.deactivatePlugin(IAuthenticationPlugin, 'source_users')
 
     userFolder.plugins.deactivatePlugin(IUserEnumerationPlugin, 'source_users')
+    userFolder.plugins.deactivatePlugin(IUserEnumerationPlugin, 'mutable_properties')
     userFolder.plugins.deactivatePlugin(IUserFactoryPlugin, 'user_factory')
 
     userFolder.plugins.deactivatePlugin(IPropertiesPlugin, 'mutable_properties')

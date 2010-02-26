@@ -22,7 +22,7 @@ class InstallationTestCase(SitesAdminTestCase):
     def afterSetUp(self):
 
         # get an empty Plone site to test the generic setup installation
-        self.emptySite = getattr(self.app, 'test_install')
+        self.emptySite = getattr(self.app, 'site1')
 
     def testQuickInstaller(self):
         """

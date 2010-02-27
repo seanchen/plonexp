@@ -9,4 +9,12 @@
     Various import step to make sure we have membrane installed.
   </import-step>
 
+  <import-step
+     id="sitesadmin.proxy"
+     version="20100208-01"
+     handler="leocornus.sitesadmin.setuphandlers.setupProxyMultiPlugins"
+     title="SitesAdmin: setup proxy multi plugins">
+    Various import step to setup proxy multi plugins
+  </import-step>
+
 </import-steps>

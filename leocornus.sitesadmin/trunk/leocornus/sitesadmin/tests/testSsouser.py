@@ -74,7 +74,7 @@ class SsouserTestCase(SitesAdminTestCase):
         found = plugins._getPlugins(ICredentialsUpdatePlugin)
         self.assertTrue('ssouser' in found)
 
-        IMutablePropertiesPlugin.providedBy(self.uf.ssouser)
+        self.failUnless(IMutablePropertiesPlugin.providedBy(self.uf.ssouser))
 
     # test the profile import.
     def testImportProfile(self):

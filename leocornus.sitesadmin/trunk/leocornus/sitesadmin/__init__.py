@@ -15,6 +15,7 @@ from Products.PluggableAuthService import registerMultiPlugin
 
 from config import PROJECTNAME
 from plugins import ssouser
+from plugins import proxy
 
 __author__ = "Sean Chen"
 __email__ = "sean.chen@leocorn.com"
@@ -23,6 +24,7 @@ __email__ = "sean.chen@leocorn.com"
 # dropdown list.
 try:
     registerMultiPlugin(ssouser.SsouserPlugins.meta_type)
+    registerMultiPlugin(proxy.ProxyMultiPlugins.meta_type)
 except RuntimeError:
     # ignore exceptions on re-registering the plugin
     pass
@@ -54,6 +56,15 @@ def initialize(context):
         constructors=(
             ssouser.manage_addSsouserPluginsForm,
             ssouser.manage_addSsouserPlugins,
+        ),
+        visibility=None
+    )
+
+    context.registerClass(
+        proxy.ProxyMultiPlugins,
+        constructors=(
+            proxy.manage_addProxyMultiPluginsForm,
+            proxy.manage_addProxyMultiPlugins,
         ),
         visibility=None
     )

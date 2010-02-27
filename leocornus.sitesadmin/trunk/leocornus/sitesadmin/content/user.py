@@ -191,15 +191,9 @@ class UserAccount(ATCTContent):
                 if password == self.getPassword():
                     return True
             else:
-                # ops users.
-                ldapDomain, ldapLogin = login.split('\\')
                 # verify through ldap plugin.
                 userFolder = getToolByName(self, 'acl_users')
-                ldapCredit = {'login' : ldapLogin,
-                              'password' : password}
-                ldapUserFolder = getattr(userFolder, 'ldap_%s' % ldapDomain)
-                credit = ldapUserFolder.authenticateCredentials(ldapCredit)
-                return credit
+                return userFolder.sitesadmin_proxy.verifyCredentials(credentials)
         else:
             # query the LDAP.
             # XXX Not support now!

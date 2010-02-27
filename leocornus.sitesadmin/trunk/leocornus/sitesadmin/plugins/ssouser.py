@@ -2,7 +2,7 @@
 # ssouser.py
 
 """
-single sing on user PAS plugin
+single signon user PAS plugins
 """
 
 import logging
@@ -90,6 +90,8 @@ class SsouserPlugins(BasePlugin):
         password = credentials['password']
 
         credit = self.getUserAdmin().membrane_users.authenticateCredentials(credentials)
+        if not credit:
+            credit = self.getUserAdmin().sitesadmin_proxy.authenticateCredentials(credentials)
 
         return credit
 

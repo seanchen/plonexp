@@ -51,6 +51,10 @@ class ProxyBasicTestCase(SitesAdminTestCase):
         self.assertEquals(proxy.getProperty('abc'), '123')
         self.assertEquals(proxy.getProperty('bcd'), '234')
 
+        self.assertEquals(proxy.getProperty('userFolder'), 'Plone')
+        proxy.manage_changeProperties(userFolder='another/site')
+        self.assertEquals(proxy.getProperty('userFolder'), 'another/site')
+
 # testing proxy multi plugins in more complex cases.
 class ProxyTestCase(SitesAdminTestCase):
 
@@ -68,7 +72,44 @@ class ProxyTestCase(SitesAdminTestCase):
         self.emptySite = getattr(self.app, 'site1')
         self.uf = self.emptySite.acl_users
 
+    def testVerifyCredentials(self):
+
+        # create a testing user in admin site's source_users.
+        adminUserFolder = self.portal.acl_users
+        adminUserFolder.source_users.addUser('srcUser', 'srcUser',
+                                             'testpassword')
+
+        # configure the proxy to include the source_users for
+        # verifying the credentials.
+        proxy = adminUserFolder.sitesadmin_proxy
+        # so the user id with local prefix will be verified through
+        # source_users
+        proxy.manage_addProperty('local', 'source_users', 'string')
+
+        theCred = {'login' : 'local\srcUser', 'password' : 'testpassword'}
+
+        # assert that we could find the user from the admin site.
+        # the authenticate method will return a PloneUser object.
+        user = adminUserFolder.authenticate(theCred['login'],
+                                            theCred['password'], None)
+        self.failUnless(user)
+        self.assertEquals('srcUser', user.getName())
+
+        # set up the empty site for to testing it.
+        userSetupTool = self.emptySite.portal_setup
+        userSetupTool.runAllImportStepsFromProfile('profile-%s' %
+                                                   'leocornus.sitesadmin:ssouser')
+
+        # update the admin site's id.
+        ssouser = self.uf.ssouser
+        ssouser.manage_changeProperties(userSiteId=self.portal.id)
+
+        credit = ssouser.authenticateCredentials(theCred)
+        self.failUnless(credit)
+        self.assertTrue('srcUser' in credit)
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(ProxyBasicTestCase))
+    suite.addTest(unittest.makeSuite(ProxyTestCase))
     return suite

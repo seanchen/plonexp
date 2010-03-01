@@ -54,6 +54,10 @@ def setupProxyMultiPlugins(context):
         # activate the plugin and
         activatePluginInterfaces(portal, 'sitesadmin_proxy', out)
 
+        # We should deactivate all other authentication plugins.
+        userFolder.plugins.deactivatePlugin(IAuthenticationPlugin, 'session')
+        userFolder.plugins.deactivatePlugin(IAuthenticationPlugin, 'source_users')
+
         # the proxy plugin should be the last choice!
         plugins = userFolder.plugins
         plugins.movePluginsDown(IAuthenticationPlugin, ['sitesadmin_proxy'])

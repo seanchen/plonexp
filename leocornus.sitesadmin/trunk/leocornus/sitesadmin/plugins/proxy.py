@@ -25,12 +25,14 @@ manage_addProxyMultiPluginsForm = DTMLFile('proxyAddForm', globals())
 
 # the factory method to add a ssouser plugin.
 def manage_addProxyMultiPlugins(self, id, title='Proxy Multi Plugins',
+                                userFolder='Plone',
                                 REQUEST=None):
     """
-    Id and title will come with the HTTP request.
+    Id and title will come with the HTTP request. the user folder is using the
+    default Plone site.
     """
 
-    pmp = ProxyMultiPlugins(id, title)
+    pmp = ProxyMultiPlugins(id, title, userFolder)
     self._setObject(pmp.getId(), pmp)
 
     if REQUEST:
@@ -53,12 +55,18 @@ class ProxyMultiPlugins(BasePlugin):
                     , 'type'  : 'string'
                     , 'mode'  : 'w'
                     },
+                    { 'id'    : 'userFolder'
+                    , 'label' : 'User Management Folder'
+                    , 'type'  : 'string'
+                    , 'mode'  : 'w'
+                    },
                   )
 
-    def __init__(self, id, title):
+    def __init__(self, id, title, userFolder):
 
         self._setId(id)
         self.title = title
+        self.userFolder = userFolder
 
     # query the backend authentication provider to verify user's credentials.
     security.declarePrivate('verifyCredentials')
@@ -80,7 +88,7 @@ class ProxyMultiPlugins(BasePlugin):
 
         credit = ldapUserFolder.authenticateCredentials(ldapCredit)
         return credit
-
+ 
     # IAuthenticationPlugin
     security.declarePrivate('authenticateCredentials')
     def authenticateCredentials(self, credentials):
@@ -100,6 +108,8 @@ class ProxyMultiPlugins(BasePlugin):
             # find the user management folder.
             # create UserAccount in the user management folder.
             # reindexing the new user account in membrane_tool.
+            # revise the credential to use the new user id and user name.
+            # new user id and user name should have the prefix.
             print '------------------'
 
         return credit

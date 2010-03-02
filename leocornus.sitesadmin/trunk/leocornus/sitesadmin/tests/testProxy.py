@@ -51,7 +51,7 @@ class ProxyBasicTestCase(SitesAdminTestCase):
         self.assertEquals(proxy.getProperty('abc'), '123')
         self.assertEquals(proxy.getProperty('bcd'), '234')
 
-        self.assertEquals(proxy.getProperty('userFolder'), 'Plone')
+        self.assertEquals(proxy.getProperty('userFolder'), 'plone')
         proxy.manage_changeProperties(userFolder='another/site')
         self.assertEquals(proxy.getProperty('userFolder'), 'another/site')
 
@@ -72,28 +72,55 @@ class ProxyTestCase(SitesAdminTestCase):
         self.emptySite = getattr(self.app, 'site1')
         self.uf = self.emptySite.acl_users
 
+    def createDefaultPloneTestUser(self, aclUsers,
+                                   userId='testuser',
+                                   loginName='testuser',
+                                   password='password',
+                                   fullname='Full Name',
+                                   email='full.name@mail.com',
+                                   location='Home'):
+        """
+        create a test user by using the default plone pas services:
+        source_users, user_factory, mutable_properties.
+        """
+
+        aclUsers.source_users.addUser(userId, loginName, password)
+        testUser = aclUsers.user_factory.createUser(userId, loginName)
+
+        propPlugin = aclUsers.mutable_properties
+        testUserPropSheet = propPlugin.getPropertiesForUser(testUser)
+        testUserPropSheet.setProperties(testUser,
+                                        {'fullname' : fullname,
+                                         'email' : email,
+                                         'location' : location,
+                                        })
+        propPlugin.setPropertiesForUser(testUser, testUserPropSheet)
+
     def testVerifyCredentials(self):
 
         # create a testing user in admin site's source_users.
         adminUserFolder = self.portal.acl_users
-        adminUserFolder.source_users.addUser('srcUser', 'srcUser',
-                                             'testpassword')
+        self.createDefaultPloneTestUser(adminUserFolder, 'srcUser',
+                                        'srcUser', 'testpassword')
 
         # configure the proxy to include the source_users for
         # verifying the credentials.
         proxy = adminUserFolder.sitesadmin_proxy
+        proxy.manage_changeProperties(userFolder=self.portal.id)
         # so the user id with local prefix will be verified through
         # source_users
         proxy.manage_addProperty('local', 'source_users', 'string')
+        proxy.manage_addProperty('local_prop', 'mutable_properties', 'string')
+        proxy.manage_addProperty('local_factory', 'user_factory', 'string')
 
-        theCred = {'login' : 'local\srcUser', 'password' : 'testpassword'}
+        theCred = {'login' : 'local\\srcUser', 'password' : 'testpassword'}
 
         # assert that we could find the user from the admin site.
         # the authenticate method will return a PloneUser object.
         user = adminUserFolder.authenticate(theCred['login'],
                                             theCred['password'], None)
         self.failUnless(user)
-        self.assertEquals('srcUser', user.getName())
+        self.assertEquals('local\\srcUser', user.getName())
 
         # set up the empty site for to testing it.
         userSetupTool = self.emptySite.portal_setup
@@ -106,7 +133,106 @@ class ProxyTestCase(SitesAdminTestCase):
 
         credit = ssouser.authenticateCredentials(theCred)
         self.failUnless(credit)
-        self.assertTrue('srcUser' in credit)
+        self.assertTrue('local\\srcUser' in credit)
+
+    def testCreateUserLocal(self):
+
+        # create a testing user in admin site's source_users.
+        adminUserFolder = self.portal.acl_users
+        fullName='test user full name'
+        eMail='test.user@testing.com'
+        self.createDefaultPloneTestUser(adminUserFolder,
+                                        'testuser',
+                                        'testuser',
+                                        'testpassword',
+                                        fullName,
+                                        eMail)
+
+        # configure the proxy to include the source_users for
+        # verifying the credentials.
+        proxy = adminUserFolder.sitesadmin_proxy
+        # We will add the user in site root folder.
+        proxy.manage_changeProperties(userFolder=self.portal.id)
+        # so the user id with local prefix will be verified through
+        # source_users and return property from mutable_properties
+        proxy.manage_addProperty('local', 'source_users', 'string')
+        proxy.manage_addProperty('local_prop', 'mutable_properties', 'string')
+        proxy.manage_addProperty('local_factory', 'user_factory', 'string')
+
+        theCred = {'login' : 'local\\testuser', 'password' : 'testpassword'}
+
+        user = adminUserFolder.authenticate(theCred['login'],
+                                            theCred['password'], None)
+        self.failUnless(user)
+        self.assertEquals('local\\testuser', user.getName())
+        self.assertEquals(fullName, user.getProperty('fullname'))
+        self.assertEquals(eMail, user.getProperty('email'))
+
+        # get back the user from membership tool.
+        mtool = getToolByName(self.portal, 'portal_membership')
+        getBack = mtool.getMemberById('local\\testuser')
+        self.assertEquals(getBack.getProperty('fullname'), fullName)
+        self.assertEquals(getBack.getProperty('email'), eMail)
+
+        # get back the user from membrane user folder.
+        membraneUser = getattr(self.portal, 'local-testuser')
+        self.assertEquals(membraneUser.getFullname(), fullName)
+        self.assertEquals(membraneUser.getEmail(), eMail)
+
+    def testCreateUserRemote(self):
+
+        # create a testing user in admin site's source_users.
+        adminUserFolder = self.portal.acl_users
+        fullName='test user from remote'
+        eMail='test.remote@testing.com'
+        self.createDefaultPloneTestUser(adminUserFolder,
+                                        'testremote',
+                                        'testremote',
+                                        'testpassword',
+                                        fullName,
+                                        eMail)
+
+        # configure the proxy to include the source_users for
+        # verifying the credentials.
+        proxy = adminUserFolder.sitesadmin_proxy
+        # We will add the user in site root folder.
+        proxy.manage_changeProperties(userFolder=self.portal.id)
+        # so the user id with local prefix will be verified through
+        # source_users and return property from mutable_properties
+        proxy.manage_addProperty('local', 'source_users', 'string')
+        proxy.manage_addProperty('local_prop', 'mutable_properties', 'string')
+        proxy.manage_addProperty('local_factory', 'user_factory', 'string')
+
+        theCred = {'login' : 'local\\testremote', 'password' : 'testpassword'}
+
+        
+        # set up the empty site for to testing it.
+        userSetupTool = self.emptySite.portal_setup
+        userSetupTool.runAllImportStepsFromProfile('profile-%s' %
+                                                   'leocornus.sitesadmin:ssouser')
+
+        # update the admin site's id.
+        remoteUserFolder = self.uf
+        ssouser = remoteUserFolder.ssouser
+        ssouser.manage_changeProperties(userSiteId=self.portal.id)
+
+        user = remoteUserFolder.authenticate(theCred['login'],
+                                             theCred['password'], None)
+        self.failUnless(user)
+        self.assertEquals('local\\testremote', user.getName())
+        self.assertEquals(fullName, user.getProperty('fullname'))
+        self.assertEquals(eMail, user.getProperty('email'))
+
+        # get back the user from membership tool.
+        mtool = getToolByName(self.emptySite, 'portal_membership')
+        getBack = mtool.getMemberById('local\\testremote')
+        self.assertEquals(getBack.getProperty('fullname'), fullName)
+        self.assertEquals(getBack.getProperty('email'), eMail)
+
+        # get back the user from membrane user folder.
+        membraneUser = getattr(self.portal, 'local-testremote')
+        self.assertEquals(membraneUser.getFullname(), fullName)
+        self.assertEquals(membraneUser.getEmail(), eMail)
 
 def test_suite():
     suite = unittest.TestSuite()

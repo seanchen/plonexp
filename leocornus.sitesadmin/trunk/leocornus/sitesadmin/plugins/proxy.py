@@ -25,7 +25,7 @@ manage_addProxyMultiPluginsForm = DTMLFile('proxyAddForm', globals())
 
 # the factory method to add a ssouser plugin.
 def manage_addProxyMultiPlugins(self, id, title='Proxy Multi Plugins',
-                                userFolder='Plone',
+                                userFolder='plone',
                                 REQUEST=None):
     """
     Id and title will come with the HTTP request. the user folder is using the
@@ -74,21 +74,22 @@ class ProxyMultiPlugins(BasePlugin):
 
         login = credentials['login']
         password = credentials['password']
-        ldapDomain, ldapLogin = login.split('\\')
-        # verify through ldap plugin.
-        userFolder = getToolByName(self, 'acl_users')
-        ldapCredit = {'login' : ldapLogin,
-                      'password' : password}
+        prefix, theLogin = login.split('\\')
 
-        pluginId = self.getProperty(ldapDomain)
+        # verify through 3rd party plugin.
+        aclUsers = getToolByName(self, 'acl_users')
+        credentials = {'login' : theLogin,
+                       'password' : password}
+
+        pluginId = self.getProperty(prefix)
         if pluginId:
-            ldapUserFolder = getattr(userFolder, pluginId)
+            authProvider = getattr(aclUsers, pluginId)
         else:
-            raise KeyError, 'Could not find plugin for Domain %s' % loginId
+            raise KeyError, 'Could not find plugin for prefix %s' % prefix
 
-        credit = ldapUserFolder.authenticateCredentials(ldapCredit)
-        return credit
- 
+        credit = authProvider.authenticateCredentials(credentials)
+        return credit + (prefix,)
+
     # IAuthenticationPlugin
     security.declarePrivate('authenticateCredentials')
     def authenticateCredentials(self, credentials):
@@ -104,18 +105,82 @@ class ProxyMultiPlugins(BasePlugin):
         # if success, we need create the membrane user account and then
         if credit:
             # we verified it is a valid user somewhere.
-            # get user properties
+            login = credentials['login']
+            theLogin = credit[1]
+            prefix = credit[2]
+            # get user properties from the plugin defined in prefix_prop
+            propSheet = self.getUserProperties(prefix, credit)
             # find the user management folder.
             # create UserAccount in the user management folder.
+            uniqueId = '%s-%s' % (prefix, theLogin)
+            self.getUserFolder().invokeFactory('UserAccount', uniqueId)
+            userAccount = getattr(self.getUserFolder(), uniqueId)
+
+            userAccount.setUserName(login)
+            if propSheet:
+                # TODO: ??? need better way to set properties.
+                userAccount.setFullname(propSheet.getProperty('fullname'))
+                userAccount.setEmail(propSheet.getProperty('email'))
+                userAccount.setLocation(propSheet.getProperty('location'))
+                # XXX more are comming! should leverage the
+                # portal_memberdata tool
+            else:
+                userAccount.setFullname(theLogin)
+
             # reindexing the new user account in membrane_tool.
+            membraneTool = getToolByName(self, 'membrane_tool')
+            membraneTool.indexObject(userAccount)
+
             # revise the credential to use the new user id and user name.
             # new user id and user name should have the prefix.
-            print '------------------'
+            credit = (login, login)
 
         return credit
+
+    security.declarePrivate('getUserProperties')
+    def getUserProperties(self, prefix, credit):
+        """
+        returns a property sheet for the login id from the prefix plugins.
+        """
+
+        aclUsers = getToolByName(self, 'acl_users')
+
+        pluginId = self.getProperty(prefix)
+        if pluginId:
+            authProvider = getattr(aclUsers, pluginId)
+        else:
+            raise KeyError, 'Could not find plugin for prefix %s' % prefix
+
+        prefixPropPlugin = self.getProperty('%s_prop' % prefix)
+        if prefixPropPlugin:
+            propProvider = getattr(aclUsers, prefixPropPlugin)
+        else:
+            propProvider = authProvider
+
+        factoryPlugin = self.getProperty('%s_factory' % prefix)
+        if factoryPlugin:
+            factory = getattr(aclUsers, factoryPlugin)
+        else:
+            factory = authProvider
+
+        # try to get a PloneUser object.
+        # At the point, we already verified credentials...
+        nativeUser = factory.createUser(credit[0], credit[1])
+
+        return propProvider.getPropertiesForUser(nativeUser)
+
+    # return admin site's membrane user folder, so you can create user account.
+    security.declarePrivate('getUserFolder')
+    def getUserFolder(self):
+        """
+        a regular Plone folder as the user management folder.
+        """
+
+        app = self.getPhysicalRoot()
+        return app.unrestrictedTraverse(self.userFolder)
 
 # implements plugins.
 classImplements(ProxyMultiPlugins,
                 IAuthenticationPlugin)
- 
+
 InitializeClass(ProxyMultiPlugins)

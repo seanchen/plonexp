@@ -67,7 +67,7 @@ class ProxyTestCase(SitesAdminTestCase):
 
     def afterSetUp(self):
 
-        self.loginAsPortalOwner()
+        #self.loginAsPortalOwner()
 
         self.emptySite = getattr(self.app, 'site1')
         self.uf = self.emptySite.acl_users
@@ -96,6 +96,31 @@ class ProxyTestCase(SitesAdminTestCase):
                                         })
         propPlugin.setPropertiesForUser(testUser, testUserPropSheet)
 
+    def setupTestingProxy(self, aclUsers):
+
+        # configure the proxy to include the source_users for
+        # verifying the credentials.
+        proxy = aclUsers.sitesadmin_proxy
+        proxy.manage_changeProperties(userFolder=self.portal.id)
+        # so the user id with local prefix will be verified through
+        # source_users
+        proxy.manage_addProperty('local', 'source_users', 'string')
+        proxy.manage_addProperty('local_prop', 'mutable_properties', 'string')
+        proxy.manage_addProperty('local_factory', 'user_factory', 'string')
+
+    def setupRemoteSite(self, remoteSite):
+
+        # set up the empty site for to testing it.
+        userSetupTool = remoteSite.portal_setup
+        userSetupTool.runAllImportStepsFromProfile('profile-%s' %
+                                                   'leocornus.sitesadmin:ssouser')
+
+        # update the admin site's id.
+        ssouser = remoteSite.acl_users.ssouser
+        ssouser.manage_changeProperties(userSiteId=self.portal.id)
+
+        return ssouser
+
     def testVerifyCredentials(self):
 
         # create a testing user in admin site's source_users.
@@ -103,15 +128,7 @@ class ProxyTestCase(SitesAdminTestCase):
         self.createDefaultPloneTestUser(adminUserFolder, 'srcUser',
                                         'srcUser', 'testpassword')
 
-        # configure the proxy to include the source_users for
-        # verifying the credentials.
-        proxy = adminUserFolder.sitesadmin_proxy
-        proxy.manage_changeProperties(userFolder=self.portal.id)
-        # so the user id with local prefix will be verified through
-        # source_users
-        proxy.manage_addProperty('local', 'source_users', 'string')
-        proxy.manage_addProperty('local_prop', 'mutable_properties', 'string')
-        proxy.manage_addProperty('local_factory', 'user_factory', 'string')
+        self.setupTestingProxy(adminUserFolder)
 
         theCred = {'login' : 'local\\srcUser', 'password' : 'testpassword'}
 
@@ -122,15 +139,7 @@ class ProxyTestCase(SitesAdminTestCase):
         self.failUnless(user)
         self.assertEquals('local\\srcUser', user.getName())
 
-        # set up the empty site for to testing it.
-        userSetupTool = self.emptySite.portal_setup
-        userSetupTool.runAllImportStepsFromProfile('profile-%s' %
-                                                   'leocornus.sitesadmin:ssouser')
-
-        # update the admin site's id.
-        ssouser = self.uf.ssouser
-        ssouser.manage_changeProperties(userSiteId=self.portal.id)
-
+        ssouser = self.setupRemoteSite(self.emptySite)
         credit = ssouser.authenticateCredentials(theCred)
         self.failUnless(credit)
         self.assertTrue('local\\srcUser' in credit)
@@ -148,16 +157,7 @@ class ProxyTestCase(SitesAdminTestCase):
                                         fullName,
                                         eMail)
 
-        # configure the proxy to include the source_users for
-        # verifying the credentials.
-        proxy = adminUserFolder.sitesadmin_proxy
-        # We will add the user in site root folder.
-        proxy.manage_changeProperties(userFolder=self.portal.id)
-        # so the user id with local prefix will be verified through
-        # source_users and return property from mutable_properties
-        proxy.manage_addProperty('local', 'source_users', 'string')
-        proxy.manage_addProperty('local_prop', 'mutable_properties', 'string')
-        proxy.manage_addProperty('local_factory', 'user_factory', 'string')
+        self.setupTestingProxy(adminUserFolder)
 
         theCred = {'login' : 'local\\testuser', 'password' : 'testpassword'}
 
@@ -192,29 +192,12 @@ class ProxyTestCase(SitesAdminTestCase):
                                         fullName,
                                         eMail)
 
-        # configure the proxy to include the source_users for
-        # verifying the credentials.
-        proxy = adminUserFolder.sitesadmin_proxy
-        # We will add the user in site root folder.
-        proxy.manage_changeProperties(userFolder=self.portal.id)
-        # so the user id with local prefix will be verified through
-        # source_users and return property from mutable_properties
-        proxy.manage_addProperty('local', 'source_users', 'string')
-        proxy.manage_addProperty('local_prop', 'mutable_properties', 'string')
-        proxy.manage_addProperty('local_factory', 'user_factory', 'string')
+        self.setupTestingProxy(adminUserFolder)
 
         theCred = {'login' : 'local\\testremote', 'password' : 'testpassword'}
 
-        
-        # set up the empty site for to testing it.
-        userSetupTool = self.emptySite.portal_setup
-        userSetupTool.runAllImportStepsFromProfile('profile-%s' %
-                                                   'leocornus.sitesadmin:ssouser')
-
-        # update the admin site's id.
+        self.setupRemoteSite(self.emptySite)
         remoteUserFolder = self.uf
-        ssouser = remoteUserFolder.ssouser
-        ssouser.manage_changeProperties(userSiteId=self.portal.id)
 
         user = remoteUserFolder.authenticate(theCred['login'],
                                              theCred['password'], None)

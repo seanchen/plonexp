@@ -9,7 +9,13 @@ import logging
 
 from Globals import InitializeClass
 from Globals import DTMLFile
+
+from AccessControl import getSecurityManager
+from AccessControl.SecurityManagement import setSecurityManager
+from AccessControl.SecurityManagement import newSecurityManager
+from AccessControl.User import UnrestrictedUser
 from AccessControl.SecurityInfo import ClassSecurityInfo
+
 
 from Products.PluggableAuthService.utils import classImplements
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
@@ -110,26 +116,7 @@ class ProxyMultiPlugins(BasePlugin):
             prefix = credit[2]
             # get user properties from the plugin defined in prefix_prop
             propSheet = self.getUserProperties(prefix, credit)
-            # find the user management folder.
-            # create UserAccount in the user management folder.
-            uniqueId = '%s-%s' % (prefix, theLogin)
-            self.getUserFolder().invokeFactory('UserAccount', uniqueId)
-            userAccount = getattr(self.getUserFolder(), uniqueId)
-
-            userAccount.setUserName(login)
-            if propSheet:
-                # TODO: ??? need better way to set properties.
-                userAccount.setFullname(propSheet.getProperty('fullname'))
-                userAccount.setEmail(propSheet.getProperty('email'))
-                userAccount.setLocation(propSheet.getProperty('location'))
-                # XXX more are comming! should leverage the
-                # portal_memberdata tool
-            else:
-                userAccount.setFullname(theLogin)
-
-            # reindexing the new user account in membrane_tool.
-            membraneTool = getToolByName(self, 'membrane_tool')
-            membraneTool.indexObject(userAccount)
+            self.createUserAccount(login, prefix, theLogin, propSheet)
 
             # revise the credential to use the new user id and user name.
             # new user id and user name should have the prefix.
@@ -166,8 +153,50 @@ class ProxyMultiPlugins(BasePlugin):
         # try to get a PloneUser object.
         # At the point, we already verified credentials...
         nativeUser = factory.createUser(credit[0], credit[1])
+        # specificly for PloneLDAP plugins.
+        nativeUser.acl_users = aclUsers
 
         return propProvider.getPropertiesForUser(nativeUser)
+
+    security.declarePrivate('createUserAccount')
+    def createUserAccount(self, login, prefix, theLogin, propSheet):
+        """
+        
+        """
+
+        #import pdb; pdb.set_trace()
+        admin = UnrestrictedUser('manager', '', ['Manager'], '')
+        admin = admin.__of__(self.acl_users)
+        # save current security manager.
+        current_sm = getSecurityManager()
+        try:
+            # execute the following by using manager permission.
+            # ...
+            newSecurityManager(None, admin)
+
+            # find the user management folder.
+            # create UserAccount in the user management folder.
+            uniqueId = '%s-%s' % (prefix, theLogin)
+            self.getUserFolder().invokeFactory('UserAccount', uniqueId)
+            userAccount = getattr(self.getUserFolder(), uniqueId)
+
+            userAccount.setUserName(login)
+            if propSheet:
+                # TODO: ??? need better way to set properties.
+                userAccount.setFullname(propSheet.getProperty('fullname'))
+                userAccount.setEmail(propSheet.getProperty('email'))
+                userAccount.setLocation(propSheet.getProperty('location'))
+                # XXX more are comming! should leverage the
+                # portal_memberdata tool
+            else:
+                userAccount.setFullname(theLogin)
+
+            # reindexing the new user account in membrane_tool.
+            membraneTool = getToolByName(self, 'membrane_tool')
+            membraneTool.indexObject(userAccount)
+        finally:
+            # restore the current security manager.
+            setSecurityManager(current_sm)
 
     # return admin site's membrane user folder, so you can create user account.
     security.declarePrivate('getUserFolder')

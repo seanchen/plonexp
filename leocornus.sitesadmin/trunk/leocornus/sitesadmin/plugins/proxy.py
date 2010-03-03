@@ -31,6 +31,7 @@ manage_addProxyMultiPluginsForm = DTMLFile('proxyAddForm', globals())
 
 # the factory method to add a ssouser plugin.
 def manage_addProxyMultiPlugins(self, id, title='Proxy Multi Plugins',
+                                separator='\\',
                                 userFolder='plone',
                                 REQUEST=None):
     """
@@ -38,7 +39,7 @@ def manage_addProxyMultiPlugins(self, id, title='Proxy Multi Plugins',
     default Plone site.
     """
 
-    pmp = ProxyMultiPlugins(id, title, userFolder)
+    pmp = ProxyMultiPlugins(id, title, separator, userFolder)
     self._setObject(pmp.getId(), pmp)
 
     if REQUEST:
@@ -61,6 +62,11 @@ class ProxyMultiPlugins(BasePlugin):
                     , 'type'  : 'string'
                     , 'mode'  : 'w'
                     },
+                    { 'id'    : 'separator'
+                    , 'label' : 'Domain Separator'
+                    , 'type'  : 'string'
+                    , 'mode'  : 'w'
+                    },
                     { 'id'    : 'userFolder'
                     , 'label' : 'User Management Folder'
                     , 'type'  : 'string'
@@ -68,10 +74,11 @@ class ProxyMultiPlugins(BasePlugin):
                     },
                   )
 
-    def __init__(self, id, title, userFolder):
+    def __init__(self, id, title, separator, userFolder):
 
         self._setId(id)
         self.title = title
+        self.separator = separator
         self.userFolder = userFolder
 
     # query the backend authentication provider to verify user's credentials.
@@ -80,7 +87,7 @@ class ProxyMultiPlugins(BasePlugin):
 
         login = credentials['login']
         password = credentials['password']
-        prefix, theLogin = login.split('\\')
+        prefix, theLogin = login.split(self.separator)
 
         # verify through 3rd party plugin.
         aclUsers = getToolByName(self, 'acl_users')
@@ -93,8 +100,15 @@ class ProxyMultiPlugins(BasePlugin):
         else:
             raise KeyError, 'Could not find plugin for prefix %s' % prefix
 
+        valid = False
         credit = authProvider.authenticateCredentials(credentials)
-        return credit + (prefix,)
+        #import pdb; pdb.set_trace()
+        if credit:
+            login, name = credit
+            if (login != None) & (name != None):
+                valid = True
+
+        return valid
 
     # IAuthenticationPlugin
     security.declarePrivate('authenticateCredentials')
@@ -106,16 +120,16 @@ class ProxyMultiPlugins(BasePlugin):
         if ('login' not in credentials) or ('password' not in credentials):
             return None
 
-        credit = self.verifyCredentials(credentials)
+        valid = self.verifyCredentials(credentials)
+        credit = None
 
         # if success, we need create the membrane user account and then
-        if credit:
+        if valid:
             # we verified it is a valid user somewhere.
             login = credentials['login']
-            theLogin = credit[1]
-            prefix = credit[2]
+            prefix, theLogin = login.split(self.separator)
             # get user properties from the plugin defined in prefix_prop
-            propSheet = self.getUserProperties(prefix, credit)
+            propSheet = self.getUserProperties(prefix, theLogin)
             self.createUserAccount(login, prefix, theLogin, propSheet)
 
             # revise the credential to use the new user id and user name.
@@ -125,7 +139,7 @@ class ProxyMultiPlugins(BasePlugin):
         return credit
 
     security.declarePrivate('getUserProperties')
-    def getUserProperties(self, prefix, credit):
+    def getUserProperties(self, prefix, theLogin):
         """
         returns a property sheet for the login id from the prefix plugins.
         """
@@ -152,7 +166,7 @@ class ProxyMultiPlugins(BasePlugin):
 
         # try to get a PloneUser object.
         # At the point, we already verified credentials...
-        nativeUser = factory.createUser(credit[0], credit[1])
+        nativeUser = factory.createUser(theLogin, theLogin)
         # specificly for PloneLDAP plugins.
         nativeUser.acl_users = aclUsers
 

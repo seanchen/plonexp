@@ -81,13 +81,24 @@ class ProxyMultiPlugins(BasePlugin):
         self.separator = separator
         self.userFolder = userFolder
 
+        # add default property provider and default user factory.
+        # the priority is like
+        # property provider: prefix_prop, prop_default, prefix itself.
+        # factory provider: prefix_factory, factory_default, prefix itself.
+        self._setProperty('prop_default', 'mutable_properties', 'string')
+        self._setProperty('factory_default', 'user_factory', 'string')
+
     # query the backend authentication provider to verify user's credentials.
     security.declarePrivate('verifyCredentials')
     def verifyCredentials(self, credentials):
 
         login = credentials['login']
         password = credentials['password']
-        prefix, theLogin = login.split(self.separator)
+        if login.find(self.separator) >= 0:
+            prefix, theLogin = login.split(self.separator)
+        else:
+            # it is not for proxy, skip it
+            return False
 
         # verify through 3rd party plugin.
         aclUsers = getToolByName(self, 'acl_users')
@@ -155,12 +166,18 @@ class ProxyMultiPlugins(BasePlugin):
         prefixPropPlugin = self.getProperty('%s_prop' % prefix)
         if prefixPropPlugin:
             propProvider = getattr(aclUsers, prefixPropPlugin)
+        elif self.getProperty('prop_default'):
+            propProvider = getattr(aclUsers,
+                                   self.getProperty('prop_default'))
         else:
             propProvider = authProvider
 
         factoryPlugin = self.getProperty('%s_factory' % prefix)
         if factoryPlugin:
             factory = getattr(aclUsers, factoryPlugin)
+        elif self.getProperty('factory_default'):
+            factory = getattr(aclUsers,
+                              self.getProperty('factory_default'))
         else:
             factory = authProvider
 

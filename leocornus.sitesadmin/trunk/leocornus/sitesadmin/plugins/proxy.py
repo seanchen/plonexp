@@ -113,7 +113,6 @@ class ProxyMultiPlugins(BasePlugin):
 
         valid = False
         credit = authProvider.authenticateCredentials(credentials)
-        #import pdb; pdb.set_trace()
         if credit:
             login, name = credit
             if (login != None) & (name != None):
@@ -140,8 +139,8 @@ class ProxyMultiPlugins(BasePlugin):
             login = credentials['login']
             prefix, theLogin = login.split(self.separator)
             # get user properties from the plugin defined in prefix_prop
-            propSheet = self.getUserProperties(prefix, theLogin)
-            self.createUserAccount(login, prefix, theLogin, propSheet)
+            properties = self.getUserProperties(prefix, theLogin)
+            self.createUserAccount(login, prefix, theLogin, properties)
 
             # revise the credential to use the new user id and user name.
             # new user id and user name should have the prefix.
@@ -152,7 +151,9 @@ class ProxyMultiPlugins(BasePlugin):
     security.declarePrivate('getUserProperties')
     def getUserProperties(self, prefix, theLogin):
         """
-        returns a property sheet for the login id from the prefix plugins.
+        returns a property dict for the login id from the prefix plugins.
+        it is easier to use dict instead of property sheet.  Since some
+        plugins, such as PloneLDAP, are return the user properties as a dict.
         """
 
         aclUsers = getToolByName(self, 'acl_users')
@@ -187,15 +188,20 @@ class ProxyMultiPlugins(BasePlugin):
         # specificly for PloneLDAP plugins.
         nativeUser.acl_users = aclUsers
 
-        return propProvider.getPropertiesForUser(nativeUser)
+        props = propProvider.getPropertiesForUser(nativeUser)
+        if not isinstance(props, dict):
+            # suppose it is a instance of property sheet. Might be wrong!
+            props = props._properties
+
+        return props
 
     security.declarePrivate('createUserAccount')
-    def createUserAccount(self, login, prefix, theLogin, propSheet):
+    def createUserAccount(self, login, prefix, theLogin, properties):
         """
-        
+        create a user account for the given login id and user properties.
+        the user properties should be a dict.
         """
 
-        #import pdb; pdb.set_trace()
         admin = UnrestrictedUser('manager', '', ['Manager'], '')
         admin = admin.__of__(self.acl_users)
         # save current security manager.
@@ -212,11 +218,14 @@ class ProxyMultiPlugins(BasePlugin):
             userAccount = getattr(self.getUserFolder(), uniqueId)
 
             userAccount.setUserName(login)
-            if propSheet:
+            if properties:
                 # TODO: ??? need better way to set properties.
-                userAccount.setFullname(propSheet.getProperty('fullname'))
-                userAccount.setEmail(propSheet.getProperty('email'))
-                userAccount.setLocation(propSheet.getProperty('location'))
+                if properties.has_key('fullname'):
+                    userAccount.setFullname(properties['fullname'])
+                if properties.has_key('email'):
+                    userAccount.setEmail(properties['email'])
+                if properties.has_key('location'):
+                    userAccount.setLocation(properties['location'])
                 # XXX more are comming! should leverage the
                 # portal_memberdata tool
             else:

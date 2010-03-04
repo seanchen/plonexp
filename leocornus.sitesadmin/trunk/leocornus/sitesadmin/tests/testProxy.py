@@ -202,12 +202,13 @@ class ProxyTestCase(SitesAdminTestCase):
         adminUserFolder = self.portal.acl_users
         fullName='test user from remote'
         eMail='test.remote@testing.com'
+        location = 'my location'
         self.createDefaultPloneTestUser(adminUserFolder,
                                         'testremote',
                                         'testremote',
                                         'testpassword',
                                         fullName,
-                                        eMail)
+                                        eMail, location)
 
         self.setupTestingProxy(adminUserFolder)
 
@@ -227,17 +228,20 @@ class ProxyTestCase(SitesAdminTestCase):
         self.assertEquals('local\\testremote', user.getName())
         self.assertEquals(fullName, user.getProperty('fullname'))
         self.assertEquals(eMail, user.getProperty('email'))
+        self.assertEquals(location, user.getProperty('location'))
 
         # get back the user from membership tool.
         mtool = getToolByName(self.emptySite, 'portal_membership')
         getBack = mtool.getMemberById('local\\testremote')
         self.assertEquals(getBack.getProperty('fullname'), fullName)
         self.assertEquals(getBack.getProperty('email'), eMail)
+        self.assertEquals(location, getBack.getProperty('location'))
 
         # get back the user from membrane user folder.
         membraneUser = getattr(self.portal, 'local-testremote')
         self.assertEquals(membraneUser.getFullname(), fullName)
         self.assertEquals(membraneUser.getEmail(), eMail)
+        self.assertEquals(membraneUser.getLocation(), location)
 
 def test_suite():
     suite = unittest.TestSuite()

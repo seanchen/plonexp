@@ -55,6 +55,9 @@ class ProxyBasicTestCase(SitesAdminTestCase):
         proxy.manage_changeProperties(userFolder='another/site')
         self.assertEquals(proxy.getProperty('userFolder'), 'another/site')
 
+        self.assertEquals(proxy.getProperty('prop_default'), 'mutable_properties')
+        self.assertEquals(proxy.getProperty('factory_default'), 'user_factory')
+
 # testing proxy multi plugins in more complex cases.
 class ProxyTestCase(SitesAdminTestCase):
 
@@ -105,8 +108,9 @@ class ProxyTestCase(SitesAdminTestCase):
         # so the user id with local prefix will be verified through
         # source_users
         proxy.manage_addProperty('local', 'source_users', 'string')
-        proxy.manage_addProperty('local_prop', 'mutable_properties', 'string')
-        proxy.manage_addProperty('local_factory', 'user_factory', 'string')
+        # we will use the default property provider and default user factory.
+        #proxy.manage_addProperty('local_prop', 'mutable_properties', 'string')
+        #proxy.manage_addProperty('local_factory', 'user_factory', 'string')
 
     def setupRemoteSite(self, remoteSite):
 
@@ -131,6 +135,7 @@ class ProxyTestCase(SitesAdminTestCase):
         self.setupTestingProxy(adminUserFolder)
 
         theCred = {'login' : 'local\\srcUser', 'password' : 'testpassword'}
+        badCred = {'login' : 'local\\srcUser', 'password' : 'badpassword'}
 
         # assert that we could find the user from the admin site.
         # the authenticate method will return a PloneUser object.
@@ -139,10 +144,17 @@ class ProxyTestCase(SitesAdminTestCase):
         self.failUnless(user)
         self.assertEquals('local\\srcUser', user.getName())
 
+        user = adminUserFolder.authenticate(badCred['login'],
+                                            badCred['password'], None)
+        self.failIf(user)
+
         ssouser = self.setupRemoteSite(self.emptySite)
         credit = ssouser.authenticateCredentials(theCred)
         self.failUnless(credit)
         self.assertTrue('local\\srcUser' in credit)
+
+        credit = ssouser.authenticateCredentials(badCred)
+        self.failIf(credit)
 
     def testCreateUserLocal(self):
 
@@ -160,6 +172,11 @@ class ProxyTestCase(SitesAdminTestCase):
         self.setupTestingProxy(adminUserFolder)
 
         theCred = {'login' : 'local\\testuser', 'password' : 'testpassword'}
+        badCred = {'login' : 'local\\testuser', 'password' : 'badpaddword'}
+
+        user = adminUserFolder.authenticate(badCred['login'],
+                                            badCred['password'], None)
+        self.failIf(user)
 
         user = adminUserFolder.authenticate(theCred['login'],
                                             theCred['password'], None)
@@ -195,9 +212,14 @@ class ProxyTestCase(SitesAdminTestCase):
         self.setupTestingProxy(adminUserFolder)
 
         theCred = {'login' : 'local\\testremote', 'password' : 'testpassword'}
+        badCred = {'login' : 'local\\testuser', 'password' : 'badpaddword'}
 
         self.setupRemoteSite(self.emptySite)
         remoteUserFolder = self.uf
+
+        user = remoteUserFolder.authenticate(badCred['login'],
+                                             badCred['password'], None)
+        self.failIf(user)
 
         user = remoteUserFolder.authenticate(theCred['login'],
                                              theCred['password'], None)

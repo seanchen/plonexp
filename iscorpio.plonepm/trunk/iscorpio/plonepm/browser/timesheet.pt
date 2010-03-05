@@ -45,7 +45,7 @@
       field help.
     </div>
 
-    <input size="80" type="text" name="description" id="description"
+    <input size="60" type="text" name="description" id="description"
            tal:attributes="value request/description | nothing;"
     />
   </div>

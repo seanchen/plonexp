@@ -10,9 +10,9 @@
   </dt>
 
   <dd class="portletItem">
-    <div width="100%" align="center"><strong>
+    <div width="100%" align="left"><strong>
         <span tal:content="storyInfo/title"/>
-    </strong></div>
+    </strong><hr/></div>
 
     <strong>Progress</strong><br/>
     <span tal:define="estimatedHours storyInfo/estimatedHours;

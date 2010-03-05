@@ -221,6 +221,7 @@ class ProxyMultiPlugins(BasePlugin):
             if properties:
                 # TODO: ??? need better way to set properties.
                 if properties.has_key('fullname'):
+                    userAccount.setTitle(properties['fullname'])
                     userAccount.setFullname(properties['fullname'])
                 if properties.has_key('email'):
                     userAccount.setEmail(properties['email'])

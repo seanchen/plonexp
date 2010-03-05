@@ -100,6 +100,16 @@ UserAccountSchema = ATCTContent.schema.copy() + Schema((
             ),
         ),
 
+    StringField(
+        'home_page',
+        languageIndependent = 1,
+        user_property=True,
+        widget = StringWidget(
+            label="Home Page",
+            description = "User's Home Page."
+            ),
+        ),
+
     LinesField(
         'sites',
         languageIndependent = 1,

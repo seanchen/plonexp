@@ -37,13 +37,21 @@ class UserAccountTest(SitesAdminTestCase):
 
     def testCreateUser(self):
 
+        title = "my title, user one"
+        fullName = "User Full Name"
+        location = 'my location'
+        biography = 'my biography in description'
+        homePage = 'my home page is interesting'
+        email = 'my email is here'
         self.portal.invokeFactory('UserAccount', 'user1')
         user1 = getattr(self.portal, 'user1')
         user1.setUserName("user1test")
-        user1.setFullname("User Full Name")
+        user1.setFullname(fullName)
         user1.setPassword('user1password')
-        user1.setLocation('a location')
-        user1.setEmail('sean.chen@ontario.ca')
+        user1.setLocation(location)
+        user1.setDescription(biography)
+        user1.setHome_page(homePage)
+        user1.setEmail(email)
         sites = ("{'id':'gsdc/sso_test', 'roles':['Member','Reviewer'], 'groups':['testing','contributor']}",
                  "{'id':'gsdc/cts', 'roles':['Reviewer'], 'groups':['contributor']}")
         user1.setSites(sites)
@@ -58,9 +66,11 @@ class UserAccountTest(SitesAdminTestCase):
         # testing the membership info.
         mTool = getToolByName(self.portal, 'portal_membership')
         theMember = mTool.getMemberById('user1test')
-        self.assertEquals('User Full Name', theMember.getProperty('fullname'))
-        self.assertEquals('sean.chen@ontario.ca', theMember.getProperty('email'))
-        self.assertEquals('a location', theMember.getProperty('location'))
+        self.assertEquals(fullName, theMember.getProperty('fullname'))
+        self.assertEquals(email, theMember.getProperty('email'))
+        self.assertEquals(location, theMember.getProperty('location'))
+        self.assertEquals(biography, theMember.getProperty('description'))
+        self.assertEquals(homePage, theMember.getProperty('home_page'))
         self.assertEquals(sites, theMember.getProperty("sites"))
 
 tests.append(UserAccountTest)

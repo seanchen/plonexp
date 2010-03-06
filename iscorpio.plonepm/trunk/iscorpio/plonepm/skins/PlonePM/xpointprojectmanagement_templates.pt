@@ -48,12 +48,13 @@
   <!-- ==================================================================== -->
   <tal:black metal:define-macro="xppm_iterations_list"
              tal:define="Batch python: modules['Products.CMFPlone'].Batch;
-                         b_size python: 10;
+                         b_size python: 15;
                          b_start python: 0;
                          b_start request/b_start | b_start;
-                         batch python: Batch(iterationsList, b_size, int(b_start), orphan=2);">
-    <div metal:use-macro="here/batch_macros/macros/navigation" />
-    <table class="listing" width="98%"><tbody>
+                         batch python: Batch(iterationsList, b_size, int(b_start), orphan=2);
+                         batch_base_url request/getURL">
+    <div metal:use-macro="here/batch_macros/macros/navigation"/>
+    <table class="listing" width="100%"><tbody>
       <tr>
         <th>Iteration</th>
         <th width="78">Target Date</th>
@@ -92,12 +93,13 @@
   <!-- ==================================================================== -->
   <tal:block metal:define-macro="xppm_stories_list"
              tal:define="Batch python: modules['Products.CMFPlone'].Batch;
-                         b_size python: 10;
+                         b_size python: 15;
                          story_b_start python: 0;
                          story_b_start request/story_b_start | story_b_start;
-                         batch python: Batch(storiesList, b_size, int(story_b_start), orphan=2, b_start_str='story_b_start');">
+                         batch python: Batch(storiesList, b_size, int(story_b_start), orphan=2, b_start_str='story_b_start');
+                         batch_base_url request/getURL">
     <div metal:use-macro="here/batch_macros/macros/navigation" />
-    <table class="listing" width="98%"><tbody>
+    <table class="listing" width="100%"><tbody>
       <tr>
         <th>Story</th>
         <th>Owners</th>
@@ -137,17 +139,19 @@
           </td>
         </tr>
       </tal:block>
-      <tr>
-        <th align="right">Overall Progress:</th>
-        <th colspan="3" align="left"
-            tal:define="estimatedHours totalEstimatedHours;
-                        usedHours totalUsedHours;
-                        progressPercent totalProgressPercent;">
-          <tal:block
-             metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_progress_bar"
-          />
-        </th>
-      </tr>
+      <tal:block tal:condition="totalEstimatedHours">
+        <tr>
+          <th align="right">Overall Progress:</th>
+          <th colspan="3" align="left"
+              tal:define="estimatedHours totalEstimatedHours;
+                          usedHours totalUsedHours;
+                          progressPercent totalProgressPercent;">
+            <tal:block
+               metal:use-macro="here/xpointprojectmanagement_templates/macros/xpoint_progress_bar"
+            />
+          </th>
+        </tr>
+      </tal:block>
     </tbody></table>
   </tal:block>
   <!-- ==================================================================== -->

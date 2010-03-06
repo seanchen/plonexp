@@ -78,6 +78,7 @@ class Renderer(base.Renderer):
         projectUrl = self.project.absolute_url()
         return {'url' : projectUrl,
                 'iterationsUrl' : projectUrl + '/project_iterations',
+                'storiesUrl' : projectUrl + '/project_stories',
                 'title' : self.project.title or self.project.id,
                 'svnUrl' : self.project.xppm_repo_url,
                 'viewUrl' : self.project.xppm_browse_code_url,

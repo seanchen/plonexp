@@ -107,3 +107,26 @@ class IterationsView(BrowserView):
             iterData.append(anIter)
 
         return iterData
+
+class StorysView(BrowserView):
+    """
+    a list of all stories for this project.
+    """
+
+    # preparing the stories info for this view.
+    def getStoryInfos(self):
+        """
+        return a list of story's info.
+        """
+
+        context = aq_inner(self.context)
+        stories = context.getAllStories()
+        storyInfos = []
+
+        for story in stories:
+
+            aStory = {}
+
+            storyInfos.append(aStory)
+
+        return storyInfos

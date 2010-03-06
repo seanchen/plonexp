@@ -6,3 +6,8 @@ Changelog
 
 * Initial release
 
+* providing a lightweigh version. disable the following type for this release:
+
+  * Function Requirement
+  * Function Specification
+  * System Requirement

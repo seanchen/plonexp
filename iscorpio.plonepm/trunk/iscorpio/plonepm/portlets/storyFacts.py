@@ -84,6 +84,26 @@ class Renderer(base.Renderer):
                 'iterationIcon' : iteration.getIcon(),
                }
 
+    # use cases for this story.
+    def useCases(self):
+        """
+        return a list of use cases associated with this story.
+        """
+
+        caseIds = self.story.getXppm_use_cases()
+        if caseIds:
+            cases = []
+            for caseId in caseIds:
+                case = self.story.getUseCase(caseId)
+                cases.append({
+                    'url' : case.absolute_url(),
+                    'title' : case.title or case.id,
+                    'icon' : case.getIcon(),
+                    })
+            return cases
+        else:
+            return None
+
     # stories planned in the same iteration.
     def colleagueStories(self):
         """

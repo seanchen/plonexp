@@ -43,8 +43,8 @@
   <!-- ==================================================================== -->
 
   <!-- ==================================================================== -->
-  <!-- macro for stories list. -->
-  <!-- param: storiesList -->
+  <!-- macro for iterations list. -->
+  <!-- param: iterationsList -->
   <!-- ==================================================================== -->
   <tal:black metal:define-macro="xppm_iterations_list"
              tal:define="Batch python: modules['Products.CMFPlone'].Batch;

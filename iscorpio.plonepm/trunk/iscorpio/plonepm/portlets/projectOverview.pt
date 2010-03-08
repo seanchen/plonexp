@@ -11,12 +11,14 @@
 
   <dd class="portletItem">
   <ul class="plonepmOverview">
-    <li><a href="#">Releases</a></li>
+    <!-- <li><a href="#">Releases</a></li> -->
     <li><a href="#"
            tal:attributes="href projectInfo/iterationsUrl">Roadmap / Iterations</a></li>
     <li><a href="#"
            tal:attributes="href projectInfo/storiesUrl">Stories</a></li>
-    <li><a href="#">Artifacts / Issues</a></li>
+    <!-- <li><a href="#">Artifacts / Issues</a></li> -->
+		<li><a href="#"
+           tal:attributes="href projectInfo/useCasesUrl">Use Cases</a></li>
     <li><a href="#">Project Metadata</a></li>
     <li><a href="#" tal:attributes="href projectInfo/svnUrl">Source Code Repository</a></li>
     <li><a href="#" tal:attributes="href projectInfo/viewUrl">Browse Source Code</a></li>

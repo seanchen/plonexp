@@ -31,6 +31,13 @@
      permission="zope2.View"
   />
 
+  <browser:page
+     name="project_useCases"
+     for="..interfaces.IPPMProject"
+     template="useCases_view.pt"
+     permission="zope2.View"
+  />
+
   <!-- the default view for a story -->
   <browser:page
      name="story_view"

@@ -79,6 +79,7 @@ class Renderer(base.Renderer):
         return {'url' : projectUrl,
                 'iterationsUrl' : projectUrl + '/project_iterations',
                 'storiesUrl' : projectUrl + '/project_stories',
+                'useCasesUrl' : projectUrl + '/project_useCases',
                 'title' : self.project.title or self.project.id,
                 'svnUrl' : self.project.xppm_repo_url,
                 'viewUrl' : self.project.xppm_browse_code_url,

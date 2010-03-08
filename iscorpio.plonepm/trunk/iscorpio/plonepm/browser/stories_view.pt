@@ -21,7 +21,6 @@
     [<metal:field use-macro="python:here.widget('title', mode='view')">
       Title or id
     </metal:field>]
-		<span tal:content="here/absolute_url"/> -
   </h1>
 
   <div tal:replace="structure provider:plone.belowcontenttitle" />

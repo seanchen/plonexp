@@ -23,11 +23,24 @@
       />
     </span>
 
-    <strong>Time Tracking</strong><br/>
-    <span>summary of time tracking ...</span><br/>
+<!--     <strong>Time Tracking</strong><br/> -->
+<!--     <span>summary of time tracking ...</span><br/> -->
 
-    <strong>Artifacts</strong><br/>
-    <span>summary of artifacts for this story</span><br/>
+<!--     <strong>Artifacts</strong><br/> -->
+<!--     <span>summary of artifacts for this story</span><br/> -->
+
+    <tal:block tal:condition="view/useCases">
+    <strong>Use Cases</strong><br/>
+    <ul tal:repeat="case view/useCases">
+      <li>
+        <a href="#" tal:attributes="href case/url">
+          <img src="#" width="16" height="16"
+               tal:attributes="src case/icon"/>
+          <span tal:content="case/title"/>
+        </a>
+      </li>
+    </ul>
+    </tal:block>
 
     <strong>Iteration</strong><br/>
     <a href="#" tal:attributes="href storyInfo/iterationUrl">

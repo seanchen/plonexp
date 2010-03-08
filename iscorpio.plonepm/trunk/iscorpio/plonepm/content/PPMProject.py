@@ -190,11 +190,26 @@ class PPMProject(ATFolder):
         """
         returns all iterations for this project as display list.
         """
+
         retList = []
         iterations = self.xpCatalogSearch(portal_type='PPMIteration')
         for iteration in iterations:
             retList.append((iteration.id,
                             iteration.id + ' - ' + iteration.Title))
+
+        return DisplayList(retList)
+
+    security.declarePublic('vocabulary_useCases')
+    def vocabulary_useCases(self):
+        """
+        returns all use cases for this project as display list.
+        """
+
+        retList = []
+        cases = self.xpCatalogSearch(portal_type='PPMUseCase')
+        for case in cases:
+            retList.append((case.id,
+                            case.id + ' - ' + case.Title))
 
         return DisplayList(retList)
 
@@ -238,6 +253,21 @@ class PPMProject(ATFolder):
         Return all system requirement in this project.
         """
         return self.xpCatalogSearch(portal_type='PPMSysReq')
+
+    security.declarePublic('getUseCase')
+    def getUseCase(self, caseId):
+        """
+        returns the use case object for the given use case id.
+        """
+
+        return getattr(self, caseId)
+
+    security.declarePublic('getAllUseCases')
+    def getAllUseCases(self):
+        """
+        Return all use cases in this project.
+        """
+        return self.xpCatalogSearch(portal_type='PPMUseCase')
 
     security.declarePublic('getMetadata')
     def getMetadata(self, type=None):

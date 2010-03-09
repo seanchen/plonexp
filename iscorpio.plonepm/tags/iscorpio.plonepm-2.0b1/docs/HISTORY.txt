@@ -1,0 +1,13 @@
+Changelog
+=========
+
+2.0 - Unreleased
+----------------
+
+* Initial release
+
+* providing a lightweigh version. disable the following type for this release:
+
+  * Function Requirement
+  * Function Specification
+  * System Requirement

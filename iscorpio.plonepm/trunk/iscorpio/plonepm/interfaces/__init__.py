@@ -13,3 +13,4 @@ __docformat__ = 'plaintext'
 from project import IPPMProject
 from project import IPPMStory
 from project import IPPMIteration
+from project import IPPMMetadata

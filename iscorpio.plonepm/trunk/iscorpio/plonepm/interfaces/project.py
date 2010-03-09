@@ -8,7 +8,7 @@ all interfaces about project.
 from zope.interface import Interface
 
 __author__ = "Sean Chen"
-__email__ = 'chyxiang@gmail.com'
+__email__ = 'sean.chen@leocorn.com'
 __docformat__ = 'plaintext'
 
 # the project interface
@@ -37,3 +37,9 @@ class IPPMIteration(Interface):
     pass
 
 # end of class IPPMIteration
+
+class IPPMMetadata(Interface):
+    """
+    the marker interace for a metadata
+    """
+    pass

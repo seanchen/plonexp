@@ -38,6 +38,14 @@
      permission="zope2.View"
   />
 
+  <!-- the default metadata view. -->
+  <browser:page
+     name="metadata_view"
+     for="..interfaces.IPPMMetadata"
+     template="metadata_view.pt"
+     permission="zope2.View"
+  />
+
   <!-- the default view for a story -->
   <browser:page
      name="story_view"

@@ -6,6 +6,8 @@ __docformat__ = 'plaintext'
 
 import logging
 
+from zope.interface import implements
+
 from AccessControl import ClassSecurityInfo
 # from Archetypes
 from Products.Archetypes.public import Schema
@@ -23,9 +25,10 @@ from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 # the configruation info for this project.
 from iscorpio.plonepm.config import PROJECTNAME
 from iscorpio.plonepm.content.base import XPPMBase
+from iscorpio.plonepm.interfaces import IPPMMetadata
 
 __author__ = 'Sean Chen'
-__email__ = 'chyxiang@gmail.com'
+__email__ = 'sean.chen@leocorn.com'
 
 # define the schema for the metadata.
 PPMMetadataSchema = ATCTContent.schema.copy() + Schema((
@@ -59,6 +62,7 @@ class PPMMetadata(XPPMBase, ATCTContent, HistoryAwareMixin):
     __implements__ = (ATCTContent.__implements__,
                       HistoryAwareMixin.__implements__,
                       )
+    implements(IPPMMetadata)
 
     # the prefix for the auto generated ids.
     xppm_id_prefix = 'xpm'

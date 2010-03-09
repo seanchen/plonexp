@@ -8,15 +8,17 @@
   </dt>
 
   <tal:items tal:define="plone_view context/@@plone;
+												 getIcon nocall:plone_view/getIcon;
                          toLocalizedTime nocall:plone_view/toLocalizedTime;"
              tal:repeat="artifact view/artifacts"
   >
 
     <dd class="portletItem"
-        tal:define="oddrow repeat/artifact/odd;"
+        tal:define="oddrow repeat/artifact/odd;
+										item_icon python: getIcon(artifact['obj']);"
         tal:attributes="class python:oddrow and  'portletItem even' or 'portletItem odd'">
       <a href="#" tal:attributes="href artifact/url">
-        <img src="#" width="16" height="16" tal:attributes="src artifact/icon"/>
+        <img tal:replace="structure item_icon/html_tag"/>
         <tal:title content="artifact/title">
           Title
         </tal:title>

@@ -31,7 +31,7 @@
 
   <!-- actions -->
   <action title="View" action_id="view" category="object" condition_expr=""
-          url_expr="string:${folder_url}/" visible="True"
+          url_expr="string:${object_url}/" visible="True"
           i18n:attributes="title">
     <permission value="View"/>
   </action>

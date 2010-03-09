@@ -34,6 +34,8 @@
     <element value="project_view"/>
     <element value="folder_listing"/>
     <element value="project_iterations"/>
+    <element value="project_stories"/>
+    <element value="project_useCases"/>
   </property>
 
   <!-- alias -->

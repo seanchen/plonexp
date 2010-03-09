@@ -37,7 +37,7 @@
     <div metal:use-macro="here/batch_macros/macros/navigation"/>
     <table class="listing" width="100%"><tbody>
       <tr>
-        <th>Use Case</th>
+        <th width="188px">Use Case</th>
         <th>Description</th>
       </tr>
       <!-- one row for each story. -->

@@ -22,12 +22,12 @@ class ProjectView(BrowserView):
 
         self.context = context
         self.request = request
+        self.project = aq_inner(self.context)
 
     # return all metata data definition as a dict
     def getMetadata(self):
 
-        context = aq_inner(self.context)
-        return context.getMetadata()
+        return self.project.getMetadata()
 
     # returns the whole estimated hour for this project.
     def getProjectEstimatedHours(self):
@@ -35,8 +35,7 @@ class ProjectView(BrowserView):
         returns the amount of hours estimated for this project.
         """
 
-        context = aq_inner(self.context)
-        stories = context.getAllStories()
+        stories = self.project.getAllStories()
         hours = 0
         for story in stories:
             hours = hours + \
@@ -50,8 +49,7 @@ class ProjectView(BrowserView):
         returns the progress status as a percentage for this project. 
         """
 
-        context = aq_inner(self.context)
-        stories = context.getAllStories()
+        stories = self.project.getAllStories()
         progressPercent = 0
         if len(stories) > 0:
             progress = 0

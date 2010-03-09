@@ -78,7 +78,8 @@ class Renderer(base.Renderer):
 
         infos = []
         # TODO: make this configurable!
-        types = ['PPMIteration', 'PPMStory', 'PPMFuncReq', 'PPMSysReq']
+        types = ['PPMIteration', 'PPMStory', 'PPMFuncReq',
+                 'PPMSysReq', 'PPMUseCase']
         # TODO: the limit should be configuarable too!
         artifacts = self.project.xpCatalogSearch(portal_type=types,
                                                  sort_on='modified',

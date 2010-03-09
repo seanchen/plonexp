@@ -269,9 +269,19 @@ class PPMProject(ATFolder):
         """
         return self.xpCatalogSearch(portal_type='PPMUseCase')
 
+    security.declarePublic('getMetadataTypes')
+    def getMetadataTypes(self):
+        """
+        return a list of unique metadata types used for this project.
+        """
+
+        catalog = getToolByName(self, 'portal_catalog')
+        return catalog.uniqueValuesFor('getXppm_metadata_type')
+
     security.declarePublic('getMetadata')
     def getMetadata(self, type=None):
-        """ this will return a catalog search result based on the
+        """
+        this will return a catalog search result based on the
         given metadata type.  If the no type provide, all metadata
         will be returned.
         """
@@ -290,8 +300,10 @@ class PPMProject(ATFolder):
 
     security.declarePublic('getMetadataById')
     def getMetadataById(self, theId):
-        """ return an unique metadata by the given id.
         """
+        return an unique metadata by the given id.
+        """
+
         query = {'id' : theId}
         oneMetadata = self.xpCatalogSearch(query)[0]
         return oneMetadata

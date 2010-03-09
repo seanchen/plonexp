@@ -12,6 +12,8 @@
   <include package=".browser"/>
   <include package=".portlets"/>
 
+  <include file="skins.zcml" />
+
   <!-- Generic Setup profiles -->
   <genericsetup:registerProfile
      name="default"

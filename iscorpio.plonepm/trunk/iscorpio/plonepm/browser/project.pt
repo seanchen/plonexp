@@ -38,17 +38,31 @@
   </metal:field>
 
   <h3>Project Metadata</h3>
-  <dl tal:define="metadata view/getMetadata">
-    <tal:metadata repeat="meta metadata">
-      <dt>
-        <span tal:replace="meta/Title"/>
-      </dt>
-      <dd>
-        <span tal:replace="meta/Description"/> -
-        <span tal:replace="meta/getXppm_metadata_type"/>
-      </dd>
-    </tal:metadata>
-  </dl>
+  <table class='listing' width="100%"><tbody>
+    <tr>
+      <th>Type</th>
+      <th>Metadata</th>
+    </tr>
+    <tal:block tal:repeat="type here/getMetadataTypes">
+      <tr tal:define="oddrow repeat/type/odd;"
+          tal:attributes="class python: oddrow and 'odd' or 'even'">
+        <td width="120px">
+          <span tal:replace="type"/>
+        </td>
+        <td>
+          <ul>
+          <tal:block tal:repeat="meta python: here.getMetadata(type)">
+            <li><a href="#"
+                   tal:attributes="href meta/getURL">
+            <span tal:replace="meta/Title"/> -
+            <span tal:replace="meta/Description"/>
+            </a></li>
+          </tal:block>
+          </ul>
+        </td>
+      </tr>
+    </tal:block>
+  </tbody></table>
 
   <!-- footer. -->
   <div metal:use-macro="here/document_relateditems/macros/relatedItems">

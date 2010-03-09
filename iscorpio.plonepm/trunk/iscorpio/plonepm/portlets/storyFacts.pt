@@ -32,7 +32,7 @@
     <tal:block tal:condition="view/useCases">
     <strong>Use Cases</strong><br/>
     <ul tal:repeat="case view/useCases">
-      <li>
+      <li class="colleagueStory">
         <a href="#" tal:attributes="href case/url">
           <img src="#" width="16" height="16"
                tal:attributes="src case/icon"/>

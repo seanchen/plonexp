@@ -91,7 +91,7 @@ class Renderer(base.Renderer):
                 'url' : obj.absolute_url(),
                 'modified' : obj.modified(),
                 'title' : obj.title or obj.id,
-                'icon' : obj.getIcon(),
+                'obj' : obj,
                 })
 
         return infos

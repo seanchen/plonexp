@@ -1,5 +1,7 @@
 <dl class="portlet simplePortlet" i18n:domain="plone"
-     tal:define="storyInfo view/storyInfo;">
+     tal:define="storyInfo view/storyInfo;
+                 plone_view context/@@plone;
+                 getIcon nocall:plone_view/getIcon;">
 
   <dt class="portletHeader">
     <span class="portletTopLeft"></span>
@@ -32,10 +34,10 @@
     <tal:block tal:condition="view/useCases">
     <strong>Use Cases</strong><br/>
     <ul tal:repeat="case view/useCases">
-      <li class="colleagueStory">
+      <li class="colleagueStory"
+          tal:define="item_icon python: getIcon(case['obj']);">
         <a href="#" tal:attributes="href case/url">
-          <img src="#" width="16" height="16"
-               tal:attributes="src case/icon"/>
+          <img tal:replace="structure item_icon/html_tag"/>
           <span tal:content="case/title"/>
         </a>
       </li>
@@ -43,18 +45,19 @@
     </tal:block>
 
     <strong>Iteration</strong><br/>
-    <a href="#" tal:attributes="href storyInfo/iterationUrl">
-      <img src="#" width="16" height="16"
-           tal:attributes="src storyInfo/iterationIcon"/>
+    <a href="#"
+       tal:attributes="href storyInfo/iterationUrl"
+       tal:define="iteration_icon python: getIcon(storyInfo['iteration']);">
+      <img tal:replace="structure iteration_icon/html_tag"/>
       <span tal:content="storyInfo/iterationTitle"/>
     </a>
 
     <!-- colleague stories in the same iteration -->
     <ul tal:repeat="story view/colleagueStories">
-      <li tal:attributes="class python: story['isSelf'] and 'currentStory' or 'colleagueStory'">
+      <li tal:attributes="class python: story['isSelf'] and 'currentStory' or 'colleagueStory'"
+          tal:define="story_icon python: getIcon(story['obj'])">
         <a href="#" tal:attributes="href story/url">
-          <img src="#" width="16" height="16"
-               tal:attributes="src story/icon"/>
+          <img tal:replace="structure story_icon/html_tag"/>
           <span tal:content="story/title"/>
       </a></li>
     </ul>

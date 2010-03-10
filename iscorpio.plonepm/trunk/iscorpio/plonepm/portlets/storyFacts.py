@@ -81,7 +81,7 @@ class Renderer(base.Renderer):
                 'progressPercent' : self.story.getXppm_story_progress_percent(),
                 'iterationTitle' : iteration.title or iteration.id,
                 'iterationUrl' : iteration.absolute_url(),
-                'iterationIcon' : iteration.getIcon(),
+                'iteration' : iteration,
                }
 
     # use cases for this story.
@@ -98,7 +98,7 @@ class Renderer(base.Renderer):
                 cases.append({
                     'url' : case.absolute_url(),
                     'title' : case.title or case.id,
-                    'icon' : case.getIcon(),
+                    'obj' : case,
                     })
             return cases
         else:
@@ -118,7 +118,7 @@ class Renderer(base.Renderer):
             values.append({
                 'url' : obj.absolute_url(),
                 'title' : obj.title or obj.id,
-                'icon' : obj.getIcon(),
+                'obj' : obj,
                 'isSelf' : obj.id == self.story.id,
                 })
 

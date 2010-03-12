@@ -33,11 +33,6 @@ from Products.ATContentTypes.atct import ATFolder
 from Products.ATContentTypes.atct import ATFolderSchema
 from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 
-from Products.DataGridField import DataGridField
-from Products.DataGridField import DataGridWidget
-from Products.DataGridField.Column import Column
-from Products.DataGridField.FixedColumn import FixedColumn
-
 from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.utils import getToolByName
 

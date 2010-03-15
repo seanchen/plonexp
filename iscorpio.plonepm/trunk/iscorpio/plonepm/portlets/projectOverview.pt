@@ -15,12 +15,18 @@
            tal:attributes="href projectInfo/projectUrl">Project Overview</a></li>
     <!-- <li><a href="#">Releases</a></li> -->
     <li><a href="#"
-           tal:attributes="href projectInfo/iterationsUrl">Roadmap / Iterations</a></li>
+           tal:attributes="href projectInfo/iterationsUrl">Roadmap / Iterations
+        (<span tal:replace="projectInfo/iterationsAmount" />)
+    </a></li>
     <li><a href="#"
-           tal:attributes="href projectInfo/storiesUrl">Stories</a></li>
+           tal:attributes="href projectInfo/storiesUrl">Stories
+        (<span tal:replace="projectInfo/storiesAmount" />)
+    </a></li>
     <!-- <li><a href="#">Artifacts / Issues</a></li> -->
     <li><a href="#"
-           tal:attributes="href projectInfo/useCasesUrl">Use Cases</a></li>
+           tal:attributes="href projectInfo/useCasesUrl">Use Cases
+        (<span tal:replace="projectInfo/useCasesAmount" />)
+    </a></li>
     <li><a href="#" tal:attributes="href projectInfo/svnUrl">Source Code Repository</a></li>
     <li><a href="#" tal:attributes="href projectInfo/viewUrl">Browse Source Code</a></li>
   </ul>

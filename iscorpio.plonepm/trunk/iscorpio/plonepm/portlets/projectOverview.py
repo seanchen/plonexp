@@ -84,6 +84,9 @@ class Renderer(base.Renderer):
                 'title' : self.project.title or self.project.id,
                 'svnUrl' : self.project.xppm_repo_url,
                 'viewUrl' : self.project.xppm_browse_code_url,
+                'storiesAmount' : len(self.project.getAllStories()),
+                'useCasesAmount' : len(self.project.getAllUseCases()),
+                'iterationsAmount' : len(self.project.getAllIterations()),
                }
 
 # the form for add this portlet.

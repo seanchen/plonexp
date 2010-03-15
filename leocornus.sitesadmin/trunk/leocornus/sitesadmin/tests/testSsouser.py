@@ -139,23 +139,36 @@ class SsouserTestCase(SitesAdminTestCase):
         self.uf.ssouser.manage_changeProperties(userSiteId='unit')
         self.failIfEqual(defaultSiteId, self.uf.ssouser.userSiteId)
 
-    # test authenticate credential
-    def testAuthCredit(self):
+    def prepareTestingSite(self, site):
 
         # install the ssouser plugin.
-        setup_tool = getattr(self.emptySite, 'portal_setup')
+        setup_tool = getattr(site, 'portal_setup')
         setup_tool.runAllImportStepsFromProfile('profile-%s' % \
                                                 'leocornus.sitesadmin:ssouser')
 
-        # preparing testing user.
-        self.portal.invokeFactory('UserAccount', 'user1')
-        user1 = getattr(self.portal, 'user1')
-        user1.setUserName("user1test")
-        user1.setPassword('user1password')
-        self.portal.membrane_tool.indexObject(user1)
-
         # using the testing plone site as the user admin site.
-        self.uf.ssouser.manage_changeProperties(userSiteId=self.portal.id)
+        site.acl_users.ssouser.manage_changeProperties(userSiteId=self.portal.id)
+
+    def createTestingUser(self, site, userId='user1',
+                          userName='user1test',
+                          password='user1password',
+                          location='user1 location'):
+
+        # create testing user in the give site.
+        site.invokeFactory('UserAccount', userId)
+        user1 = getattr(self.portal, userId)
+        user1.setUserName(userName)
+        user1.setPassword(password)
+        user1.setLocation(location)
+        site.membrane_tool.indexObject(user1)
+
+        return user1
+
+    # test authenticate credential
+    def testAuthCredit(self):
+
+        self.prepareTestingSite(self.emptySite)
+        self.createTestingUser(self.portal)
 
         # authenticate the testing user.
         credentials = {'login' : 'user1test',
@@ -168,21 +181,8 @@ class SsouserTestCase(SitesAdminTestCase):
     # test authenticate credential
     def testMutableProperty(self):
 
-        # install the ssouser plugin.
-        setup_tool = getattr(self.emptySite, 'portal_setup')
-        setup_tool.runAllImportStepsFromProfile('profile-%s' % \
-                                                'leocornus.sitesadmin:ssouser')
-
-        # preparing testing user.
-        self.portal.invokeFactory('UserAccount', 'user1')
-        user1 = getattr(self.portal, 'user1')
-        user1.setUserName("user1test")
-        user1.setPassword('user1password')
-        user1.setLocation('user1 location')
-        self.portal.membrane_tool.indexObject(user1)
-
-        # using the testing plone site as the user admin site.
-        self.uf.ssouser.manage_changeProperties(userSiteId=self.portal.id)
+        self.prepareTestingSite(self.emptySite)
+        user1 = self.createTestingUser(self.portal)
 
         mtool = getToolByName(self.emptySite, 'portal_membership')
         member = mtool.getMemberById('user1test')
@@ -195,6 +195,23 @@ class SsouserTestCase(SitesAdminTestCase):
         oneMore = mtool.getMemberById('user1test')
         self.assertEquals(oneMore.getProperty('location'), 'new location')
         self.assertEquals(user1.getLocation(), 'new location')
+
+    def testGetUsers(self):
+
+        self.prepareTestingSite(self.emptySite)
+        user1 = self.createTestingUser(self.portal)
+        user2 = self.createTestingUser(self.portal, userId='user2',
+                                       userName="user2test")
+
+        userFolder = self.emptySite.acl_users
+
+        self.failIf(len(userFolder.getUsers()) > 0)
+
+        userFolder.portal_role_manager.assignRoleToPrincipal('Member', 'user1test')
+        self.failUnless(len(userFolder.getUsers()) == 1)
+
+        userFolder.portal_role_manager.assignRoleToPrincipal('Manager', 'user2test')
+        self.failUnless(len(userFolder.getUsers()) == 2)
 
 def test_suite():
     suite = unittest.TestSuite()

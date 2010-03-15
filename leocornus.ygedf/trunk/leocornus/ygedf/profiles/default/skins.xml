@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<object name="portal_skins" allow_any="False" cookie_persistence="False"
+        default_skin="YGEDF Theme">
+
+  <!-- Objects for skin redmaple -->
+  <object name="ygedf_images" meta_type="Filesystem Directory View"
+          directory="leocornus.ygedf:skins/ygedf_images"/>
+  <object name="ygedf_styles" meta_type="Filesystem Directory View"
+          directory="leocornus.ygedf:skins/ygedf_styles"/>
+  <object name="iscorpio_frog_templates" meta_type="Filesystem Directory View"
+          directory="leocornus.ygedf:skins/ygedf_templates"/>
+
+  <skin-path name="YGEDF Theme" based-on="Plone Default">
+    <layer name="ygedf_images" insert-after="custom"/>
+    <layer name="ygedf_styles" insert-after="ygedf_images"/>
+    <layer name="ygedf_templates" insert-after="ygedf_styles"/>
+  </skin-path>
+
+</object>

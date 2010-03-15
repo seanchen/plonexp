@@ -1,0 +1,46 @@
+<configure
+   xmlns="http://namespaces.zope.org/zope"
+   xmlns:browser="http://namespaces.zope.org/browser">
+
+  <!-- Leocornus Classic Theme Zope 3 browser layer -->
+<!--   <interface -->
+<!--       interface=".interfaces.ILeocornusClassicTheme" -->
+<!--       type="zope.publisher.interfaces.browser.IBrowserSkinType" -->
+<!--       name="Leocornus Classic Theme" -->
+<!--   /> -->
+
+<!-- the portal header viewlet manager for classic theme, we are -->
+<!-- using the Plone ordered viewlet manager now. -->
+<!--   <browser:viewletManager -->
+<!--      name="classic.portalheader" -->
+<!--      layer=".interfaces.ILeocornusClassicTheme" -->
+<!--      provides=".interfaces.IClassicPortalHeader" -->
+<!--      class="plone.app.viewletmanager.manager.OrderedViewletManager" -->
+<!--      permission="zope2.View" -->
+<!--   /> -->
+
+<!--   <browser:viewlet -->
+<!--      name="classic.logo" -->
+<!--      layer=".interfaces.ILeocornusClassicTheme" -->
+<!--      manager="plone.app.layout.viewlets.interfaces.IPortalTop" -->
+<!--      class=".header.LogoViewlet" -->
+<!--      permission="zope2.View" -->
+<!--   /> -->
+
+<!--   <browser:viewlet -->
+<!--      name="classic.globalsection" -->
+<!--      layer=".interfaces.ILeocornusClassicTheme" -->
+<!--      manager="plone.app.layout.viewlets.interfaces.IPortalTop" -->
+<!--      class=".header.GlobalSectionViewlet" -->
+<!--      permission="zope2.View" -->
+<!--   /> -->
+
+<!--  <browser:viewlet -->
+<!--      name="classic.top" -->
+<!--     layer=".interfaces.ILeocornusClassicTheme" -->
+<!--      manager=".interfaces.ILeocornusClassicPortalTop" -->
+<!--      template="portal_top.pt" -->
+<!--      permission="zope2.View" -->
+<!--   /> -->
+
+</configure>

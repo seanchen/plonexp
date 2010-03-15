@@ -1,0 +1,22 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="leocornus.ygedf">
+
+  <genericsetup:registerProfile
+      name="default"
+      title="YGEDF Customization Theme"
+      directory="profiles/default"
+      description="YGEDF Plone Website"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <genericsetup:registerProfile
+      name="uninstall"
+      title="YGEDF Uninstall Profile"
+      directory="profiles/uninstall"
+      description="Remove the YGEDF theme"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+</configure>

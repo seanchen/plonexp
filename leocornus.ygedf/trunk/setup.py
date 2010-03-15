@@ -1,13 +1,20 @@
+
+# setup.py
+
 from setuptools import setup, find_packages
 import os
 
-version = open(os.path.join('leocornus/ygedf', 'version.txt')).read()
+__author__ = "Sean Chen"
+__email__ = "sean.chen@leocorn.com"
+
+
+prodFolder = 'leocornus/ygedf'
 
 setup(name='leocornus.ygedf',
-      version=version,
+      version=open(os.path.join(prodFolder, 'version.txt')).read(),
       description="Providing themes, facilities, tools, etc. for ygedf.org websites",
-      long_description=open(os.path.join('leocornus/ygedf', "README.txt")).read() + "\n" +
-                       open(os.path.join("leocornus/ygedf", "HISTORY.txt")).read(),
+      long_description=open(os.path.join(prodFolder, "README.txt")).read() + "\n" +
+                       open(os.path.join(prodFolder, "HISTORY.txt")).read(),
       # Get more strings from http://www.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[
         "Framework :: Zope :: Plone",

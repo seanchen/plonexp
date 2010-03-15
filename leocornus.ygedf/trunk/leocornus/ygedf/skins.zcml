@@ -1,0 +1,12 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:cmf="http://namespaces.zope.org/cmf"
+    i18n_domain="leocornus.ygedf">
+
+  <!-- File System Directory Views registration -->
+	<!-- by default it is under skins folder. -->
+  <cmf:registerDirectory name="ygedf_images"/>
+  <cmf:registerDirectory name="ygedf_templates"/>
+  <cmf:registerDirectory name="ygedf_styles"/>
+
+</configure>

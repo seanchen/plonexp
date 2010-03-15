@@ -9,6 +9,8 @@ __docformat__ = 'plaintext'
 
 import logging
 
+from zope.interface import implements
+
 from AccessControl import ClassSecurityInfo
 # from Archetypes
 from Products.Archetypes.public import Schema
@@ -18,6 +20,7 @@ from Products.Archetypes.public import registerType
 from iscorpio.plonepm.config import PROJECTNAME
 from iscorpio.plonepm.content.base import XPPMBase
 from iscorpio.plonepm.content.base import XPPMDocBase
+from iscorpio.plonepm.interfaces import IPPMUseCase
 
 # the use case schema.
 PPMUseCaseSchema = XPPMDocBase.schema.copy()
@@ -40,6 +43,7 @@ class PPMUseCase(XPPMBase, XPPMDocBase):
     __implements__ = (
         XPPMDocBase.__implements__,
         )
+    implements(IPPMUseCase)
 
     xppm_id_prefix = "uc"
     log = logging.getLogger("PlonePM PPMUseCase")

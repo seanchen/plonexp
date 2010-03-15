@@ -14,3 +14,4 @@ from project import IPPMProject
 from project import IPPMStory
 from project import IPPMIteration
 from project import IPPMMetadata
+from project import IPPMUseCase

@@ -21,6 +21,7 @@ from Products.PluggableAuthService.interfaces.plugins import ICredentialsUpdateP
 from Products.PluggableAuthService.interfaces.plugins import IUserFactoryPlugin
 
 from Products.PlonePAS.interfaces.plugins import IMutablePropertiesPlugin
+from Products.PlonePAS.interfaces.plugins import IUserIntrospection
 
 __author__ = "Sean Chen"
 __email__ = "sean.chen@leocorn.com"
@@ -108,6 +109,7 @@ class SsouserPlugins(BasePlugin):
                                                                   sort_by,
                                                                   max_results,
                                                                   **kw)
+        self.log.debug('enumerateUsers(id=%s, login=%s, kw=%s): %s' % (id, login, kw, users))
 
         return users
 
@@ -168,6 +170,47 @@ class SsouserPlugins(BasePlugin):
         # XXX: Not now
         pass
 
+    security.declarePrivate('getUsers')
+    def getUsers(self):
+        """
+        Return a list of users within this site.
+        """
+
+        userFolder = self.acl_users
+        roleManager = userFolder.portal_role_manager
+
+        users = set()
+        roles = ['Member', 'Manager']
+        principals = set()
+        for role in roles:
+            ids = roleManager.listAssignedPrincipals(role)
+            principals.update(ids)
+
+        for userId in principals:
+            user = userFolder.getUserById(userId, None)
+            # it will be None for groups
+            if user:
+                # this is not a group.
+                users.add(user)
+
+        return users
+
+    security.declarePrivate('getUserIds')
+    def getUserIds(self):
+        """
+        return a list of user ids.
+        """
+
+        pass
+
+    security.declarePrivate('getUserNames')
+    def getUserNames(self):
+        """
+        retrun a list of user names.
+        """
+
+        pass
+
     # return the zope root object.
     security.declarePrivate('getZopeApp')
     def getZopeApp(self):
@@ -192,6 +235,7 @@ classImplements(SsouserPlugins,
                 IExtractionPlugin,
                 ICredentialsUpdatePlugin,
                 IPropertiesPlugin,
+                IUserIntrospection,
                 IMutablePropertiesPlugin)
 
 InitializeClass(SsouserPlugins)

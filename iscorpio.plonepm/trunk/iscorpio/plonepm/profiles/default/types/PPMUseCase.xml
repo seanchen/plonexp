@@ -12,14 +12,14 @@
   <property name="content_meta_type">PPMUseCase</property>
   <property name="product">iscorpio.plonepm</property>
   <property name="factory">addPPMUseCase</property>
-  <property name="immediate_view">base_view</property>
+  <property name="immediate_view">useCase_view</property>
   <property name="global_allow">False</property>
   <property name="filter_content_types">True</property>
   <property name="allowed_content_types"/>
   <property name="allow_discussion">True</property>
-  <property name="default_view">base_view</property>
+  <property name="default_view">useCase_view</property>
   <property name="view_methods">
-    <element value="base_view"/>
+    <element value="useCase_view"/>
   </property>
 
   <!-- alias for this content type -->

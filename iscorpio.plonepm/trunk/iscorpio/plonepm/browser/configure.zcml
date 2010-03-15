@@ -46,6 +46,14 @@
      permission="zope2.View"
   />
 
+  <!-- the default use case view. -->
+  <browser:page
+     name="useCase_view"
+     for="..interfaces.IPPMUseCase"
+     template="useCase_view.pt"
+     permission="zope2.View"
+  />
+
   <!-- the default view for a story -->
   <browser:page
      name="story_view"

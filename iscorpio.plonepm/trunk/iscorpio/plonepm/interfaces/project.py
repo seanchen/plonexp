@@ -43,3 +43,9 @@ class IPPMMetadata(Interface):
     the marker interace for a metadata
     """
     pass
+
+class IPPMUseCase(Interface):
+    """
+    the marker interace for a use case
+    """
+    pass

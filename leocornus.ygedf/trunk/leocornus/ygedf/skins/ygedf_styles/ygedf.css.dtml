@@ -7,7 +7,7 @@
 /******* Portal Wrapper *******/
 /* this id will define the basic property for a plone site */
 #visual-portal-wrapper{
-  width: 868px;
+  width: 960px;
   background: &dtml-backgroundColor;;
   margin-left:auto;
   margin-right:auto;

@@ -1,0 +1,44 @@
+<div class="visualNoPrint" id="classic-logo">
+<TABLE cellSpacing="0" cellPadding="0" align="center" border="0" width="100%"><TBODY>
+  <TR>
+    <TD align="right" background="ygedf_topbg.gif" height="36">
+      <TABLE cellSpacing="0" cellPadding="0" border="0">
+        <TBODY>
+        <TR>
+          <TD class="font12huilink" align="middle" width="60">
+            <A
+            style="DISPLAY: none"
+            href="http://www.ygf.yn.cn/guestbook.aspx">Homepage</A>
+
+            <A
+            href="javascript:void(0);">Contact</A>
+          </TD>
+          <TD class="font12huilink" align="middle" width="60">
+            <A
+            href="http://www.ygf.yn.cn/corpInfo.aspx?id=11">Info</A>
+          </TD>
+          <TD class="font12huilink" align="middle" width="60">
+            <A
+            href="http://www.ygf.yn.cn/inv_job.aspx">Job</A>
+          </TD>
+          <TD class="font12huilink" align="middle" width="60">
+            <A href="#">Bookmark</A>
+          </TD>
+          <TD class="font12huilink" align="middle" width="20">&nbsp;  </TD>
+        </TR>
+      </TBODY></TABLE>
+  </TD></TR>
+  <TR>
+    <TD>
+      <OBJECT
+      codeBase=" http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,28,0"
+      height="244" width="960" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000">
+        <PARAM NAME="movie" VALUE="fa.swf"/>
+        <PARAM NAME="quality" VALUE="high"/>
+        <embed src="fa.swf" quality="high"
+               pluginspage="http://www.adobe.com/shockwave/download/download.cgi?P1_Prod_Version=ShockwaveFlash"
+               type="application/x-shockwave-flash" width="960" height="244"/>
+    </OBJECT>
+  </TD></TR>
+</TBODY></TABLE>
+</div>

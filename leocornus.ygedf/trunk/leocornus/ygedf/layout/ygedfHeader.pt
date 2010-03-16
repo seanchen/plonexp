@@ -1,0 +1,3 @@
+<div id="header">
+  <div tal:replace="structure provider:ygedf.portalheader" />
+</div>

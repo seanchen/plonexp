@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<object name="portal_skins" meta_type="Plone Skins Tool" allow_any="False"
+        cookie_persistence="False"
+        default_skin="Plone Default" request_varname="plone_skin">
+
+  <object name="ygedf_images"
+          meta_type="Filesystem Directory View" remove="True"/>
+  <object name="ygedf_templates"
+          meta_type="Filesystem Directory View" remove="True"/>
+  <object name="ygedf_styles"
+          meta_type="Filesystem Directory View" remove="True"/>
+
+  <skin-path name="YGEDF Theme" remove="True"/>
+
+</object>

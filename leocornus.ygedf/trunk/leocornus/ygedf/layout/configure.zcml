@@ -43,6 +43,15 @@
      permission="zope2.View"
   />
 
+  <!-- footer viewlets -->
+  <browser:viewlet
+     name="ygedf.footer"
+     layer=".interfaces.IYGEDFTheme"
+     manager="plone.app.layout.viewlets.interfaces.IPortalFooter"
+     template="footer.pt"
+     permission="zope.Public"
+  />
+
 <!--  <browser:viewlet -->
 <!--      name="classic.top" -->
 <!--     layer=".interfaces.ILeocornusClassicTheme" -->

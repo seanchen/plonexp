@@ -1,0 +1,16 @@
+<div id="portal-footer" metal:define-macro="portal_footer" i18n:domain="plone">
+
+<p>
+    Copyright <acronym title="Copyright">&copy;</acronym>
+    2009-<span tal:omit-tag=""
+               tal:define="now modules/DateTime/DateTime"
+               tal:content="now/year" />
+    <a href="http://www.ygedf.org">Yunnan Green Environment Development Foundation</a>
+		All Rights Reserved
+</p>
+
+<p>
+    Powered by <a href="http://www.leocorn.com">Leocornus Ltd.</a>
+</p>
+
+</div>

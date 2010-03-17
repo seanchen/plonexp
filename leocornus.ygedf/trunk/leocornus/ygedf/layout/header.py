@@ -5,6 +5,8 @@
 viewlets in portal header for the ygedf theme.
 """
 
+from zope.component import getMultiAdapter
+
 from plone.app.layout.viewlets.common import ViewletBase
 
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
@@ -32,7 +34,16 @@ class GlobalSectionsViewlet(ViewletBase):
 
     def update(self):
 
-        super(GlobalSectionsViewlet, self).update()
+        context_state = getMultiAdapter((self.context, self.request),
+                                        name=u'plone_context_state')
+        actions = context_state.actions()
+        portal_tabs_view = getMultiAdapter((self.context, self.request),
+                                           name=u'portal_tabs_view')
+        selectedTabs = self.context.restrictedTraverse('selectedTabs')
+
+        self.portal_tabs = portal_tabs_view.topLevelTabs(actions=actions)
+        self.selected_tabs = selectedTabs('index_html', self.context, self.portal_tabs)
+        self.selected_portal_tab = self.selected_tabs['portal']
 
 class SiteActionsViewlet(ViewletBase):
 

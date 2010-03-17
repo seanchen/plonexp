@@ -1,3 +1,51 @@
-<div id="classic-globalnav" class="visualNoPrint">
-  Latest Events: Global Nav Section.
+<div id="ygedf-globalnav" class="visualNoPrint">
+      <TABLE cellSpacing="0" cellPadding="0" border="0" align="center" width="100%">
+        <TBODY>
+        <TR>
+          <TD background="cai_cxi.gif">
+            <IMG height="49" src="cai_left.gif"/>
+          </TD>
+
+          <tal:tabs tal:repeat="tab view/portal_tabs">
+            <tal:tab tal:define="last repeat/tab/end | nothing">
+              <TD class="font14biaotibaicu" align="middle" width="86" background="cai_bg.gif"
+                  tal:attributes="background python: view.selected_portal_tab == tab['id'] and 'cai_cxi.gif' or 'cai_bg.gif'">
+                <A tal:content="tab/name"
+                   tal:attributes="href tab/url;
+                                   title tab/description | nothing"
+                   href="http://www.ygf.yn.cn/index.aspx">首 页</A>
+              </TD>
+              <TD width="7" tal:condition="python: not last">
+                <IMG height="49" src="cai_cxi.gif" width="7"/>
+              </TD>
+            </tal:tab>
+          </tal:tabs>
+
+					<!-- comment out now for a backup reference -->
+<!--
+          <TD class="font14biaotibaicu" align="middle" width="86" background="cai_bg.gif">
+            <A href="http://www.ygf.yn.cn/goaction.aspx">参与行动</A></TD>
+          <TD align="middle" width="7">
+            <IMG height="49" src="cai_cxi.gif" width="7"/></TD>
+
+          <TD class="font14biaotibaicu" align="middle" width="84" background="cai_bg.gif">
+            <A href="http://www.ygf.yn.cn/volunteer.aspx">志愿者中心</A></TD>
+          <TD align="middle" width="7">
+            <IMG height="49" src="cai_cxi.gif" width="7"/></TD>
+
+          <TD class="font14biaotibaicu" align="middle" width="87" background="cai_bg.gif">
+            <A href="http://www.ygf.yn.cn/index.aspx#" target=_blank>绿色社区</A></TD>
+          <TD align="middle" width="7">
+            <IMG height="49" src="cai_cxi.gif" width="7"/></TD>
+
+          <TD class="font14biaotibaicu" align="middle" width="87" background="cai_bg.gif">
+            <A href="http://www.ygf.yn.cn/work_togther.aspx">合作伙伴</A></TD>
+-->
+
+          <TD align="right" background="cai_cxi.gif">
+            <IMG height="49" src="cai_right.gif"/>
+          </TD>
+        </TR>
+      </TBODY></TABLE>
+
 </div>

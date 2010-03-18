@@ -43,6 +43,14 @@
      permission="zope2.View"
   />
 
+  <browser:viewlet
+     name="ygedf.personalbar"
+     layer=".interfaces.IYGEDFTheme"
+     manager="plone.app.layout.viewlets.interfaces.IPortalTop"
+     class=".bars.PersonalBarViewlet"
+     permission="zope2.View"
+  />
+
   <!-- footer viewlets -->
   <browser:viewlet
      name="ygedf.footer"

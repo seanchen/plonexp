@@ -40,17 +40,17 @@
 /* Also it is also specified in columns.css.dtml */
 #portal-column-one .visualPadding {
   margin: 0px;
-  padding: 0px 1px 0px 0px;
+  padding: 5px 1px 0px 0px;
 }
 #portal-column-two .visualPadding {
   margin: 0px;
-  padding: 0px 0px 0px 1px;
+  padding: 5px 0px 0px 1px;
 }
 
 /* Only in columns.css.dtml by default */
 #portal-column-content {
   margin: 0px;
-  padding: 4px 0px 0px 2px;
+  padding: 5px 0px 0px 2px;
 }
 
 .portletItem ul {
@@ -77,6 +77,12 @@
 #calendar-next {
   color: white;
 }
+
+/* personal bar, defined in public.css.dtml */
+#portal-personaltools {
+  padding: 0em 1em 0em 5em;
+}
+
 /* this class will override the default .portlet class, */
 /* which is defined in portlets.css.dtml */
 .classicPortlet {

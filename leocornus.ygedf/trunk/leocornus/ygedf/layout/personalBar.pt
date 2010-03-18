@@ -1,0 +1,85 @@
+<div id="portal-personaltools-wrapper"
+     i18n:domain="plone">
+
+<h5 class="hiddenStructure" i18n:translate="heading_personal_tools">Personal tools</h5>
+
+<ul id="portal-personaltools"
+    tal:condition="python:view.user_actions or not view.anonymous"
+    class="visualInline">
+   <tal:block condition="not: view/anonymous">
+       <li><a
+           id="user-name"
+           tal:attributes="href view/homelink_url"
+          ><img src="" tal:replace="structure here/user.gif" />
+            <span class="visualCaseSensitive"
+                 tal:content="view/user_name">
+                John
+           </span
+       ></a></li>
+   </tal:block>
+
+    <tal:actions tal:repeat="action view/user_actions">
+        <li tal:define="icon action/icon | nothing;
+                        icon python:icon is not None and icon or view.getIconFor(action['category'], action['id'], None);
+                        class_name string:visualIcon actionicon-${action/category}-${action/id};
+                        class_name python:icon is not None and class_name or nothing;"
+            tal:attributes="class class_name">
+            <a href=""
+               tal:attributes="href action/url;
+                               class python:icon is not None and 'visualIconPadding' or nothing;"
+            ><tal:actionname i18n:translate=""
+                             tal:content="action/title">dummy</tal:actionname
+            ></a>
+        </li>
+    </tal:actions>
+
+<tal:language
+    tal:define="available view/available;
+                languages view/languages;
+                showFlags view/showFlags;">
+    <tal:block
+        tal:condition="python:available and len(languages)>=2">
+
+        <li tal:condition="showFlags"
+            tal:repeat="lang languages">
+            <span tal:define="code lang/code;
+                              selected lang/selected"
+                  tal:omit-tag="selected">
+
+                <a href=""
+                   tal:define="flag lang/flag|nothing;
+                               name lang/name"
+                   tal:attributes="href string:${here/absolute_url}/switchLanguage?set_language=${code};
+                                   title name">
+                    <tal:flag condition="flag">
+                        <img width="14"
+                             height="11"
+                             alt=""
+                             tal:attributes="src string:${view/site_url}${flag};
+                                             title python: name;
+                                             class python: selected and 'currentItem' or '';" />
+                    </tal:flag>
+                    <tal:nonflag condition="not: flag">
+                        <span tal:replace="code">language code</span>
+                    </tal:nonflag>
+                </a>
+
+            </span>
+        </li>
+
+        <li tal:condition="not: showFlags">
+            <select style="font-size: 94%;"
+                    onchange=""
+                    tal:attributes="onchange string:window.location='${context/absolute_url}/switchLanguage?set_language=' + this.options[this.selectedIndex].value">
+                <option tal:repeat="lang languages"
+                        tal:content="lang/name"
+                        tal:attributes="selected lang/selected;
+                                        value lang/code">Language</option>
+            </select>
+        </li>
+
+    </tal:block>
+</tal:language>
+
+</ul>
+</div>

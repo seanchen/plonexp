@@ -110,6 +110,16 @@ UserAccountSchema = ATCTContent.schema.copy() + Schema((
             ),
         ),
 
+    StringField(
+        'wysiwyg_editor',
+        languageIndependent = 1,
+        user_property=True,
+        widget = StringWidget(
+            label="Content Editor",
+            description = "Select the content editor that you would like to use."
+            ),
+        ),
+
     LinesField(
         'sites',
         languageIndependent = 1,

@@ -121,7 +121,7 @@ class SsouserPlugins(BasePlugin):
         """
 
         credit = self.getUserAdmin().credentials_cookie_auth.extractCredentials(request)
-        self.log.debug('extract credentials: %s', credit)
+
         return credit
 
     # ICredentialsUpdatePlugin

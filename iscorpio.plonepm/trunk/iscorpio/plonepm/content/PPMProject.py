@@ -235,6 +235,14 @@ class PPMProject(ATFolder):
             filter = {'portal_type' : ['PPMIteration']}
             )
 
+    security.declarePublic('getStory')
+    def getStory(self, storyId):
+        """
+        returns the story object for the given story id.
+        """
+
+        return getattr(self, storyId)
+
     security.declarePublic('getAllStories')
     def getAllStories(self, iteration=None):
         """ Return all Stories in this project.

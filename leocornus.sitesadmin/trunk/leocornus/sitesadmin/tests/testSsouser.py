@@ -229,19 +229,71 @@ class SsouserTestCase(SitesAdminTestCase):
 
         userFolder = self.emptySite.acl_users
         ssouser = userFolder.ssouser
+        ssouser.manage_changeProperties(restrictSearch=True)
         roleManager = userFolder.portal_role_manager
 
         self.failIf(len(ssouser.enumerateUsers()) > 0)
         users = ssouser.enumerateUsers(fullname='one')
-        self.failUnless(len(users) == 1)
-        self.assertEquals(users[0]['id'], 'user1test')
+        self.failIf(len(users) > 0)
 
         roleManager.assignRoleToPrincipal('Member', 'user1test')
         self.failUnless(len(ssouser.enumerateUsers()) == 1)
+        users = ssouser.enumerateUsers(fullname='one')
+        self.failUnless(len(users) == 1)
+        self.assertEquals(users[0]['id'], 'user1test')
 
         roleManager.assignRoleToPrincipal('Member', 'user2test')
         roleManager.assignRoleToPrincipal('Manager', 'user2test')
         self.failUnless(len(ssouser.enumerateUsers()) == 2)
+
+    def testGetRolesForUser(self):
+
+        self.prepareTestingSite(self.emptySite)
+        user1 = self.createTestingUser(self.portal, userId='user1',
+                                       userName='user1test',
+                                       fullname='Full Name One')
+
+        userFolder = self.emptySite.acl_users
+        ssouser = userFolder.ssouser
+        roleManager = userFolder.portal_role_manager
+
+        self.failIf(ssouser.getRolesForUser('user1test'))
+
+        roleManager.assignRoleToPrincipal('Member', 'user1test')
+        self.failUnless(ssouser.getRolesForUser('user1test'))
+
+    def testRestrictSearch(self):
+
+        self.prepareTestingSite(self.emptySite)
+        user1 = self.createTestingUser(self.portal, userId='user1',
+                                       userName='user1test',
+                                       fullname='Full Name One')
+        user2 = self.createTestingUser(self.portal, userId='user2',
+                                       userName="user2test",
+                                       fullname='Full Name Two')
+        user3 = self.createTestingUser(self.portal, userId='user3',
+                                       userName="user3test",
+                                       fullname='Full Name Three')
+
+        userFolder = self.emptySite.acl_users
+        ssouser = userFolder.ssouser
+        roleManager = userFolder.portal_role_manager
+
+        ssouser.manage_changeProperties(restrictSearch='False')
+        self.failIf(ssouser.getProperty('restrictSearch'))
+
+        self.assertEquals(len(userFolder.searchUsers(fullname='Full name')), 3)
+
+        ssouser.manage_changeProperties(restrictSearch='True')
+        self.failUnless(ssouser.getProperty('restrictSearch'))
+
+        self.failIf(len(userFolder.searchUsers(fullname='Full name')) > 0)
+
+        roleManager.assignRoleToPrincipal('Member', 'user1test')
+        self.assertEquals(len(userFolder.searchUsers(fullname='Full name')), 1)
+
+        roleManager.assignRoleToPrincipal('Manager', 'user2test')
+        self.assertEquals(len(userFolder.searchUsers(fullname='Full name')), 2)
 
 def test_suite():
     suite = unittest.TestSuite()

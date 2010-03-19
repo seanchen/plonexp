@@ -30,12 +30,13 @@ __email__ = "sean.chen@leocorn.com"
 manage_addSsouserPluginsForm = DTMLFile('ssouserAdd', globals())
 
 # the factory method to add a ssouser plugin.
-def manage_addSsouserPlugins(self, id, title='', userSiteId='sites_admin', REQUEST=None):
+def manage_addSsouserPlugins(self, id, title='', userSiteId='sites_admin',
+                             restrictSearch=False, REQUEST=None):
     """
     Id and title will come with the HTTP request.
     """
 
-    sp = SsouserPlugins(id, title, userSiteId)
+    sp = SsouserPlugins(id, title, userSiteId, restrictSearch)
     self._setObject(sp.getId(), sp)
 
     if REQUEST:
@@ -67,15 +68,21 @@ class SsouserPlugins(BasePlugin):
                     , 'type'  : 'string'
                     , 'mode'  : 'w'
                     }
+                  , { 'id'    : 'restrictSearch'
+                    , 'label' : 'Restrict User Search to Site Level'
+                    , 'type'  : 'boolean'
+                    , 'mode'  : 'w'
+                    }
                   )
 
     security = ClassSecurityInfo()
 
-    def __init__(self, id, title, userSiteId):
+    def __init__(self, id, title, userSiteId, restrictSearch):
 
         self._setId(id)
         self.title = title
         self.userSiteId = userSiteId
+        self.restrictSearch = restrictSearch
 
     # IAuthenticationPlugin
     security.declarePrivate('authenticateCredentials')
@@ -104,20 +111,25 @@ class SsouserPlugins(BasePlugin):
         Return a list of valid users identified by this plugin.
         """
 
-        if id == None and login == None and kw == {}:
+        users = []
+        if (id == None and login == None and kw == {}) and self.restrictSearch:
             # search for all users.
-            users = []
             for user in self.getUsers():
                 userMap = {'id' : user.getId(),
                            'login' : user.getId(),
                            'pluginid' : self.id}
                 users.append(userMap)
         else:
-            users = self.getUserAdmin().membrane_users.enumerateUsers(id, login,
-                                                                      exact_match,
-                                                                      sort_by,
-                                                                      max_results,
-                                                                      **kw)
+            userAdmin = self.getUserAdmin().membrane_users
+            rets = userAdmin.enumerateUsers(id, login, exact_match, sort_by,
+                                            max_results, **kw)
+
+            if self.restrictSearch:
+                for user in rets:
+                    if self.getRolesForUser(user['id']):
+                        users.append(user)
+            else:
+                users.extend(rets)
 
         self.log.debug('enumerateUsers(id=%s, login=%s, kw=%s): %s' % (id, login, kw, users))
 
@@ -213,6 +225,17 @@ class SsouserPlugins(BasePlugin):
             ids.update(principals)
 
         return ids
+
+    security.declarePrivate('getRolesForUser')
+    def getRolesForUser(self, userId, default=None):
+        """
+        return a tuple of roles for the given userid.
+        """
+
+        userFolder = self.acl_users
+        roleManager = userFolder.portal_role_manager
+
+        return roleManager._principal_roles.get(userId, default)
 
     security.declarePrivate('getUserIds')
     def getUserIds(self):

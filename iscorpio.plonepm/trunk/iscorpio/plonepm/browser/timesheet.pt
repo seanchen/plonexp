@@ -1,6 +1,6 @@
 <tal:tracking tal:condition="view/changeLog">
 <h2>Tracking History</h2>
-<table class="listing" width="98%"><tbody>
+<table class="listing" width="100%"><tbody>
   <tr>
     <th width="106px">When</th>
     <th width="78px">Who</th>
@@ -42,10 +42,10 @@
 
     <div class="formHelp" id="description_help"
          i18n:translate="ppm_help_description">
-      field help.
+      Please provide brief description about what bas been done.
     </div>
 
-    <input size="60" type="text" name="description" id="description"
+    <input size="80" type="text" name="description" id="description"
            tal:attributes="value request/description | nothing;"
     />
   </div>
@@ -64,7 +64,7 @@
 
     <div class="formHelp" id="duration_help"
          i18n:translate="ppm_help_duration">
-      Please specify how much time you spent on this work..
+      Please specify how much time you spent on this work.
     </div>
 
     <input size="28" type="text" name="duration" id="duration"
@@ -85,7 +85,7 @@
 
     <div class="formHelp" id="percentage_help"
          i18n:translate="ppm_help_percentage">
-      Please specify the finish percentage for this story
+      Please specify the finish percentage for this story.
     </div>
 
     <input size="18" type="text" name="percentage" id="percentage"

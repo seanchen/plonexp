@@ -58,6 +58,11 @@ class ProxyBasicTestCase(SitesAdminTestCase):
         self.assertEquals(proxy.getProperty('prop_default'), 'mutable_properties')
         self.assertEquals(proxy.getProperty('factory_default'), 'user_factory')
 
+        proxy.manage_changeProperties(prop_default='some_property',
+                                      factory_default='some_factory')
+        self.assertEquals(proxy.getProperty('prop_default'), 'some_property')
+        self.assertEquals(proxy.getProperty('factory_default'), 'some_factory')
+
 # testing proxy multi plugins in more complex cases.
 class ProxyTestCase(SitesAdminTestCase):
 

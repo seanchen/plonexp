@@ -44,6 +44,19 @@
     </ul>
     </tal:block>
 
+    <tal:block tal:condition="view/dependencyStories">
+    <strong>Dependency Stories</strong>
+    <ul tal:repeat="story view/dependencyStories">
+      <li class="colleagueStory"
+          tal:define="story_icon python: getIcon(story['obj'])">
+        <a href="#" tal:attributes="href story/url">
+          <img tal:replace="structure story_icon/html_tag"/>
+          <span tal:content="story/title"/>
+        </a>
+      </li>
+    </ul>
+    </tal:block>
+
     <strong>Iteration</strong><br/>
     <a href="#"
        tal:attributes="href storyInfo/iterationUrl"

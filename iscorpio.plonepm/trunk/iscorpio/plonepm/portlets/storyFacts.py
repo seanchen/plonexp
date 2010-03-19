@@ -104,6 +104,24 @@ class Renderer(base.Renderer):
         else:
             return None
 
+    # stories that the current story depends on.
+    def dependencyStories(self):
+        """
+        all dependence stories for current story.
+        """
+
+        values = []
+        storyIds = self.story.getXppm_story_dependencies()
+        for storyId in storyIds:
+            storyObj = self.story.getStory(storyId)
+            values.append({
+                'url' : storyObj.absolute_url(),
+                'title' : storyObj.title or storyObj.id,
+                'obj' : storyObj,
+                })
+
+        return values
+
     # stories planned in the same iteration.
     def colleagueStories(self):
         """

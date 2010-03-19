@@ -27,6 +27,8 @@
     <element value="PPMMetadata"/>
     <!-- <element value="PPMArtifact"/> -->
     <element value="Topic"/>
+		<element value="File" />
+		<element value="Image" />
   </property>
   <property name="allow_discussion">False</property>
   <property name="default_view">project_view</property>

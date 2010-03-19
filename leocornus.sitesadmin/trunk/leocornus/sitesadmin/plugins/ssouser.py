@@ -104,11 +104,21 @@ class SsouserPlugins(BasePlugin):
         Return a list of valid users identified by this plugin.
         """
 
-        users = self.getUserAdmin().membrane_users.enumerateUsers(id, login,
-                                                                  exact_match,
-                                                                  sort_by,
-                                                                  max_results,
-                                                                  **kw)
+        if id == None and login == None and kw == {}:
+            # search for all users.
+            users = []
+            for user in self.getUsers():
+                userMap = {'id' : user.getId(),
+                           'login' : user.getId(),
+                           'pluginid' : self.id}
+                users.append(userMap)
+        else:
+            users = self.getUserAdmin().membrane_users.enumerateUsers(id, login,
+                                                                      exact_match,
+                                                                      sort_by,
+                                                                      max_results,
+                                                                      **kw)
+
         self.log.debug('enumerateUsers(id=%s, login=%s, kw=%s): %s' % (id, login, kw, users))
 
         return users
@@ -177,23 +187,32 @@ class SsouserPlugins(BasePlugin):
         """
 
         userFolder = self.acl_users
-        roleManager = userFolder.portal_role_manager
-
         users = set()
-        roles = ['Member', 'Manager']
-        principals = set()
-        for role in roles:
-            ids = roleManager.listAssignedPrincipals(role)
-            principals.update(ids)
-
-        for userId in principals:
+        for userId in self.getPrincipalIds():
             user = userFolder.getUserById(userId, None)
-            # it will be None for groups
+            # it will be None for groups and stall ids.
             if user:
                 # this is not a group.
                 users.add(user)
 
         return users
+
+    security.declarePrivate('getPrincipalIds')
+    def getPrincipalIds(self):
+        """
+        return a set of user ids within this site, who has been assigned at lest
+        one role.
+        """
+
+        userFolder = self.acl_users
+        roleManager = userFolder.portal_role_manager
+
+        ids = set()
+        for role in roleManager.listRoleIds():
+            principals = roleManager.listAssignedPrincipals(role)
+            ids.update(principals)
+
+        return ids
 
     security.declarePrivate('getUserIds')
     def getUserIds(self):

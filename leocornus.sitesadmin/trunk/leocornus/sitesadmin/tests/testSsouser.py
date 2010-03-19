@@ -125,20 +125,6 @@ class SsouserTestCase(SitesAdminTestCase):
         self.assertTrue('ssouser' in found)
         self.assertFalse('session' in found)
 
-    # test update the property.
-    def testChangeProperty(self):
-
-        # import the generic setup profile to install the ssouser plugin.
-        setup_tool = getattr(self.emptySite, 'portal_setup')
-        setup_tool.runAllImportStepsFromProfile('profile-%s' % \
-                                                'leocornus.sitesadmin:ssouser')
-
-        defaultSiteId = self.uf.ssouser.userSiteId
-        self.assertEquals(defaultSiteId, 'sites_admin')
-
-        self.uf.ssouser.manage_changeProperties(userSiteId='unit')
-        self.failIfEqual(defaultSiteId, self.uf.ssouser.userSiteId)
-
     def prepareTestingSite(self, site):
 
         # install the ssouser plugin.
@@ -146,12 +132,25 @@ class SsouserTestCase(SitesAdminTestCase):
         setup_tool.runAllImportStepsFromProfile('profile-%s' % \
                                                 'leocornus.sitesadmin:ssouser')
 
+        self.assertEquals(site.acl_users.ssouser.userSiteId, 'sites_admin')
+
         # using the testing plone site as the user admin site.
         site.acl_users.ssouser.manage_changeProperties(userSiteId=self.portal.id)
+
+    # test update the property.
+    def testChangeProperty(self):
+
+        self.prepareTestingSite(self.emptySite)
+
+        self.uf.ssouser.manage_changeProperties(userSiteId='unit')
+        self.failIfEqual('sites_admin', self.uf.ssouser.userSiteId)
+        self.assertEquals('unit', self.uf.ssouser.userSiteId)
 
     def createTestingUser(self, site, userId='user1',
                           userName='user1test',
                           password='user1password',
+                          fullname="Full Name",
+                          email="email@mail.com",
                           location='user1 location'):
 
         # create testing user in the give site.
@@ -159,6 +158,8 @@ class SsouserTestCase(SitesAdminTestCase):
         user1 = getattr(self.portal, userId)
         user1.setUserName(userName)
         user1.setPassword(password)
+        user1.setFullname(fullname)
+        user1.setEmail(email)
         user1.setLocation(location)
         site.membrane_tool.indexObject(user1)
 
@@ -212,6 +213,35 @@ class SsouserTestCase(SitesAdminTestCase):
 
         userFolder.portal_role_manager.assignRoleToPrincipal('Manager', 'user2test')
         self.failUnless(len(userFolder.getUsers()) == 2)
+
+    def testEnumerateUsers(self):
+
+        self.prepareTestingSite(self.emptySite)
+        user1 = self.createTestingUser(self.portal, userId='user1',
+                                       userName='user1test',
+                                       fullname='Full Name One')
+        user2 = self.createTestingUser(self.portal, userId='user2',
+                                       userName="user2test",
+                                       fullname='Full Name Two')
+        user3 = self.createTestingUser(self.portal, userId='user3',
+                                       userName="user3test",
+                                       fullname='Full Name Three')
+
+        userFolder = self.emptySite.acl_users
+        ssouser = userFolder.ssouser
+        roleManager = userFolder.portal_role_manager
+
+        self.failIf(len(ssouser.enumerateUsers()) > 0)
+        users = ssouser.enumerateUsers(fullname='one')
+        self.failUnless(len(users) == 1)
+        self.assertEquals(users[0]['id'], 'user1test')
+
+        roleManager.assignRoleToPrincipal('Member', 'user1test')
+        self.failUnless(len(ssouser.enumerateUsers()) == 1)
+
+        roleManager.assignRoleToPrincipal('Member', 'user2test')
+        roleManager.assignRoleToPrincipal('Manager', 'user2test')
+        self.failUnless(len(ssouser.enumerateUsers()) == 2)
 
 def test_suite():
     suite = unittest.TestSuite()

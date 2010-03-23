@@ -65,7 +65,7 @@
 
   <!-- TODO: using other permission like plonepm: bill time -->
   <browser:viewletManager
-     name="plonepm.timesheet"
+     name="plonepm.timesheet.old"
      provides=".interfaces.IPlonepmTimesheet"
      permission="zope2.View"
      class=".timesheet.AddForm"
@@ -77,6 +77,27 @@
      for="..interfaces.IPPMStory"
      class=".timesheet.BillTime"
      permission="cmf.ModifyPortalContent"
+  />
+
+  <browser:viewletManager
+     name="plonepm.timesheet"
+     provides=".interfaces.IPlonepmTimesheet"
+     permission="zope2.View"
+     class="plone.app.viewletmanager.manager.OrderedViewletManager"
+  />
+
+  <browser:viewlet
+     name="plonepm.timesheet.changelog"
+     manager=".interfaces.IPlonepmTimesheet"
+     class=".timesheet.ChangeLogViewlet"
+     permission="zope2.View"
+  />
+
+  <browser:viewlet
+     name="plonepm.timesheet.billtimeform"
+     manager=".interfaces.IPlonepmTimesheet"
+     class=".timesheet.BillTimeFormViewlet"
+     permission="zope2.View"
   />
 
   <!-- default view for iteration -->

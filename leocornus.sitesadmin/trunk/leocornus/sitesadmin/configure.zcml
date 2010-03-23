@@ -7,10 +7,12 @@
 
   <five:registerPackage package="." initialize=".initialize" />
 
+	<!-- using the default skins folder -->
   <cmf:registerDirectory name="sitesadmin_images"/>
 
   <include package=".tools" />
   <include package=".content" />
   <include file="profiles.zcml" />
+	<include file="ssoprefs.zcml" />
 
 </configure>

@@ -63,22 +63,6 @@
      permission="zope2.View"
   />
 
-  <!-- TODO: using other permission like plonepm: bill time -->
-  <browser:viewletManager
-     name="plonepm.timesheet.old"
-     provides=".interfaces.IPlonepmTimesheet"
-     permission="zope2.View"
-     class=".timesheet.AddForm"
-     template="timesheet.pt"
-  />
-
-  <browser:page
-     name="add_time_bill"
-     for="..interfaces.IPPMStory"
-     class=".timesheet.BillTime"
-     permission="cmf.ModifyPortalContent"
-  />
-
   <browser:viewletManager
      name="plonepm.timesheet"
      provides=".interfaces.IPlonepmTimesheet"

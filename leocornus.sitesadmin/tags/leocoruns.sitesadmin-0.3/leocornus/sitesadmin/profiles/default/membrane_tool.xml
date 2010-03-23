@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<object name="membrane_tool" meta_type="MembraneTool">
+
+  <membrane-type name="UserAccount"/>
+
+  <object name="lexicon" meta_type="ZCTextIndex Lexicon">
+    <element name="Case Normalizer" group="Case Normalizer" />
+    <!--element name=" Don't remove stop words" group="Stop Words" /-->
+    <element name="Unicode Whitespace splitter" group="Word Splitter" />
+  </object>
+
+  <index name="getFullname" meta_type="ZCTextIndex">
+    <indexed_attr value="getFullname"/>
+    <extra name="index_type" value="Cosine Measure"/>
+    <extra name="lexicon_id" value="lexicon"/>
+  </index>
+
+  <index name="getEmail" meta_type="ZCTextIndex">
+    <indexed_attr value="getEmail"/>
+    <extra name="index_type" value="Cosine Measure"/>
+    <extra name="lexicon_id" value="lexicon"/>
+  </index>
+
+  <column value="getFullname"/>
+  <column value="getEmail"/>
+
+  <query_index_map>
+    <index name="fullname">getFullname</index>
+    <index name="email">getEmail</index>
+  </query_index_map>
+</object>

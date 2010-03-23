@@ -1,0 +1,54 @@
+Change Log
+==========
+
+0.3
+---
+
+  * New pas plugin in root admin site to proxy PAS service to different
+    backend plugins: sitestadmin_proxy:
+    - Properties: domain separator, membrane user folder, default property
+      plugin, default user factory plugin.
+    - The proxy will provide a alternative authentication service for
+      ssouser plugin to verify the crendential base on 3rd party plugin
+      such as LDAP, OpenId.
+    - The proxy plugin will create a user account in membrane user folder,
+      if authenticated successfully and this is a new user for membrane.
+
+  * implements the PAS service IUserIntrospection for ssouser plugin
+
+  * Added option for ssouser plugin to restrict user search to current site
+    level:
+    - new property for ssouser plugin: restrictSearch
+    - The restrict criteria is based on role assignment, portal_role_manager,
+      users who haven't been assigned any role will not show up on the search
+      result.
+
+  * unit test cases.
+
+0.2
+---
+
+  * Introduce membrane to manage members for Plone sites.
+
+  * New content type UserAccount for membrane user.
+
+  * Site level PAS plugin to forward all PAS services to the root
+    admin site:
+    - IAuthenticationPlugin
+    - IExtractionPlugin
+    - ICredentialsUpdatePlugin
+    - IUserEnumerationPlugin
+    - IUserFactoryPlugin
+    - IPropertiesPlugin
+    - IMutablePropertiesPlugin
+
+  * Unit test cases
+
+0.1
+---
+
+  * add sites admin property sheet in portal_properties
+
+  * add a configlet in plone control panel for sitesadmin_properties
+
+  * add an utility to hide un-necessary product

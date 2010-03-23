@@ -197,7 +197,7 @@
             <table class="listing" summary="Groups">
               <tr>
                 <th colspan="2">
-                  <span tal:omit-tag="" i18n:translate="label_quick_search">Quick search</span>:
+                  <span tal:omit-tag="" i18n:translate="label_quick_search">Quick Search by Name</span>:
                     <input class="quickSearch"
                            type="text"
                            name="searchstring"

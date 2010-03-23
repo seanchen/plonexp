@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+0.4
+---
+
+  * customize forms in plone_prefs: pref_user_overviews, pref_user_details, etc.
+
+  * easy to search user from 3rd plugins.
+
 0.3
 ---
 

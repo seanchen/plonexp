@@ -6,12 +6,10 @@ Define interfaces for browser views.
 """
 
 from zope.interface import Interface
-from zope.interface import directlyProvides
 from zope.schema import Text
 from zope.schema import Float
 from zope.schema import Datetime
 from zope.viewlet.interfaces import IViewletManager
-from zope.contentprovider.interfaces import ITALNamespaceData
 
 __author__ = "Sean Chen"
 __email__ = "sean.chen@leocorn.com"
@@ -20,9 +18,6 @@ class IPlonepmTimesheet(IViewletManager):
     """
     Marker interface for the PlonePM timesheet viewlet manager
     """
-
-# directly provides ... ???
-directlyProvides(IPlonepmTimesheet, ITALNamespaceData)
 
 # the interface and schema for timesheet fill out form.
 class ITimesheetForm(Interface):

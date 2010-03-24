@@ -16,6 +16,8 @@
                 b_start request/b_start | python:0;
                 b_size request/b_size | python:20;
                 portal_roles here/getGlobalPortalRoles;
+                manageTab python: 'manage';
+                manageTab request/manageTab | manageTab;
                 searchstring request/searchstring | nothing;
                 ssosearchstring request/ssosearchstring | nothing;">
 
@@ -82,20 +84,6 @@
         </p>
 
         <form action=""
-              name="users_add"
-              method="post"
-              tal:attributes="action template_id">
-
-          <input class="standalone add"
-                     type="submit"
-                     name="form.button.AddUser"
-                     value="Add New Member"
-                     i18n:attributes="value label_add_new_member;"
-                     />
-          <input type="hidden" name="form.submitted" value="1" />
-        </form>
-
-        <form action=""
               class="enableAutoFocus"
               name="users_search"
               method="post"
@@ -108,9 +96,27 @@
                           portal_users python: criteria and search_view.searchUsers(**criteria) or [];
                           batch python:Batch(portal_users, b_size, int(b_start), orphan=1)">
           <input type="hidden" name="form.submitted" value="1" />
+          <input type="hidden" name="manageTab" value="" tal:attributes="value manageTab;" />
 
-          <table class="listing" summary="User Listing">
-            <tr id="ssosearchtr">
+          <table style="margin: 0px 0px -2px 0px; border-spacing: 0px; padding: 0px; border-width: 0px"><tbody>
+            <tr><td>
+            <ul class="contentViews">
+              <li class="selected"
+                  tal:attributes="class python: manageTab == 'manage' and 'selected' or nothing"> 
+                <a href=""
+                   tal:attributes="href python: template_id + '?manageTab=manage'"
+                   i18n:translate="label_member_management">Member Management</a>
+              </li>
+              <li tal:attributes="class python: manageTab == 'addnew' and 'selected' or nothing"> 
+                <a href=""
+                   tal:attributes="href python: template_id + '?manageTab=addnew'"
+                   i18n:translate="label_add_member">Add New Member</a>
+              </li>
+            </ul>
+            </td></tr>
+          <tbody></table>
+          <table class="listing" summary="User Listing" style="margin-top: 0px; padding-top: 0px">
+            <tr tal:attributes="style python: manageTab == 'addnew' and 'display: inhert' or 'display: none'">
               <th colspan="6" tal:attributes="colspan python:len(portal_roles)+2">
                 <span tal:omit-tag="" i18n:translate="label_new_user_name_search">Add New Member by Search Name</span>:
                 <input class="quickSearch"
@@ -129,8 +135,8 @@
                 />
 
               </th>
-            <tr>
-                <tr id="sitesearchtr">
+            </tr>
+                <tr tal:attributes="style python: manageTab == 'manage' and 'display: inhert' or 'display: none'">
           <th colspan="6" tal:attributes="colspan python:len(portal_roles)+2">
             <span tal:omit-tag="" i18n:translate="label_user_name_search">Search Member by Name</span>:
                 <input class="quickSearch"
@@ -222,21 +228,22 @@
           </tr>
         </tal:block>
                 <tr tal:condition="not:batch">
-                    <td tal:condition="searchstring"
+                    <td tal:condition="python: searchstring or ssosearchstring"
                         i18n:translate="text_nomatches"
                         style="text-align:center;">No matches</td>
-                    <tal:block tal:condition="not:searchstring">
+                    <tal:block tal:condition="python: not (searchstring or ssosearchstring)">
                       <td tal:condition="site_properties/many_users"
                           class="discreet"
                           i18n:translate="text_no_user_searchstring"
                           style="text-align:center; font-size: 100%;">
-                          Enter a username to search for
+                          Enter a User's Name to search for
                       </td>
                       <td tal:condition="not:site_properties/many_users"
                           class="discreet"
                           i18n:translate="text_no_user_searchstring_largesite"
                           style="text-align:center; font-size: 100%;">
-                          Enter a username to search for, or click 'Show All'
+                          Enter a User's Name to search for
+                          <span tal:condition="python: manageTab == 'manage'">, or click 'Show All Members'</span>
                       </td>
                     </tal:block>
                 </tr>

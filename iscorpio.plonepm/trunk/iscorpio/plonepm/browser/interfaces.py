@@ -22,9 +22,9 @@ class IPlonepmTimesheet(IViewletManager):
 # the interface and schema for timesheet fill out form.
 class ITimesheetForm(Interface):
 
-    #when = Datetime(title=u'When', required=True,
-    #                description=u'Please specify when the work is done',
-    #                readonly=False)
+    when = Datetime(title=u'When', required=True,
+                    description=u'Please specify when the work is done',
+                    readonly=False)
 
     description = Text(title=u'Work Description', required=True,
                        description=u'Please provide brief description about what bas been done.',

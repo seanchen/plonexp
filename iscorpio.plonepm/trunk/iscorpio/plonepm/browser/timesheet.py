@@ -5,6 +5,9 @@
 a timesheet to bill time to a story or an artifact
 """
 
+from datetime import datetime
+from time import time
+
 from zope.interface import implements
 from zope.formlib import form
 from zope.viewlet.interfaces import IViewlet
@@ -48,6 +51,18 @@ class ChangeLogViewlet(ViewletBase):
         else:
             return member['fullname']
 
+    def getFormatedWhen(self, when):
+        """
+        return a formated datetime to tell when the job been done.
+        """
+
+        if isinstance(when, str):
+
+            return when
+        else:
+            # suppose this is datetime instance
+            return when.strftime("%Y-%m-%d %H:%M")
+
 # this form is based on formlib
 class BillTimeFormViewlet(PageForm):
 
@@ -57,6 +72,7 @@ class BillTimeFormViewlet(PageForm):
     """
 
     form_fields = form.Fields(ITimesheetForm)
+    form_fields['when'].field.default = datetime.fromtimestamp(time())
     template = ViewPageTemplateFile('timesheet_form.pt')
 
     implements(IViewlet)
@@ -85,13 +101,14 @@ class BillTimeFormViewlet(PageForm):
         context = aq_inner(self.context)
 
         # get data from form.
+        when = data.get('when')
         description = data.get('description', u'')
         duration = float(data.get('duration', -1))
         percentage = float(data.get('percentage', -1))
 
         # TODO: check invalid data!
         # adding the timesheet to the context.
-        context.logTimesheet(description, duration, percentage)
+        context.logTimesheet(when, description, duration, percentage)
 
         # re-index this context object.
         portal_catalog = getToolByName(context, 'portal_catalog')

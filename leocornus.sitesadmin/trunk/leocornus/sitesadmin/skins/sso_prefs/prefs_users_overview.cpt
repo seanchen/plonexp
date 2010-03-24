@@ -16,7 +16,8 @@
                 b_start request/b_start | python:0;
                 b_size request/b_size | python:20;
                 portal_roles here/getGlobalPortalRoles;
-                searchstring request/searchstring | nothing;">
+                searchstring request/searchstring | nothing;
+                ssosearchstring request/ssosearchstring | nothing;">
 
       <div id="region-content" class="documentEditable"
            tal:condition="python:checkPermission('Manage users', here)">
@@ -101,14 +102,37 @@
               tal:attributes="action template/getId"
               tal:define="findAll python:'form.button.FindAll' in request.keys();
                           search_view here/@@pas_search;
-                          portal_users python:(searchstring or findAll) and search_view.searchUsers(**(findAll and dict(sort_by='userid') or dict(sort_by='userid', fullname=searchstring))) or [];
+                          criteria python: searchstring and dict(sort_by='userid', fullname=searchstring) or nothing;
+                          criteria python: findAll and dict(sort_by='userid') or criteria;
+                          criteria python: ssosearchstring and dict(sort_by='userid', fullname=ssosearchstring, megasearch=True) or criteria;
+                          portal_users python: criteria and search_view.searchUsers(**criteria) or [];
                           batch python:Batch(portal_users, b_size, int(b_start), orphan=1)">
           <input type="hidden" name="form.submitted" value="1" />
 
           <table class="listing" summary="User Listing">
-                <tr>
-          <th colspan="6" tal:attributes="colspan python:len(portal_roles)+4">
-            <span tal:omit-tag="" i18n:translate="label_user_name_search">User Search by Name</span>:
+            <tr id="ssosearchtr">
+              <th colspan="6" tal:attributes="colspan python:len(portal_roles)+2">
+                <span tal:omit-tag="" i18n:translate="label_new_user_name_search">Add New Member by Search Name</span>:
+                <input class="quickSearch"
+                       type="text"
+                       name="ssosearchstring"
+                       value=""
+                       tal:attributes="value ssosearchstring;"
+                />
+
+                <input type="submit"
+                       class="searchButton"
+                       name="form.button.SSOSearch"
+                       value="Search"
+                       onclick="javascript: document.users_search.searchstring.value=''"
+                       i18n:attributes="value label_sso_search;"
+                />
+
+              </th>
+            <tr>
+                <tr id="sitesearchtr">
+          <th colspan="6" tal:attributes="colspan python:len(portal_roles)+2">
+            <span tal:omit-tag="" i18n:translate="label_user_name_search">Search Member by Name</span>:
                 <input class="quickSearch"
                        type="text"
                        name="searchstring"
@@ -120,6 +144,7 @@
                            class="searchButton"
                            name="form.button.Search"
                            value="Search"
+                   onclick="javascript: document.users_search.ssosearchstring.value=''"
                            i18n:attributes="value label_search;"
                            />
 
@@ -127,6 +152,7 @@
                            class="searchButton"
                            name="form.button.FindAll"
                            value="Show All Members"
+                   onclick="javascript: document.users_search.searchstring.value=''; document.users_search.ssosearchstring.value=''"
                            i18n:attributes="value label_showall_members;"
                            tal:condition="not:site_properties/many_users"
                            />
@@ -169,9 +195,9 @@
                          title="Send a mail to this user"
                          i18n:attributes="title title_send_mail_to_user;"
               >
-								<tal:block replace="structure here/mail_icon.gif"/>
-								<span tal:replace="email">Email Address</span>
-							</a>
+                <tal:block replace="structure here/mail_icon.gif"/>
+                <span tal:replace="email">Email Address</span>
+              </a>
               <input style="margin:2px;"
                              type="hidden"
                  size="15"

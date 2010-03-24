@@ -5,7 +5,7 @@ __doc__ = """PPMStory defines a story for a software project in Agile approach."
 __docformat__ = 'plaintext'
 
 import logging
-from time import strftime
+from time import time
 
 from zope.interface import implements
 from AccessControl import ClassSecurityInfo
@@ -249,7 +249,8 @@ class PPMStory(XPPMBase, ATFolder, HistoryAwareMixin):
         field.set(self, owners)
 
     security.declareProtected(ModifyPortalContent, 'logTimesheet')
-    def logTimesheet(self, description, duration, percentage, memberId=None):
+    def logTimesheet(self, when, description, duration,
+                     percentage, memberId=None):
         """
         logging the billable time as format:
         datetime, description, duration, percentage
@@ -260,16 +261,19 @@ class PPMStory(XPPMBase, ATFolder, HistoryAwareMixin):
             mtool = getToolByName(self, 'portal_membership')
             memberId = mtool.getAuthenticatedMember().getId()
 
-        # current time.
-        logTime = strftime("%Y-%m-%d %H:%M")
-        # current user.
-        #user = 
+        # we split datetime to logtime and worktime: indicates the timestamp
+        # for this log and timestamp for the work been done.  log time pretty
+        # much for future usage.
+
+        # TODO: migration script to convert the legacy data!
+
         # TODO: should initialize this in __init__
         try:
             self._changeLog
         except AttributeError:
             self._changeLog = []
-        self._changeLog.append({'datetime' : logTime,
+        self._changeLog.append({'logtime' : time(),
+                                'worktime' : when,
                                 'memberId' : memberId,
                                 'description' : description,
                                 'duration' : duration,

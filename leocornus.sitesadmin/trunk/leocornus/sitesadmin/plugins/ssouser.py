@@ -112,6 +112,7 @@ class SsouserPlugins(BasePlugin):
         """
 
         users = []
+
         if (id == None and login == None and kw == {}) and self.restrictSearch:
             # search for all users.
             for user in self.getUsers():
@@ -121,10 +122,19 @@ class SsouserPlugins(BasePlugin):
                 users.append(userMap)
         else:
             userAdmin = self.getUserAdmin().membrane_users
+            megaSearch = kw.has_key('megasearch') and kw['megasearch']
+            if kw.has_key('megasearch'):
+                # a bit clean up in case.
+                kw.pop('megasearch')
+
             rets = userAdmin.enumerateUsers(id, login, exact_match, sort_by,
                                             max_results, **kw)
 
-            if self.restrictSearch:
+            if (id and kw == {}) or megaSearch:
+                # trying to search a specific user
+                users.extend(rets)
+
+            elif self.restrictSearch:
                 for user in rets:
                     if self.getRolesForUser(user['id']):
                         users.append(user)

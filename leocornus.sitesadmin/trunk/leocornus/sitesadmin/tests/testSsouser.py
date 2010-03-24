@@ -295,6 +295,32 @@ class SsouserTestCase(SitesAdminTestCase):
         roleManager.assignRoleToPrincipal('Manager', 'user2test')
         self.assertEquals(len(userFolder.searchUsers(fullname='Full name')), 2)
 
+    def testMegaSearch(self):
+
+        self.prepareTestingSite(self.emptySite)
+        # creat user account in admin site.
+        user1 = self.createTestingUser(self.portal, userId='user1',
+                                       userName='user1test',
+                                       fullname='Full Name One')
+        user2 = self.createTestingUser(self.portal, userId='user2',
+                                       userName="user2test",
+                                       fullname='Full Name Two')
+        user3 = self.createTestingUser(self.portal, userId='user3',
+                                       userName="user3test",
+                                       fullname='Full Name Three')
+
+        userFolder = self.emptySite.acl_users
+        ssouser = userFolder.ssouser
+        roleManager = userFolder.portal_role_manager
+
+        ssouser.manage_changeProperties(restrictSearch='True')
+        self.failUnless(ssouser.getProperty('restrictSearch'))
+
+        self.assertEquals(len(userFolder.searchUsers(fullname='Full name')), 0)
+        self.assertEquals(len(userFolder.searchUsers(fullname='Full name',
+                                                     megasearch=True)),
+                          3)
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(SsouserTestCase))

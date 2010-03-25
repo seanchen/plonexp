@@ -126,13 +126,23 @@ class SsouserPlugins(BasePlugin):
             if kw.has_key('megasearch'):
                 # a bit clean up in case.
                 kw.pop('megasearch')
+            excludeMember = kw.has_key('excludemember') and kw['excludemember']
+            if kw.has_key('excludemember'):
+                kw.pop('excludemember')
 
             rets = userAdmin.enumerateUsers(id, login, exact_match, sort_by,
                                             max_results, **kw)
 
-            if (id and kw == {}) or megaSearch:
+            if (id and kw == {}):
                 # trying to search a specific user
                 users.extend(rets)
+            elif megaSearch:
+                if excludeMember:
+                    for user in rets:
+                        if not self.getRolesForUser(user['id']):
+                            users.append(user)
+                else:
+                    users.extend(rets)
 
             elif self.restrictSearch:
                 for user in rets:

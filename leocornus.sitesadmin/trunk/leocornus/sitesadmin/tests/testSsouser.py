@@ -321,6 +321,16 @@ class SsouserTestCase(SitesAdminTestCase):
                                                      megasearch=True)),
                           3)
 
+        roleManager.assignRoleToPrincipal('Manager', 'user2test')
+        self.assertEquals(len(userFolder.searchUsers(fullname='Full name')), 1)
+        self.assertEquals(len(userFolder.searchUsers(fullname='Full name',
+                                                     megasearch=True)),
+                          3)
+        self.assertEquals(len(userFolder.searchUsers(fullname='Full name',
+                                                     megasearch=True,
+                                                     excludemember=True)),
+                          2)
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(SsouserTestCase))

@@ -250,7 +250,7 @@ class PPMStory(XPPMBase, ATFolder, HistoryAwareMixin):
 
     security.declareProtected(ModifyPortalContent, 'logTimesheet')
     def logTimesheet(self, when, description, duration,
-                     percentage, memberId=None):
+                     percentage=None, memberId=None):
         """
         logging the billable time as format:
         datetime, description, duration, percentage
@@ -260,6 +260,10 @@ class PPMStory(XPPMBase, ATFolder, HistoryAwareMixin):
             # no member specified, using the current logged in user.
             mtool = getToolByName(self, 'portal_membership')
             memberId = mtool.getAuthenticatedMember().getId()
+
+        if not percentage:
+            # using the current percentage.
+            percentage = self.getXppm_story_progress_percent()
 
         # we split datetime to logtime and worktime: indicates the timestamp
         # for this log and timestamp for the work been done.  log time pretty

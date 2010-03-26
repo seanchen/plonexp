@@ -102,9 +102,9 @@ class BillTimeFormViewlet(PageForm):
 
         # get data from form.
         when = data.get('when')
-        description = data.get('description', u'')
-        duration = float(data.get('duration', -1))
-        percentage = float(data.get('percentage', -1))
+        description = data.get('description')
+        duration = data.get('duration')
+        percentage = data.get('percentage')
 
         # TODO: check invalid data!
         # adding the timesheet to the context.

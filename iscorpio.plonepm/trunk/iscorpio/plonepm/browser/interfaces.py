@@ -9,6 +9,7 @@ from zope.interface import Interface
 from zope.schema import Text
 from zope.schema import Float
 from zope.schema import Datetime
+from zope.schema import Choice
 from zope.viewlet.interfaces import IViewletManager
 
 __author__ = "Sean Chen"
@@ -25,6 +26,11 @@ class ITimesheetForm(Interface):
     when = Datetime(title=u'When', required=True,
                     description=u'Please specify when the work is done',
                     readonly=False)
+
+    who = Choice(title=u'Who', required=False,
+                 description=u'Please select who did the work, default is current user',
+                 values=['abc', 'cde'],
+                 readonly=False)
 
     description = Text(title=u'Work Description', required=True,
                        description=u'Please provide brief description about what bas been done.',

@@ -158,6 +158,14 @@ class PPMProject(ATFolder):
 
         return self
 
+    def getCurrentMember(self):
+        """
+        returns current authenticated user.
+        """
+
+        mtool = getToolByName(self, 'portal_membership')
+        return mtool.getAuthenticatedMember()
+
     #security.declareProtected('vocabulary_allMembersList')
     def vocabulary_allMembersList(self):
         """ Return a list of tuple (user_id, fullname, email) for all
@@ -166,8 +174,8 @@ class PPMProject(ATFolder):
         members = []
         portalMembers = getToolByName(self, 'portal_membership')
         members = [(member.id,
-                    member.getProperty('fullname',None),
-                    member.getProperty('email',None))
+                    member.getProperty('fullname', member.id),
+                    member.getProperty('email', None))
                    for member in portalMembers.listMembers()]
 
         return DisplayList(members)

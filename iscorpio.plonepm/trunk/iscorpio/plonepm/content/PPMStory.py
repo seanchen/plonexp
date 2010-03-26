@@ -229,7 +229,8 @@ class PPMStory(XPPMBase, ATFolder, HistoryAwareMixin):
         developers = self.getProjectDevelopers()
         for memberId in developers:
             members.append((memberId,
-                            portalMembers.getMemberById(memberId).getProperty('fullname', None))
+                            portalMembers.getMemberById(memberId).getProperty('fullname',
+                                                                              memberId))
                            )
 
         return DisplayList(members)
@@ -258,8 +259,7 @@ class PPMStory(XPPMBase, ATFolder, HistoryAwareMixin):
 
         if not memberId:
             # no member specified, using the current logged in user.
-            mtool = getToolByName(self, 'portal_membership')
-            memberId = mtool.getAuthenticatedMember().getId()
+            memberId = self.getCurrentMember().getId()
 
         if not percentage:
             # using the current percentage.

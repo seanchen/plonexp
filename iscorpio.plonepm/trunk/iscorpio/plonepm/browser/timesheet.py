@@ -19,6 +19,8 @@ from Products.Five.formlib.formbase import PageForm
 from Products.Five.formlib.formbase import EditFormBase
 from Products.CMFCore.utils import getToolByName
 
+from Products.CMFDefault.formlib.vocabulary import SimpleVocabulary
+
 from plone.app.layout.viewlets.common import ViewletBase
 
 from interfaces import IPlonepmTimesheet
@@ -85,6 +87,9 @@ class BillTimeFormViewlet(PageForm):
         self.view = view
         self.manager = manager
 
+        self.form_fields['who'].field.vocabulary = self.developers()
+        self.form_fields['who'].field.default = self.defaultDeveloperId()
+
     # check the permission for current user.
     def allowBillTime(self):
         """
@@ -95,6 +100,31 @@ class BillTimeFormViewlet(PageForm):
         mtool = getToolByName(self, 'portal_membership')
         return mtool.checkPermission('ModifyPortalContent', self.context)
 
+    def developers(self):
+        """
+        returns the developers assigned to this project as a titled vocabulary.
+        """
+
+        context = aq_inner(self.context)
+
+        portalMembers = getToolByName(context, 'portal_membership')
+        items = set([(id, id,
+                      portalMembers.getMemberById(id).getProperty('fullname', id))
+                     for id in context.getProjectDevelopers()])
+        member = context.getCurrentMember()
+        items.add((member.getId(), member.getId(),
+                   member.getProperty('fullname', member.getId())))
+
+        return SimpleVocabulary.fromTitleItems(items)
+
+    def defaultDeveloperId(self):
+        """
+        returns the current authenticated member as default developer!
+        """
+
+        context = aq_inner(self.context)
+        return context.getCurrentMember().getId()
+
     @form.action("Bill Time")
     def action_billTime(self, action, data):
 
@@ -102,13 +132,14 @@ class BillTimeFormViewlet(PageForm):
 
         # get data from form.
         when = data.get('when')
+        who = data.get('who')
         description = data.get('description')
         duration = data.get('duration')
         percentage = data.get('percentage')
 
         # TODO: check invalid data!
         # adding the timesheet to the context.
-        context.logTimesheet(when, description, duration, percentage)
+        context.logTimesheet(when, description, duration, percentage, who)
 
         # re-index this context object.
         portal_catalog = getToolByName(context, 'portal_catalog')

@@ -113,7 +113,7 @@ class SsouserPlugins(BasePlugin):
 
         users = []
 
-        if (id == None and login == None and kw == {}) and self.restrictSearch:
+        if (id == None and login == None and kw == {}) and self.isRestrictSearch():
             # search for all users.
             for user in self.getUsers():
                 userMap = {'id' : user.getId(),
@@ -129,6 +129,9 @@ class SsouserPlugins(BasePlugin):
             excludeMember = kw.has_key('excludemember') and kw['excludemember']
             if kw.has_key('excludemember'):
                 kw.pop('excludemember')
+            searchLdap = kw.has_key('searchldap') and kw['searchldap']
+            if kw.has_key('searchldap'):
+                kw.pop('searchldap')
 
             rets = userAdmin.enumerateUsers(id, login, exact_match, sort_by,
                                             max_results, **kw)
@@ -137,14 +140,24 @@ class SsouserPlugins(BasePlugin):
                 # trying to search a specific user
                 users.extend(rets)
             elif megaSearch:
+                # mega search mean keep all the search result.
                 if excludeMember:
+                    # suppose the user from 3rd parth plugin haven't been
+                    # assigned any role here!
                     for user in rets:
                         if not self.getRolesForUser(user['id']):
                             users.append(user)
                 else:
                     users.extend(rets)
 
-            elif self.restrictSearch:
+                if searchLdap:
+                    # perform the mega search on 3rd party plugins.
+                    proxy = self.getUserAdmin().sitesadmin_proxy
+                    megaRets = proxy.ssoEnumerateUsers(id, login, exact_match,
+                                                       sort_by, max_results, **kw)
+                    users.extend(megaRets)
+
+            elif self.isRestrictSearch():
                 for user in rets:
                     if self.getRolesForUser(user['id']):
                         users.append(user)
@@ -154,6 +167,19 @@ class SsouserPlugins(BasePlugin):
         self.log.debug('enumerateUsers(id=%s, login=%s, kw=%s): %s' % (id, login, kw, users))
 
         return users
+
+    security.declarePrivate('isRestrictSearch')
+    def isRestrictSearch(self):
+
+        if not self.hasProperty('restrictSearch'):
+            return False
+
+        try:
+            # temp fix vor legacy data.
+            restrictSearch = self.getProperty('restrictSearch')
+            return restrictSearch
+        except AttributeError:
+            return False
 
     # IExtractionPlugin
     security.declarePrivate('extractCredentials')

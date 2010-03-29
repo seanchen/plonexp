@@ -74,7 +74,6 @@ class BillTimeFormViewlet(PageForm):
     """
 
     form_fields = form.Fields(ITimesheetForm)
-    form_fields['when'].field.default = datetime.fromtimestamp(time())
     template = ViewPageTemplateFile('timesheet_form.pt')
 
     implements(IViewlet)
@@ -89,6 +88,8 @@ class BillTimeFormViewlet(PageForm):
 
         self.form_fields['who'].field.vocabulary = self.developers()
         self.form_fields['who'].field.default = self.defaultDeveloperId()
+        # using the current as default value.
+        self.form_fields['when'].field.default = datetime.fromtimestamp(time())
 
     # check the permission for current user.
     def allowBillTime(self):

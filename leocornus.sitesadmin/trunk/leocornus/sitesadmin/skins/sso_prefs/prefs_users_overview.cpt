@@ -19,6 +19,7 @@
                 manageTab python: 'manage';
                 manageTab request/manageTab | manageTab;
                 searchstring request/searchstring | nothing;
+                searchldap request/searchldap | nothing;
                 ssosearchstring request/ssosearchstring | nothing;">
 
       <div id="region-content" class="documentEditable"
@@ -93,6 +94,7 @@
                           criteria python: searchstring and dict(sort_by='userid', fullname=searchstring) or nothing;
                           criteria python: findAll and dict(sort_by='userid') or criteria;
                           criteria python: ssosearchstring and dict(sort_by='userid', fullname=ssosearchstring, megasearch=True, excludemember=True) or criteria;
+                          criteria python: searchldap and dict(sort_by='userid', fullname=ssosearchstring, megasearch=True, excludemember=True, searchldap=True) or criteria;
                           portal_users python: criteria and search_view.searchUsers(**criteria) or [];
                           batch python:Batch(portal_users, b_size, int(b_start), orphan=1)">
           <input type="hidden" name="form.submitted" value="1" />
@@ -118,22 +120,34 @@
           <table class="listing" summary="User Listing" style="margin-top: 0px; padding-top: 0px">
             <tr tal:attributes="style python: manageTab == 'addnew' and 'display: inhert' or 'display: none'">
               <th colspan="6" tal:attributes="colspan python:len(portal_roles)+2">
+                <table align="center"><tbody><tr>
+                <td>
                 <span tal:omit-tag="" i18n:translate="label_new_user_name_search">Add New Member by Search Name</span>:
+                </td>
+                <td align="left">
                 <input class="quickSearch"
                        type="text"
                        name="ssosearchstring"
                        value=""
                        tal:attributes="value ssosearchstring;"
+                /><br/>
+                <input class="checkboxType"
+                       type="checkbox"
+                       name="searchldap"
+                       tal:attributes="checked searchldap;"
                 />
-
+                <span tal:omit-tag="" i18n:translate="label_search_ldap">Search OPS LDAP</span>
+                <span tal:replace="searchldap"/>
+                </td>
+                <td style="border-right: 0px">
                 <input type="submit"
                        class="searchButton"
                        name="form.button.SSOSearch"
                        value="Search"
-                       onclick="javascript: document.users_search.searchstring.value=''"
                        i18n:attributes="value label_sso_search;"
                 />
-
+                </td>
+                </tr></tbody></table>
               </th>
             </tr>
                 <tr tal:attributes="style python: manageTab == 'manage' and 'display: inhert' or 'display: none'">
@@ -150,7 +164,6 @@
                            class="searchButton"
                            name="form.button.Search"
                            value="Search"
-                   onclick="javascript: document.users_search.ssosearchstring.value=''"
                            i18n:attributes="value label_search;"
                            />
 
@@ -158,7 +171,6 @@
                            class="searchButton"
                            name="form.button.FindAll"
                            value="Show All Members"
-                   onclick="javascript: document.users_search.searchstring.value=''; document.users_search.ssosearchstring.value=''"
                            i18n:attributes="value label_showall_members;"
                            tal:condition="not:site_properties/many_users"
                            />

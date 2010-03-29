@@ -53,6 +53,8 @@ class ProxyMultiPlugins(BasePlugin):
     access the backend PAS services.
     """
 
+    logger = logging.getLogger("Sitesadmin Proxy Plugins")
+
     meta_type = "SitesAdmin Proxy Mutli Plugins"
 
     security = ClassSecurityInfo()
@@ -137,16 +139,100 @@ class ProxyMultiPlugins(BasePlugin):
         if valid:
             # we verified it is a valid user somewhere.
             login = credentials['login']
-            prefix, theLogin = login.split(self.separator)
-            # get user properties from the plugin defined in prefix_prop
-            properties = self.getUserProperties(prefix, theLogin)
-            self.createUserAccount(login, prefix, theLogin, properties)
-
-            # revise the credential to use the new user id and user name.
-            # new user id and user name should have the prefix.
-            credit = (login, login)
+            if self.setUpMembraneUser(login):
+                # revise the credential to use the new user id and user name.
+                # new user id and user name should have the prefix.
+                credit = (login, login)
 
         return credit
+
+    # perform search on all 3rd party plugins.
+    security.declarePrivate('ssoEnumerateUsers')
+    def ssoEnumerateUsers(self, id=None, login=None, exact_match=False,
+                          sort_by=None, max_results=None, **kw):
+        """
+        perform the user search on all 3rd party plugins, it will create the
+        membrane user account if it is not exist!
+        """
+
+        users = []
+        membraneTool = getToolByName(self, 'membrane_tool')
+        for prefix, plugin in self.get3rdPlugins():
+
+            # enumerate user for each plugin.
+            rets = plugin.enumerateUsers(**kw)
+            theRets = []
+            for user in rets:
+                # try to create membrane user account for each user.
+                theLogin = user['id'].lower()
+                membraneUserId = "%s%s%s" % (prefix, self.separator, theLogin)
+
+                self.logger.debug('ssoEnumerateUsers - membrane user id=%s' % membraneUserId)
+                # we need the exact match for the user id.
+                query = {'exact_getUserId' : membraneUserId}
+                if not membraneTool.unrestrictedSearchResults(**query):
+                    # no membrane user yet! create one.
+                    if self.setUpMembraneUser(membraneUserId):
+                        # this is a valid user!
+                        # should use the new id now. most likely, plugins are
+                        # using cache for this search.
+                        buf = user.copy()
+                        buf['id'] = membraneUserId
+                        buf['login'] = membraneUserId
+                        theRets.append(buf)
+                    else:
+                        # this is not a valid user! skip it
+                        continue
+
+            users.extend(theRets)
+
+        self.logger.debug('ssoEnumerateUsers(id=%s, login=%s, kw=%s): %s' %
+                          (id, login, kw, users))
+        return users
+
+    security.declarePrivate('get3rdPlugins')
+    def get3rdPlugins(self):
+        """
+        returns all 3rd party plugins as a list of tuple (prefix, plugin)
+        """
+
+        plugins = []
+        aclUsers = getToolByName(self, 'acl_users')
+        for propery in self._properties:
+            prefix = propery['id']
+            # do some filter, there maybe some better way.
+            if prefix in ['title', 'separator', 'userFolder']:
+                continue
+            if prefix.endswith('_default') or \
+               prefix.endswith('_prop') or \
+               prefix.endswith('_factory'):
+                continue
+
+            pluginId = self.getProperty(prefix)
+            try:
+                plugin = getattr(aclUsers, pluginId)
+            except AttributeError:
+                # just skip
+                continue
+
+            plugins.append((prefix, plugin))
+
+        return plugins
+
+    security.declarePrivate('setUpMembraneUser')
+    def setUpMembraneUser(self, membraneUserId):
+        """
+        Try to set up a membrame user account for the given membrane user id.
+        """
+
+        prefix, theLogin = membraneUserId.split(self.separator)
+        props = self.getUserProperties(prefix, theLogin)
+        if not props['email']:
+            # skip users who don't have an email address
+            return False
+
+        self.createUserAccount(membraneUserId, prefix, theLogin, props)
+        return True
 
     security.declarePrivate('getUserProperties')
     def getUserProperties(self, prefix, theLogin):

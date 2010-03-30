@@ -93,19 +93,6 @@ class ProxyTestCase(SitesAdminTestCase):
         #proxy.manage_addProperty('local_prop', 'mutable_properties', 'string')
         #proxy.manage_addProperty('local_factory', 'user_factory', 'string')
 
-    def setupRemoteSite(self, remoteSite):
-
-        # set up the empty site for to testing it.
-        userSetupTool = remoteSite.portal_setup
-        userSetupTool.runAllImportStepsFromProfile('profile-%s' %
-                                                   'leocornus.sitesadmin:ssouser')
-
-        # update the admin site's id.
-        ssouser = remoteSite.acl_users.ssouser
-        ssouser.manage_changeProperties(userSiteId=self.portal.id)
-
-        return ssouser
-
     def testVerifyCredentials(self):
 
         # create a testing user in admin site's source_users.
@@ -129,7 +116,7 @@ class ProxyTestCase(SitesAdminTestCase):
                                             badCred['password'], None)
         self.failIf(user)
 
-        ssouser = self.setupRemoteSite(self.emptySite)
+        ssouser = self.setupSsoSite(self.emptySite, self.portal.id)
         credit = ssouser.authenticateCredentials(theCred)
         self.failUnless(credit)
         self.assertTrue('local\\srcUser' in credit)
@@ -196,7 +183,7 @@ class ProxyTestCase(SitesAdminTestCase):
         theCred = {'login' : 'local\\testremote', 'password' : 'testpassword'}
         badCred = {'login' : 'local\\testuser', 'password' : 'badpaddword'}
 
-        self.setupRemoteSite(self.emptySite)
+        self.setupSsoSite(self.emptySite, self.portal.id)
         remoteUserFolder = self.uf
 
         user = remoteUserFolder.authenticate(badCred['login'],

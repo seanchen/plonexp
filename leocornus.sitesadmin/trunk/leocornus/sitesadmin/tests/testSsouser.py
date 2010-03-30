@@ -125,22 +125,10 @@ class SsouserTestCase(SitesAdminTestCase):
         self.assertTrue('ssouser' in found)
         self.assertFalse('session' in found)
 
-    def prepareTestingSite(self, site):
-
-        # install the ssouser plugin.
-        setup_tool = getattr(site, 'portal_setup')
-        setup_tool.runAllImportStepsFromProfile('profile-%s' % \
-                                                'leocornus.sitesadmin:ssouser')
-
-        self.assertEquals(site.acl_users.ssouser.userSiteId, 'sites_admin')
-
-        # using the testing plone site as the user admin site.
-        site.acl_users.ssouser.manage_changeProperties(userSiteId=self.portal.id)
-
     # test update the property.
     def testChangeProperty(self):
 
-        self.prepareTestingSite(self.emptySite)
+        self.setupSsoSite(self.emptySite, self.portal.id)
 
         self.uf.ssouser.manage_changeProperties(userSiteId='unit')
         self.failIfEqual('sites_admin', self.uf.ssouser.userSiteId)
@@ -149,7 +137,7 @@ class SsouserTestCase(SitesAdminTestCase):
     # test authenticate credential
     def testAuthCredit(self):
 
-        self.prepareTestingSite(self.emptySite)
+        self.setupSsoSite(self.emptySite, self.portal.id)
         self.createMembraneTestUser(self.portal)
 
         # authenticate the testing user.
@@ -163,7 +151,7 @@ class SsouserTestCase(SitesAdminTestCase):
     # test authenticate credential
     def testMutableProperty(self):
 
-        self.prepareTestingSite(self.emptySite)
+        self.setupSsoSite(self.emptySite, self.portal.id)
         user1 = self.createMembraneTestUser(self.portal)
 
         mtool = getToolByName(self.emptySite, 'portal_membership')
@@ -180,7 +168,7 @@ class SsouserTestCase(SitesAdminTestCase):
 
     def testGetUsers(self):
 
-        self.prepareTestingSite(self.emptySite)
+        self.setupSsoSite(self.emptySite, self.portal.id)
         user1 = self.createMembraneTestUser(self.portal)
         user2 = self.createMembraneTestUser(self.portal, userId='user2',
                                        userName="user2test")
@@ -197,7 +185,7 @@ class SsouserTestCase(SitesAdminTestCase):
 
     def testEnumerateUsers(self):
 
-        self.prepareTestingSite(self.emptySite)
+        self.setupSsoSite(self.emptySite, self.portal.id)
         user1 = self.createMembraneTestUser(self.portal, userId='user1',
                                        userName='user1test',
                                        fullname='Full Name One')
@@ -229,7 +217,7 @@ class SsouserTestCase(SitesAdminTestCase):
 
     def testGetRolesForUser(self):
 
-        self.prepareTestingSite(self.emptySite)
+        self.setupSsoSite(self.emptySite, self.portal.id)
         user1 = self.createMembraneTestUser(self.portal, userId='user1',
                                        userName='user1test',
                                        fullname='Full Name One')
@@ -245,7 +233,7 @@ class SsouserTestCase(SitesAdminTestCase):
 
     def testRestrictSearch(self):
 
-        self.prepareTestingSite(self.emptySite)
+        self.setupSsoSite(self.emptySite, self.portal.id)
         user1 = self.createMembraneTestUser(self.portal, userId='user1',
                                        userName='user1test',
                                        fullname='Full Name One')
@@ -278,7 +266,7 @@ class SsouserTestCase(SitesAdminTestCase):
 
     def testMegaSearch(self):
 
-        self.prepareTestingSite(self.emptySite)
+        self.setupSsoSite(self.emptySite, self.portal.id)
         # creat user account in admin site.
         user1 = self.createMembraneTestUser(self.portal, userId='user1',
                                        userName='user1test',

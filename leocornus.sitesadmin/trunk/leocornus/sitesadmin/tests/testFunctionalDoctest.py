@@ -40,6 +40,12 @@ def test_suite():
             optionflags = doctest.REPORT_ONLY_FIRST_FAILURE | \
                           doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS),
 
+        ztc.ZopeDocFileSuite(
+            'plugins/functional.txt', package='leocornus.sitesadmin',
+            test_class = SitesAdminFunctionalTestCase,
+            optionflags = doctest.REPORT_ONLY_FIRST_FAILURE | \
+                          doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS),
+
         # We could add more doctest files here as well, by copying the file
         # block above.
 

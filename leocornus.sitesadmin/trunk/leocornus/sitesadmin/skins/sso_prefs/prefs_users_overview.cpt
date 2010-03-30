@@ -93,8 +93,8 @@
                           search_view here/@@pas_search;
                           criteria python: searchstring and dict(sort_by='userid', fullname=searchstring) or nothing;
                           criteria python: findAll and dict(sort_by='userid') or criteria;
-                          criteria python: ssosearchstring and dict(sort_by='userid', fullname=ssosearchstring, megasearch=True, excludemember=True) or criteria;
-                          criteria python: searchldap and dict(sort_by='userid', fullname=ssosearchstring, megasearch=True, excludemember=True, searchldap=True) or criteria;
+                          criteria python: ssosearchstring and dict(sort_by='userid', fullname=ssosearchstring, sso_megasearch=True, sso_excludemember=True) or criteria;
+                          criteria python: searchldap and dict(sort_by='userid', fullname=ssosearchstring, sso_megasearch=True, sso_excludemember=True, sso_3rdpartysearch=True) or criteria;
                           portal_users python: criteria and search_view.searchUsers(**criteria) or [];
                           batch python:Batch(portal_users, b_size, int(b_start), orphan=1)">
           <input type="hidden" name="form.submitted" value="1" />

@@ -122,16 +122,16 @@ class SsouserPlugins(BasePlugin):
                 users.append(userMap)
         else:
             userAdmin = self.getUserAdmin().membrane_users
-            megaSearch = kw.has_key('megasearch') and kw['megasearch']
-            if kw.has_key('megasearch'):
+            megaSearch = kw.has_key('sso_megasearch') and kw['sso_megasearch']
+            if kw.has_key('sso_megasearch'):
                 # a bit clean up in case.
-                kw.pop('megasearch')
-            excludeMember = kw.has_key('excludemember') and kw['excludemember']
-            if kw.has_key('excludemember'):
-                kw.pop('excludemember')
-            searchLdap = kw.has_key('searchldap') and kw['searchldap']
-            if kw.has_key('searchldap'):
-                kw.pop('searchldap')
+                kw.pop('sso_megasearch')
+            excludeMember = kw.has_key('sso_excludemember') and kw['sso_excludemember']
+            if kw.has_key('sso_excludemember'):
+                kw.pop('sso_excludemember')
+            search3rd = kw.has_key('sso_3rdpartysearch') and kw['sso_3rdpartysearch']
+            if kw.has_key('sso_3rdpartysearch'):
+                kw.pop('sso_3rdpartysearch')
 
             rets = userAdmin.enumerateUsers(id, login, exact_match, sort_by,
                                             max_results, **kw)
@@ -150,7 +150,7 @@ class SsouserPlugins(BasePlugin):
                 else:
                     users.extend(rets)
 
-                if searchLdap:
+                if search3rd:
                     # perform the mega search on 3rd party plugins.
                     proxy = self.getUserAdmin().sitesadmin_proxy
                     megaRets = proxy.ssoEnumerateUsers(id, login, exact_match,

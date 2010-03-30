@@ -102,3 +102,6 @@ class SitesAdminFunctionalTestCase(PloneTestCase.FunctionalTestCase):
     def afterSetUp(self):
 
         self.loginAsPortalOwner()
+
+        self.sites_admin = self.portal
+        self.sso_site = getattr(self.app, 'site1')

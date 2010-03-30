@@ -157,10 +157,11 @@ class ProxyMultiPlugins(BasePlugin):
 
         users = []
         membraneTool = getToolByName(self, 'membrane_tool')
-        for prefix, plugin in self.get3rdPlugins():
+        for prefix, plugin, propProvider in self.get3rdPlugins():
 
             # enumerate user for each plugin.
-            rets = plugin.enumerateUsers(**kw)
+            #rets = plugin.enumerateUsers(**kw)
+            rets = self.get3rdEnumerateUsers(plugin, propProvider, **kw)
             theRets = []
             for user in rets:
                 # try to create membrane user account for each user.
@@ -190,6 +191,24 @@ class ProxyMultiPlugins(BasePlugin):
                           (id, login, kw, users))
         return users
 
+    security.declarePrivate('get3rdEnumerateUsers')
+    def get3rdEnumerateUsers(self, plugin, propPlugin, **kw):
+        """
+        search 3rd party plugin to find all users matching given parameters.
+        """
+
+        rets = plugin.enumerateUsers(**kw)
+
+        # check the prop provider for this 3rd party plugin, some
+        # plugins need the prop providers to provide member data for a site
+        # member.  soure_users and mutable_properties are a typical case,
+        # where user_users stores user id and password and mutable_properties
+        # stores email, fullname, location, etc.
+        if (len(rets) < 1) and propPlugin:
+            rets = propPlugin.enumerateUsers(**kw)
+
+        return rets
+
     security.declarePrivate('get3rdPlugins')
     def get3rdPlugins(self):
         """
@@ -209,13 +228,21 @@ class ProxyMultiPlugins(BasePlugin):
                 continue
 
             pluginId = self.getProperty(prefix)
+            propPluginId = self.getProperty('%s_prop' % prefix, None)
             try:
                 plugin = getattr(aclUsers, pluginId)
             except AttributeError:
                 # just skip
                 continue
 
-            plugins.append((prefix, plugin))
+            propProvider = None
+            if propPluginId:
+                try:
+                    propProvider = getattr(aclUsers, propPluginId)
+                except AttributeError:
+                    self.logger.debug('get3rdPlugins - Can not find prop provider %s' % propPluginId)
+
+            plugins.append((prefix, plugin, propProvider))
 
         return plugins
 

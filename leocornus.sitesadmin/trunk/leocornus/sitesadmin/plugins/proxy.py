@@ -196,7 +196,7 @@ class ProxyMultiPlugins(BasePlugin):
                           (id, login, kw, users))
         return users
 
-    security.declarePrivate('get3rdPlugins')
+    security.declarePrivate('get3rdEnumPlugins')
     def get3rdEnumPlugins(self):
         """
         returns all 3rd party plugins as a list of tuple (prefix, plugin)
@@ -223,7 +223,7 @@ class ProxyMultiPlugins(BasePlugin):
                     plugins.append((prefix, enumPlugin))
                     continue
                 except AttributeError:
-                    self.logger.debug('get3rdEnumPlugins - Can not find prop provider %s' % enumPluginId)
+                    self.logger.debug('get3rdEnumPlugins - Can not find enumeration provider %s' % enumPluginId)
 
             pluginId = self.getProperty(prefix)
             try:

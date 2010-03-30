@@ -299,21 +299,21 @@ class SsouserTestCase(SitesAdminTestCase):
 
         self.assertEquals(len(userFolder.searchUsers(fullname='Full name')), 0)
         self.assertEquals(len(userFolder.searchUsers(fullname='Full name',
-                                                     megasearch=True)),
+                                                     sso_megasearch=True)),
                           3)
         self.assertEquals(len(userFolder.searchUsers(fullname='Full name',
-                                                     megasearch=True,
-                                                     excludemember=True)),
+                                                     sso_megasearch=True,
+                                                     sso_excludemember=True)),
                           3)
 
         roleManager.assignRoleToPrincipal('Manager', 'user2test')
         self.assertEquals(len(userFolder.searchUsers(fullname='Full name')), 1)
         self.assertEquals(len(userFolder.searchUsers(fullname='Full name',
-                                                     megasearch=True)),
+                                                     sso_megasearch=True)),
                           3)
         self.assertEquals(len(userFolder.searchUsers(fullname='Full name',
-                                                     megasearch=True,
-                                                     excludemember=True)),
+                                                     sso_megasearch=True,
+                                                     sso_excludemember=True)),
                           2)
 
 def test_suite():

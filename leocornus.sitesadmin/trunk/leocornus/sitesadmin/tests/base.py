@@ -40,16 +40,10 @@ PloneTestCase.setupPloneSite(products=['leocornus.sitesadmin'],
 # try to setup one more plone site for testing.
 PloneTestCase.setupPloneSite(id='site1')
 
-# base test case for our product.
-class SitesAdminTestCase(PloneTestCase.PloneTestCase):
+class SitesAdminTestUtils(object):
     """
-    General steps for all test cases.
+    Some facility functions for testing.
     """
-
-    def afterSetUp(self):
-
-        self.loginAsPortalOwner()
-        self.acl_users = self.portal.acl_users
 
     def createDefaultPloneTestUser(self, aclUsers,
                                    userId='testuser',
@@ -75,6 +69,8 @@ class SitesAdminTestCase(PloneTestCase.PloneTestCase):
                                         })
         propPlugin.setPropertiesForUser(testUser, testUserPropSheet)
 
+        return testUser
+
     def createMembraneTestUser(self, site, userId='user1',
                                userName='user1test',
                                password='user1password',
@@ -94,7 +90,32 @@ class SitesAdminTestCase(PloneTestCase.PloneTestCase):
 
         return user1
 
-class SitesAdminFunctionalTestCase(PloneTestCase.FunctionalTestCase):
+    def setupSsoSite(self, ssoSite, userSiteId='plone'):
+
+        # set up the empty site for to testing it.
+        userSetupTool = ssoSite.portal_setup
+        userSetupTool.runAllImportStepsFromProfile('profile-%s' %
+                                                   'leocornus.sitesadmin:ssouser')
+
+        # update the admin site's id.
+        ssouser = ssoSite.acl_users.ssouser
+        ssouser.manage_changeProperties(userSiteId=userSiteId)
+
+        return ssouser
+
+# base test case for our product.
+class SitesAdminTestCase(PloneTestCase.PloneTestCase, SitesAdminTestUtils):
+    """
+    General steps for all test cases.
+    """
+
+    def afterSetUp(self):
+
+        self.loginAsPortalOwner()
+        self.acl_users = self.portal.acl_users
+
+class SitesAdminFunctionalTestCase(PloneTestCase.FunctionalTestCase,
+                                   SitesAdminTestUtils):
     """
     base test case class for functional test case.
     """

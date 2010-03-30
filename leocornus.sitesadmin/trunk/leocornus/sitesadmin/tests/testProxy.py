@@ -80,30 +80,6 @@ class ProxyTestCase(SitesAdminTestCase):
         self.emptySite = getattr(self.app, 'site1')
         self.uf = self.emptySite.acl_users
 
-    def createDefaultPloneTestUser(self, aclUsers,
-                                   userId='testuser',
-                                   loginName='testuser',
-                                   password='password',
-                                   fullname='Full Name',
-                                   email='full.name@mail.com',
-                                   location='Home'):
-        """
-        create a test user by using the default plone pas services:
-        source_users, user_factory, mutable_properties.
-        """
-
-        aclUsers.source_users.addUser(userId, loginName, password)
-        testUser = aclUsers.user_factory.createUser(userId, loginName)
-
-        propPlugin = aclUsers.mutable_properties
-        testUserPropSheet = propPlugin.getPropertiesForUser(testUser)
-        testUserPropSheet.setProperties(testUser,
-                                        {'fullname' : fullname,
-                                         'email' : email,
-                                         'location' : location,
-                                        })
-        propPlugin.setPropertiesForUser(testUser, testUserPropSheet)
-
     def setupTestingProxy(self, aclUsers):
 
         # configure the proxy to include the source_users for
@@ -247,6 +223,69 @@ class ProxyTestCase(SitesAdminTestCase):
         self.assertEquals(membraneUser.getFullname(), fullName)
         self.assertEquals(membraneUser.getEmail(), eMail)
         self.assertEquals(membraneUser.getLocation(), location)
+
+    def testGet3rdEnumerateUsers(self):
+
+        adminUserFolder = self.portal.acl_users
+        self.createDefaultPloneTestUser(adminUserFolder,
+                                        'testuser1', 'testuser1',
+                                        'testpassword', 'full name one',
+                                        'email1@email.com', 'location one')
+        self.createDefaultPloneTestUser(adminUserFolder,
+                                        'testuser2', 'testuser2',
+                                        'testpassword', 'full name two',
+                                        'email2@email.com', 'location two')
+
+        proxy = adminUserFolder.sitesadmin_proxy
+        plugin = adminUserFolder.source_users
+        propProvider = adminUserFolder.mutable_properties
+        query1 = {'fullname' : 'full name one'}
+        query2 = {'email' : 'email'}
+
+        rets = proxy.get3rdEnumerateUsers(plugin, None, **query1)
+        self.failIf(len(rets) > 0)
+        rets = proxy.get3rdEnumerateUsers(plugin, None, **query2)
+        self.failIf(len(rets) > 0)
+
+        rets = proxy.get3rdEnumerateUsers(plugin, propProvider, **query1)
+        self.assertEquals(len(rets), 1)
+        rets = proxy.get3rdEnumerateUsers(plugin, propProvider, **query2)
+        self.assertEquals(len(rets), 2)
+
+    def testSsoEnumerateUsers(self):
+
+        adminUserFolder = self.portal.acl_users
+        self.createDefaultPloneTestUser(adminUserFolder,
+                                        'testuser1', 'testuser1',
+                                        'testpassword', 'full name one',
+                                        'email1@email.com', 'location one')
+        self.createDefaultPloneTestUser(adminUserFolder,
+                                        'testuser2', 'testuser2',
+                                        'testpassword', 'full name two',
+                                        'email2@email.com', 'location two')
+
+        self.setupTestingProxy(adminUserFolder)
+        proxy = adminUserFolder.sitesadmin_proxy
+        query = {'fullname' : 'full name'}
+
+        rets = proxy.ssoEnumerateUsers(None, None, None, None, None, **query)
+        self.failIf(len(rets) > 0)
+        self.assertRaises(AttributeError, getattr,
+                          self.portal, 'local-testuser1')
+        self.assertRaises(AttributeError, getattr,
+                          self.portal, 'local-testuser2')
+
+        proxy.manage_addProperty('local_prop', 'mutable_properties', 'string')
+
+        rets = proxy.ssoEnumerateUsers(None, None, None, None, None, **query)
+        self.assertEquals(len(rets), 2)
+
+        user1 = getattr(self.portal, 'local-testuser1')
+        self.assertEquals(user1.getFullname(), 'full name one')
+        self.assertEquals(user1.getEmail(), 'email1@email.com')
+        user2 = getattr(self.portal, 'local-testuser2')
+        self.assertEquals(user2.getFullname(), 'full name two')
+        self.assertEquals(user2.getEmail(), 'email2@email.com')
 
 def test_suite():
     suite = unittest.TestSuite()

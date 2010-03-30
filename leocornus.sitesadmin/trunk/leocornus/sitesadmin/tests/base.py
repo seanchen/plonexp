@@ -51,6 +51,49 @@ class SitesAdminTestCase(PloneTestCase.PloneTestCase):
         self.loginAsPortalOwner()
         self.acl_users = self.portal.acl_users
 
+    def createDefaultPloneTestUser(self, aclUsers,
+                                   userId='testuser',
+                                   loginName='testuser',
+                                   password='password',
+                                   fullname='Full Name',
+                                   email='full.name@mail.com',
+                                   location='Home'):
+        """
+        create a test user by using the default plone pas services:
+        source_users, user_factory, mutable_properties.
+        """
+
+        aclUsers.source_users.addUser(userId, loginName, password)
+        testUser = aclUsers.user_factory.createUser(userId, loginName)
+
+        propPlugin = aclUsers.mutable_properties
+        testUserPropSheet = propPlugin.getPropertiesForUser(testUser)
+        testUserPropSheet.setProperties(testUser,
+                                        {'fullname' : fullname,
+                                         'email' : email,
+                                         'location' : location,
+                                        })
+        propPlugin.setPropertiesForUser(testUser, testUserPropSheet)
+
+    def createMembraneTestUser(self, site, userId='user1',
+                               userName='user1test',
+                               password='user1password',
+                               fullname="Full Name",
+                               email="email@mail.com",
+                               location='user1 location'):
+
+        # create testing user in the give site.
+        site.invokeFactory('UserAccount', userId)
+        user1 = getattr(self.portal, userId)
+        user1.setUserName(userName)
+        user1.setPassword(password)
+        user1.setFullname(fullname)
+        user1.setEmail(email)
+        user1.setLocation(location)
+        site.membrane_tool.indexObject(user1)
+
+        return user1
+
 class SitesAdminFunctionalTestCase(PloneTestCase.FunctionalTestCase):
     """
     base test case class for functional test case.

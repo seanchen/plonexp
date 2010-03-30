@@ -26,6 +26,8 @@ from Products.CMFCore.utils import getToolByName
 __author__ = "Sean Chen"
 __email__ = "sean.chen@leocorn.com"
 
+
+
 # the form to add a proxy multi plugin.
 manage_addProxyMultiPluginsForm = DTMLFile('proxyAddForm', globals())
 
@@ -82,6 +84,10 @@ class ProxyMultiPlugins(BasePlugin):
         self.title = title
         self.separator = separator
         self.userFolder = userFolder
+        self.defaultSuffix = '_default'
+        self.propertiesSuffix = '_prop'
+        self.factorySuffix = '_factory'
+        self.enumrationSuffix = '_enum'
 
         # add default property provider and default user factory.
         # the priority is like
@@ -157,11 +163,10 @@ class ProxyMultiPlugins(BasePlugin):
 
         users = []
         membraneTool = getToolByName(self, 'membrane_tool')
-        for prefix, plugin, propProvider in self.get3rdPlugins():
+        for prefix, plugin in self.get3rdEnumPlugins():
 
             # enumerate user for each plugin.
-            #rets = plugin.enumerateUsers(**kw)
-            rets = self.get3rdEnumerateUsers(plugin, propProvider, **kw)
+            rets = plugin.enumerateUsers(**kw)
             theRets = []
             for user in rets:
                 # try to create membrane user account for each user.
@@ -191,26 +196,8 @@ class ProxyMultiPlugins(BasePlugin):
                           (id, login, kw, users))
         return users
 
-    security.declarePrivate('get3rdEnumerateUsers')
-    def get3rdEnumerateUsers(self, plugin, propPlugin, **kw):
-        """
-        search 3rd party plugin to find all users matching given parameters.
-        """
-
-        rets = plugin.enumerateUsers(**kw)
-
-        # check the prop provider for this 3rd party plugin, some
-        # plugins need the prop providers to provide member data for a site
-        # member.  soure_users and mutable_properties are a typical case,
-        # where user_users stores user id and password and mutable_properties
-        # stores email, fullname, location, etc.
-        if (len(rets) < 1) and propPlugin:
-            rets = propPlugin.enumerateUsers(**kw)
-
-        return rets
-
     security.declarePrivate('get3rdPlugins')
-    def get3rdPlugins(self):
+    def get3rdEnumPlugins(self):
         """
         returns all 3rd party plugins as a list of tuple (prefix, plugin)
         """
@@ -222,27 +209,29 @@ class ProxyMultiPlugins(BasePlugin):
             # do some filter, there maybe some better way.
             if prefix in ['title', 'separator', 'userFolder']:
                 continue
-            if prefix.endswith('_default') or \
-               prefix.endswith('_prop') or \
-               prefix.endswith('_factory'):
+            if prefix.endswith(self.defaultSuffix) or \
+               prefix.endswith(self.propertiesSuffix) or \
+               prefix.endswith(self.factorySuffix) or \
+               prefix.endswith(self.enumrationSuffix):
                 continue
 
+            enumPluginId = self.getProperty('%s%s' % (prefix, self.enumrationSuffix)
+                                            , None)
+            if enumPluginId:
+                try:
+                    enumPlugin = getattr(aclUsers, enumPluginId)
+                    plugins.append((prefix, enumPlugin))
+                    continue
+                except AttributeError:
+                    self.logger.debug('get3rdEnumPlugins - Can not find prop provider %s' % enumPluginId)
+
             pluginId = self.getProperty(prefix)
-            propPluginId = self.getProperty('%s_prop' % prefix, None)
             try:
                 plugin = getattr(aclUsers, pluginId)
+                plugins.append((prefix, plugin))
             except AttributeError:
                 # just skip
                 continue
-
-            propProvider = None
-            if propPluginId:
-                try:
-                    propProvider = getattr(aclUsers, propPluginId)
-                except AttributeError:
-                    self.logger.debug('get3rdPlugins - Can not find prop provider %s' % propPluginId)
-
-            plugins.append((prefix, plugin, propProvider))
 
         return plugins
 
@@ -277,7 +266,8 @@ class ProxyMultiPlugins(BasePlugin):
         else:
             raise KeyError, 'Could not find plugin for prefix %s' % prefix
 
-        prefixPropPlugin = self.getProperty('%s_prop' % prefix)
+        prefixPropPlugin = self.getProperty('%s%s' % (prefix,
+                                                      self.propertiesSuffix))
         if prefixPropPlugin:
             propProvider = getattr(aclUsers, prefixPropPlugin)
         elif self.getProperty('prop_default'):
@@ -286,7 +276,7 @@ class ProxyMultiPlugins(BasePlugin):
         else:
             propProvider = authProvider
 
-        factoryPlugin = self.getProperty('%s_factory' % prefix)
+        factoryPlugin = self.getProperty('%s%s' % (prefix, self.factorySuffix))
         if factoryPlugin:
             factory = getattr(aclUsers, factoryPlugin)
         elif self.getProperty('factory_default'):

@@ -224,34 +224,6 @@ class ProxyTestCase(SitesAdminTestCase):
         self.assertEquals(membraneUser.getEmail(), eMail)
         self.assertEquals(membraneUser.getLocation(), location)
 
-    def testGet3rdEnumerateUsers(self):
-
-        adminUserFolder = self.portal.acl_users
-        self.createDefaultPloneTestUser(adminUserFolder,
-                                        'testuser1', 'testuser1',
-                                        'testpassword', 'full name one',
-                                        'email1@email.com', 'location one')
-        self.createDefaultPloneTestUser(adminUserFolder,
-                                        'testuser2', 'testuser2',
-                                        'testpassword', 'full name two',
-                                        'email2@email.com', 'location two')
-
-        proxy = adminUserFolder.sitesadmin_proxy
-        plugin = adminUserFolder.source_users
-        propProvider = adminUserFolder.mutable_properties
-        query1 = {'fullname' : 'full name one'}
-        query2 = {'email' : 'email'}
-
-        rets = proxy.get3rdEnumerateUsers(plugin, None, **query1)
-        self.failIf(len(rets) > 0)
-        rets = proxy.get3rdEnumerateUsers(plugin, None, **query2)
-        self.failIf(len(rets) > 0)
-
-        rets = proxy.get3rdEnumerateUsers(plugin, propProvider, **query1)
-        self.assertEquals(len(rets), 1)
-        rets = proxy.get3rdEnumerateUsers(plugin, propProvider, **query2)
-        self.assertEquals(len(rets), 2)
-
     def testSsoEnumerateUsers(self):
 
         adminUserFolder = self.portal.acl_users
@@ -276,6 +248,7 @@ class ProxyTestCase(SitesAdminTestCase):
                           self.portal, 'local-testuser2')
 
         proxy.manage_addProperty('local_prop', 'mutable_properties', 'string')
+        proxy.manage_addProperty('local_enum', 'mutable_properties', 'string')
 
         rets = proxy.ssoEnumerateUsers(None, None, None, None, None, **query)
         self.assertEquals(len(rets), 2)

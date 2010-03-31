@@ -13,6 +13,8 @@ from Products.PluggableAuthService.interfaces.plugins import IUserFactoryPlugin
 from Products.PluggableAuthService.interfaces.plugins import IPropertiesPlugin
 from Products.PluggableAuthService.interfaces.plugins import IExtractionPlugin
 from Products.PluggableAuthService.interfaces.plugins import ICredentialsUpdatePlugin
+from Products.PluggableAuthService.interfaces.plugins import ICredentialsResetPlugin
+from Products.PluggableAuthService.interfaces.plugins import IChallengePlugin
 
 from Products.PlonePAS.Extensions.Install import activatePluginInterfaces
 
@@ -53,6 +55,9 @@ def setupSsouserPlugins(portal, out):
 
     # activate plugin interfaces for the specified plugins.
     activatePluginInterfaces(portal, 'ssouser', out)
+    # using the default credentials_cookie_auth for challenge and reset.
+    #userFolder.plugins.activatePlugin(IChallengePlugin, 'credentials_cookie_auth')
+    userFolder.plugins.activatePlugin(ICredentialsResetPlugin, 'credentials_cookie_auth')
 
     # deactivate other plugin interfaces' implementation.
     # suppose we are working on a Plone site with default acl_users setting.
@@ -72,3 +77,7 @@ def setupSsouserPlugins(portal, out):
                                         'credentials_basic_auth')
 
     userFolder.plugins.deactivatePlugin(ICredentialsUpdatePlugin, 'session')
+
+    userFolder.plugins.deactivatePlugin(ICredentialsResetPlugin, 'session')
+
+    userFolder.plugins.deactivatePlugin(IChallengePlugin, 'credentials_basic_auth')

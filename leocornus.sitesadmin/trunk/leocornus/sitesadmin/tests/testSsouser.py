@@ -148,6 +148,14 @@ class SsouserTestCase(SitesAdminTestCase):
         self.failIf(credit is None)
         self.assertTrue('user1test' in credit)
 
+        # authenticate the testing user with upper case.
+        credentials = {'login' : 'user1Test',
+                       'password' : 'user1password'}
+        credit = self.uf.ssouser.authenticateCredentials(credentials)
+
+        self.failIf(credit is None)
+        self.assertTrue('user1test' in credit)
+
     # test authenticate credential
     def testMutableProperty(self):
 

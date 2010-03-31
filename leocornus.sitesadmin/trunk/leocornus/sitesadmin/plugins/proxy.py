@@ -26,8 +26,6 @@ from Products.CMFCore.utils import getToolByName
 __author__ = "Sean Chen"
 __email__ = "sean.chen@leocorn.com"
 
-
-
 # the form to add a proxy multi plugin.
 manage_addProxyMultiPluginsForm = DTMLFile('proxyAddForm', globals())
 

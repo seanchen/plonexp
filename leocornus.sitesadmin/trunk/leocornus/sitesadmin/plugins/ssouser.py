@@ -94,8 +94,10 @@ class SsouserPlugins(BasePlugin):
         if ('login' not in credentials) or ('password' not in credentials):
             return None
 
-        login = credentials['login']
-        password = credentials['password']
+        # make singile sign on case login name insensitive!
+        # This is a bit tricky, since we really depends on the 3rd party user
+        # sources!
+        credentials['login'] = credentials['login'].lower()
 
         credit = self.getUserAdmin().membrane_users.authenticateCredentials(credentials)
         if not credit:

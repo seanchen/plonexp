@@ -97,20 +97,21 @@ class ProxyTestCase(SitesAdminTestCase):
 
         # create a testing user in admin site's source_users.
         adminUserFolder = self.portal.acl_users
-        self.createDefaultPloneTestUser(adminUserFolder, 'srcUser',
-                                        'srcUser', 'testpassword')
+        self.createDefaultPloneTestUser(adminUserFolder, 'srcuser',
+                                        'srcuser', 'testpassword')
 
         self.setupTestingProxy(adminUserFolder)
 
-        theCred = {'login' : 'local\\srcUser', 'password' : 'testpassword'}
-        badCred = {'login' : 'local\\srcUser', 'password' : 'badpassword'}
+        # login name should be case insensitive
+        theCred = {'login' : 'local\\srcuser', 'password' : 'testpassword'}
+        badCred = {'login' : 'local\\srcuser', 'password' : 'badpassword'}
 
         # assert that we could find the user from the admin site.
         # the authenticate method will return a PloneUser object.
         user = adminUserFolder.authenticate(theCred['login'],
                                             theCred['password'], None)
         self.failUnless(user)
-        self.assertEquals('local\\srcUser', user.getName())
+        self.assertEquals('local\\srcuser', user.getName())
 
         user = adminUserFolder.authenticate(badCred['login'],
                                             badCred['password'], None)
@@ -119,7 +120,7 @@ class ProxyTestCase(SitesAdminTestCase):
         ssouser = self.setupSsoSite(self.emptySite, self.portal.id)
         credit = ssouser.authenticateCredentials(theCred)
         self.failUnless(credit)
-        self.assertTrue('local\\srcUser' in credit)
+        self.assertTrue('local\\srcuser' in credit)
 
         credit = ssouser.authenticateCredentials(badCred)
         self.failIf(credit)

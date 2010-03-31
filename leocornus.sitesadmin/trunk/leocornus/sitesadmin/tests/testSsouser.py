@@ -13,6 +13,8 @@ from Products.PluggableAuthService.interfaces.plugins import IPropertiesPlugin
 from Products.PluggableAuthService.interfaces.plugins import IExtractionPlugin
 from Products.PluggableAuthService.interfaces.plugins import IUserFactoryPlugin
 from Products.PluggableAuthService.interfaces.plugins import ICredentialsUpdatePlugin
+from Products.PluggableAuthService.interfaces.plugins import ICredentialsResetPlugin
+from Products.PluggableAuthService.interfaces.plugins import IChallengePlugin
 
 from Products.PlonePAS.interfaces.plugins import IMutablePropertiesPlugin
 
@@ -124,6 +126,19 @@ class SsouserTestCase(SitesAdminTestCase):
         self.assertTrue(len(found) == 1)
         self.assertTrue('ssouser' in found)
         self.assertFalse('session' in found)
+
+        found = plugins._getPlugins(ICredentialsResetPlugin)
+        self.assertTrue(len(found) == 1)
+        self.failUnless('credentials_cookie_auth' in found)
+        self.failIf('ssouser' in found)
+        self.failIf('session' in found)
+
+        found = plugins._getPlugins(IChallengePlugin)
+        self.assertTrue(len(found) == 1)
+        self.failUnless('credentials_cookie_auth' in found)
+        self.failIf('credentials_basic_auth' in found)
+        self.failIf('ssouser' in found)
+        self.failIf('session' in found)
 
     # test update the property.
     def testChangeProperty(self):

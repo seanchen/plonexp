@@ -5,6 +5,7 @@
 a timesheet to bill time to a story or an artifact
 """
 
+import operator
 from datetime import datetime
 from time import time
 
@@ -39,7 +40,18 @@ class ChangeLogViewlet(ViewletBase):
     def changeLog(self):
 
         obj = aq_inner(self.context)
-        return obj.getChangeLog()
+        log = []
+        for item in obj.getChangeLog():
+            if not item.has_key('worktime'):
+                if isinstance(item['datetime'], str):
+                    continue
+                item['worktime'] = item['datetime']
+                item['logtime'] = item['datetime']
+            log.append(item)
+
+        return sorted(log,
+                      key=operator.itemgetter('worktime'),
+                      reverse=True)
 
     def getMemberFullName(self, memberId):
         """

@@ -6,6 +6,11 @@ this package will provide a set of plugins and facilities to
 """
 
 import logging
+from urllib import quote
+from urllib import unquote
+
+from keyczar.keyczar import Crypter
+from keyczar.errors import KeyczarError
 
 from Globals import InitializeClass
 from Globals import DTMLFile
@@ -20,6 +25,9 @@ from AccessControl.SecurityInfo import ClassSecurityInfo
 from Products.PluggableAuthService.utils import classImplements
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
 from Products.PluggableAuthService.interfaces.plugins import IAuthenticationPlugin
+from Products.PluggableAuthService.interfaces.plugins import IExtractionPlugin
+from Products.PluggableAuthService.interfaces.plugins import ICredentialsUpdatePlugin
+from Products.PluggableAuthService.interfaces.plugins import ICredentialsResetPlugin
 
 from Products.CMFCore.utils import getToolByName
 
@@ -82,6 +90,8 @@ class ProxyMultiPlugins(BasePlugin):
         self.title = title
         self.separator = separator
         self.userFolder = userFolder
+        # the cookie name should be configable?
+        self.cookie_name = '__sso_ac'
         self.defaultSuffix = '_default'
         self.propertiesSuffix = '_prop'
         self.factorySuffix = '_factory'
@@ -93,6 +103,13 @@ class ProxyMultiPlugins(BasePlugin):
         # factory provider: prefix_factory, factory_default, prefix itself.
         self._setProperty('prop_default', 'mutable_properties', 'string')
         self._setProperty('factory_default', 'user_factory', 'string')
+
+    @property
+    def crypter(self):
+
+        keysFolder = self.getProperty('keys_folder',
+                                      '/etc/keyczar/keys')
+        return Crypter.Read(keysFolder)
 
     # query the backend authentication provider to verify user's credentials.
     security.declarePrivate('verifyCredentials')
@@ -350,8 +367,78 @@ class ProxyMultiPlugins(BasePlugin):
         app = self.getPhysicalRoot()
         return app.unrestrictedTraverse(self.userFolder)
 
+    security.declarePrivate('extractCredentials')
+    def extractCredentials(self, request):
+        """
+        Extract credentials from cookie or 'request.form'.
+        """
+
+        creds = {}
+        cookie = request.get(self.cookie_name, '')
+        # Look in the request.form for the names coming from the login form
+        login = request.form.get('__ac_name', '')
+
+        if login and request.form.has_key('__ac_password'):
+            creds['login'] = login
+            creds['password'] = request.form.get('__ac_password', '')
+
+        elif cookie and cookie != 'deleted':
+            try:
+                cookie_val = self.decrypt(unquote(cookie))
+                login, password = cookie_val.split(':')
+            except ValueError:
+                # Cookie is in a different format, so it is not ours
+                return creds
+            except Exception:
+                return creds
+
+            creds['login'] = login.decode('hex')
+            creds['password'] = password.decode('hex')
+
+        if creds:
+            creds['remote_host'] = request.get('REMOTE_HOST', '')
+
+            try:
+                creds['remote_address'] = request.getClientAddr()
+            except AttributeError:
+                creds['remote_address'] = request.get('REMOTE_ADDR', '')
+
+        return creds
+
+    security.declarePrivate('updateCredentials')
+    def updateCredentials(self, request, response, login, new_password):
+        """
+        Respond to change of credentials (NOOP for basic auth).
+        """
+
+        cookie_str = '%s:%s' % (login.encode('hex'), new_password.encode('hex'))
+        cookie_val = self.encrypt(cookie_str)
+        cookie_val = cookie_val.rstrip()
+        response.setCookie(self.cookie_name, quote(cookie_val), path='/')
+
+    security.declarePrivate('resetCredentials')
+    def resetCredentials(self, request, response):
+        """
+        Raise unauthorized to tell browser to clear credentials.
+        """
+
+        response.expireCookie(self.cookie_name, path='/')
+
+    security.declarePrivate('encrypt')
+    def encrypt(self, message):
+
+        return self.crypter.Encrypt(message)
+
+    security.declarePrivate('decrypt')
+    def decrypt(self, message):
+
+        return self.crypter.Decrypt(message)
+
 # implements plugins.
 classImplements(ProxyMultiPlugins,
+                IExtractionPlugin,
+                ICredentialsUpdatePlugin,
+                ICredentialsResetPlugin,
                 IAuthenticationPlugin)
 
 InitializeClass(ProxyMultiPlugins)

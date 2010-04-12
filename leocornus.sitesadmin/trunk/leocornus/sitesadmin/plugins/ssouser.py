@@ -18,6 +18,7 @@ from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlu
 from Products.PluggableAuthService.interfaces.plugins import IPropertiesPlugin
 from Products.PluggableAuthService.interfaces.plugins import IExtractionPlugin
 from Products.PluggableAuthService.interfaces.plugins import ICredentialsUpdatePlugin
+from Products.PluggableAuthService.interfaces.plugins import ICredentialsResetPlugin
 from Products.PluggableAuthService.interfaces.plugins import IUserFactoryPlugin
 
 from Products.PlonePAS.interfaces.plugins import IMutablePropertiesPlugin
@@ -190,7 +191,7 @@ class SsouserPlugins(BasePlugin):
         forward to user admin to do the 
         """
 
-        credit = self.getUserAdmin().credentials_cookie_auth.extractCredentials(request)
+        credit = self.getUserAdmin().sitesadmin_proxy.extractCredentials(request)
 
         return credit
 
@@ -201,8 +202,14 @@ class SsouserPlugins(BasePlugin):
         again forward to the useradmin
         """
 
-        return self.getUserAdmin().credentials_cookie_auth.updateCredentials(request, response,
-                                                                 login, new_password)
+        return self.getUserAdmin().sitesadmin_proxy.updateCredentials(request, response,
+                                                                      login, new_password)
+
+    security.declarePrivate('resetCredentials')
+    def resetCredentials(self, request, response):
+        """ Raise unauthorized to tell browser to clear credentials. """
+
+        return self.getUserAdmin().sitesadmin_proxy.resetCredentials(request, response)
 
     # IUserFactoryPlugin
     security.declarePrivate('createUser')
@@ -324,6 +331,7 @@ classImplements(SsouserPlugins,
                 IUserFactoryPlugin,
                 IExtractionPlugin,
                 ICredentialsUpdatePlugin,
+                ICredentialsResetPlugin,
                 IPropertiesPlugin,
                 IUserIntrospection,
                 IMutablePropertiesPlugin)

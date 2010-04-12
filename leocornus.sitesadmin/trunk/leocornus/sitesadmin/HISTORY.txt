@@ -5,8 +5,21 @@ Change Log
 ---
 
   * customize forms in plone_prefs: pref_user_overviews, pref_user_details, etc.
+    - new skin is created for this customization, sso_prefs
+    - tabs are added for user management and add new users in users and groups
+      management.
+    - some word update for some hint messages and labels.
 
   * easy to search user from 3rd plugins.
+    - adding keywords for mega search, exclude member, and 3rd party search:
+      sso_megasearch, sso_excludemember, sso_3rdpartysearch
+
+  * new membrane user accounts will be created when new users are found from 
+    3rd party user sources.
+
+  * new property with _enum suffix is added to let user specify the enumerate
+    users plugin for a 3rd party plugin.  We need it for local testing at
+    lease.
 
 0.3
 ---

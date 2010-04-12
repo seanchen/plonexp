@@ -1,0 +1,20 @@
+<configure
+   xmlns="http://namespaces.zope.org/zope"
+   xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+   xmlns:cmf="http://namespaces.zope.org/cmf"  
+   xmlns:five="http://namespaces.zope.org/five"
+   xmlns:i18n="http://namespaces.zope.org/i18n"
+   i18n_domain="leocornus.sitesadmin">
+
+  <cmf:registerDirectory name="sso_prefs"/>
+
+  <!-- the profile for installing the customization for plone_prefs -->
+  <genericsetup:registerProfile
+      name="ssoprefs"
+      title="Single Sign On Customized Prefs"
+      directory="profiles/ssoprefs"
+      description="install customization for plone_prefs."
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+  />
+
+</configure>

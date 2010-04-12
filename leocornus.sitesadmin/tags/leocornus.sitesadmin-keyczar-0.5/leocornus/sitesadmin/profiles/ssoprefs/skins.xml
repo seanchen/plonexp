@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<object name="portal_skins">
+
+  <object name="sso_prefs"
+          meta_type="Filesystem Directory View"
+          directory="leocornus.sitesadmin:skins/sso_prefs"
+  />
+
+  <skin-path name="*">
+    <layer name="sso_prefs" insert-after="custom"/>
+  </skin-path>
+
+</object>

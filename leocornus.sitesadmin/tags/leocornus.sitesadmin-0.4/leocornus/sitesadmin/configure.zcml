@@ -1,0 +1,18 @@
+<configure
+   xmlns="http://namespaces.zope.org/zope"
+   xmlns:cmf="http://namespaces.zope.org/cmf"  
+   xmlns:five="http://namespaces.zope.org/five"
+   xmlns:i18n="http://namespaces.zope.org/i18n"
+   i18n_domain="leocornus.sitesadmin">
+
+  <five:registerPackage package="." initialize=".initialize" />
+
+	<!-- using the default skins folder -->
+  <cmf:registerDirectory name="sitesadmin_images"/>
+
+  <include package=".tools" />
+  <include package=".content" />
+  <include file="profiles.zcml" />
+	<include file="ssoprefs.zcml" />
+
+</configure>

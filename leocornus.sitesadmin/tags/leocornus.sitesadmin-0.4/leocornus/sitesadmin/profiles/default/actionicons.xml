@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<action-icons>
+
+  <!-- this will be deprecated in Plone 4, where you can use -->
+  <!-- icon_expr directly in controlpanel.xml -->
+  <action-icon category="controlpanel" action_id="sitesadmin"
+               title="Sites Admin Config" priority="0"
+               icon_expr="sitesadmin_configlet_icon.gif"
+  />
+</action-icons>

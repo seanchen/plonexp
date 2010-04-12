@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+0.5
+---
+
+  * Secure Cookie implementation
+
 0.4
 ---
 

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+
+<import-steps>
+  <import-step
+    id="sitesadmin.ssoplugins" version="20100208-01"
+    handler="leocornus.sitesadmin.plugins.setuphandlers.setupSsouser"
+    title="SitesAdmin Single Sign On Plugins setup"
+  >
+    <dependency step="plonepas"/>
+    PlonePAS installation step.
+  </import-step>
+</import-steps>

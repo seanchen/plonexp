@@ -1,0 +1,132 @@
+============================================
+Single Sign On plugins functional testing
+============================================
+
+We do some functional tests for Single Sign On plugins: ssouser and proxy
+plugins.  This should cover user authentication, update user property,
+various user search scenarios, automatic membrane user creation, etc.
+
+First of all, we need set up Plone sties for testing and some testing 
+user accounts.
+
+we should have two Plone sites for testing: One is the admin site, which
+will store the membrane user accounts and the proxy plugin to 3rd party
+plugins.  Another one is the single sign on site, which will be configured
+to 
+
+    >>> self.sites_admin.id
+    'plone'
+    >>> self.sso_site.id
+    'site1'
+
+Now we need set up the sites_admin's proxy plugin for our testing:
+- using the root folder of sites_admin for storing membrane user accounts.
+- using the default source_users as the 3rd party plugin for tesing.
+- a prefix called local is set up for users sitting in source_users.
+- the enumerate users plugins is set to mutable_properties for local.
+
+    >>> proxy = self.sites_admin.acl_users.sitesadmin_proxy
+    >>> proxy.id
+    'sitesadmin_proxy'
+    >>> proxy.manage_addProperty('local', 'source_users', 'string')
+    >>> proxy.manage_addProperty('local_prop', 'mutable_properties', 'string')
+    >>> proxy.manage_addProperty('local_enum', 'mutable_properties', 'string')
+
+Overview of the configuration for proxy plugin
+
+    >>> proxy.getProperty('userFolder')
+    'plone'
+    >>> proxy.getProperty('factory_default')
+    'user_factory'
+    >>> proxy.getProperty('local_enum')
+    'mutable_properties'
+    >>> proxy.getProperty('local_prop')
+    'mutable_properties'
+    >>> proxy.getProperty('local')
+    'source_users'
+
+Testing users' data, for both local user and membrane user.
+
+    >>> localUser1 = {
+    ... 'login':'localuser1', 'password':'goodpassword',
+    ... 'fullname':'local user one', 'email':'localemail1@local.com'}
+    >>> localUser2 = {
+    ... 'login':'localuser2', 'password':'goodpassword',
+    ... 'fullname':'local user two', 'email':'localemail2@local.com'}
+    >>> localUser3 = {
+    ... 'login':'localuser3', 'password':'goodpassword',
+    ... 'fullname':'local user three', 'email':'localemail3@local.com'}
+    >>> membraneUser1 = {
+    ... 'id':'user1', 'login':'testuser1', 'password':'goodpassword',
+    ... 'fullname':'membrane user one', 'email':'membraneuser1@membrane.com'}
+    >>> membraneUser2 = {
+    ... 'id':'user2', 'login':'testuser2', 'password':'goodpassword',
+    ... 'fullname':'membrane user two', 'email':'membraneuser2@membrane.com'}
+    >>> membraneUser3 = {
+    ... 'id':'user3', 'login':'testuser3', 'password':'goodpassword',
+    ... 'fullname':'membrane user three', 'email':'membraneuser3@membrane.com'}
+
+create user account in Plone default user management, which is configured as a 
+3rd party plugin "local" for testing.
+
+    >>> self.createDefaultPloneTestUser(self.sites_admin.acl_users,
+    ... localUser1['login'], localUser1['login'], localUser1['password'],
+    ... localUser1['fullname'], localUser1['email'])
+    <PloneUser 'localuser1'>
+    >>> self.createDefaultPloneTestUser(self.sites_admin.acl_users,
+    ... localUser2['login'], localUser2['login'], localUser2['password'],
+    ... localUser2['fullname'], localUser2['email'])
+    <PloneUser 'localuser2'>
+    >>> self.createDefaultPloneTestUser(self.sites_admin.acl_users,
+    ... localUser3['login'], localUser3['login'], localUser3['password'],
+    ... localUser3['fullname'], localUser3['email'])
+    <PloneUser 'localuser3'>
+    >>> mUser1 = self.createMembraneTestUser(self.sites_admin,
+    ... membraneUser1['id'], membraneUser1['login'], membraneUser1['password'],
+    ... membraneUser1['fullname'], membraneUser1['email'])
+    >>> mUser2 = self.createMembraneTestUser(self.sites_admin,
+    ... membraneUser2['id'], membraneUser2['login'], membraneUser2['password'],
+    ... membraneUser2['fullname'], membraneUser2['email'])
+    >>> mUser3 = self.createMembraneTestUser(self.sites_admin,
+    ... membraneUser3['id'], membraneUser3['login'], membraneUser3['password'],
+    ... membraneUser3['fullname'], membraneUser3['email'])
+    >>> mUser1.getFullname() == membraneUser1['fullname']
+    True
+    >>> mUser2.getEmail() == membraneUser2['email']
+    True
+    >>> mUser3.getUserName() == membraneUser3['login']
+    True
+
+setup the sso_site to use the ssouser plugin.
+
+    >>> self.setupSsoSite(self.sso_site, self.sites_admin.id)
+    <SsouserPlugins at /site1/acl_users/ssouser>
+
+Testing authentication, new membrane user account should be create for
+3rd party plugin user's first time login.
+
+    >>> user = self.sso_site.acl_users.authenticate(
+    ... 'testuser3', 'goodpassword', None)
+    >>> user
+    <MembraneUser 'testuser3'>
+    >>> self.sso_site.acl_users.authenticate('testuser3', 'badpassword', None)
+    >>> hasattr(self.sites_admin, 'local-localuser1')
+    False
+    >>> self.sso_site.acl_users.authenticate(
+    ... 'local\\localuser1', 'goodpassword', None)
+    <MembraneUser 'local\\localuser1'>
+    >>> hasattr(self.sites_admin, 'local-localuser1')
+    True
+    >>> newUser = getattr(self.sites_admin, 'local-localuser1')
+    >>> newUser.getFullname() == localUser1['fullname']
+    True
+    >>> newUser.getEmail() == localUser1['email']
+    True
+    >>> hasattr(self.sites_admin, 'local-localuser2')
+    False
+    >>> self.sso_site.acl_users.authenticate(
+    ... 'local\\localuser2', 'badpassword', None)
+    >>> hasattr(self.sites_admin, 'local-localuser2')
+    False
+
+Testing different search scenarios:

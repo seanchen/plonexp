@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<object name="portal_skins">
+
+  <object name="sitesadmin_images"
+          meta_type="Filesystem Directory View"
+          directory="leocornus.sitesadmin:skins/sitesadmin_images"
+  />
+
+  <skin-path name="*">
+    <layer name="sitesadmin_images" insert-after="custom"/>
+  </skin-path>
+
+</object>

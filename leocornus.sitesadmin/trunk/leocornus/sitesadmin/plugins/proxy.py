@@ -87,12 +87,6 @@ class ProxyMultiPlugins(BasePlugin):
         self.title = title
         self.separator = separator
         self.userFolder = userFolder
-        # the cookie name should be configable?
-        self.cookie_name = '__sso_ac'
-        self.defaultSuffix = '_default'
-        self.propertiesSuffix = '_prop'
-        self.factorySuffix = '_factory'
-        self.enumrationSuffix = '_enum'
 
         # add default property provider and default user factory.
         # the priority is like
@@ -100,6 +94,27 @@ class ProxyMultiPlugins(BasePlugin):
         # factory provider: prefix_factory, factory_default, prefix itself.
         self._setProperty('prop_default', 'mutable_properties', 'string')
         self._setProperty('factory_default', 'user_factory', 'string')
+
+    # the better way for the following properties!
+    @property
+    def cookieName(self):
+        return self.getProperty('cookie_name', '__sso_ac')
+
+    @property
+    def defaultSuffix(self):
+        return self.getProperty('default_suffix', '_default')
+
+    @property
+    def propertiesSuffix(self):
+        return self.getProperty('properties_suffix', '_prop')
+
+    @property
+    def factorySuffix(self):
+        return self.getProperty('factory_suffix', '_factory')
+
+    @property
+    def enumrationSuffix(self):
+        return self.getProperty('enumration_suffix', '_enum')
 
     # query the backend authentication provider to verify user's credentials.
     security.declarePrivate('verifyCredentials')
@@ -364,7 +379,7 @@ class ProxyMultiPlugins(BasePlugin):
         """
 
         creds = {}
-        cookie = request.get(self.cookie_name, '')
+        cookie = request.get(self.cookieName, '')
         # Look in the request.form for the names coming from the login form
         login = request.form.get('__ac_name', '')
 
@@ -404,7 +419,7 @@ class ProxyMultiPlugins(BasePlugin):
         cookie_str = '%s:%s' % (login.encode('hex'), new_password.encode('hex'))
         cookie_val = self.encrypt(cookie_str)
         cookie_val = cookie_val.rstrip()
-        response.setCookie(self.cookie_name, quote(cookie_val), path='/')
+        response.setCookie(self.cookieName, quote(cookie_val), path='/')
 
     security.declarePrivate('resetCredentials')
     def resetCredentials(self, request, response):
@@ -412,7 +427,7 @@ class ProxyMultiPlugins(BasePlugin):
         Raise unauthorized to tell browser to clear credentials.
         """
 
-        response.expireCookie(self.cookie_name, path='/')
+        response.expireCookie(self.cookieName, path='/')
 
     security.declarePrivate('encrypt')
     def encrypt(self, message):

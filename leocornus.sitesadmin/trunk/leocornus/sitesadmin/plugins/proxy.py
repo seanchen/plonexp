@@ -9,9 +9,6 @@ import logging
 from urllib import quote
 from urllib import unquote
 
-from keyczar.keyczar import Crypter
-from keyczar.errors import KeyczarError
-
 from Globals import InitializeClass
 from Globals import DTMLFile
 
@@ -103,13 +100,6 @@ class ProxyMultiPlugins(BasePlugin):
         # factory provider: prefix_factory, factory_default, prefix itself.
         self._setProperty('prop_default', 'mutable_properties', 'string')
         self._setProperty('factory_default', 'user_factory', 'string')
-
-    @property
-    def crypter(self):
-
-        keysFolder = self.getProperty('keys_folder',
-                                      '/etc/keyczar/keys')
-        return Crypter.Read(keysFolder)
 
     # query the backend authentication provider to verify user's credentials.
     security.declarePrivate('verifyCredentials')
@@ -427,12 +417,14 @@ class ProxyMultiPlugins(BasePlugin):
     security.declarePrivate('encrypt')
     def encrypt(self, message):
 
-        return self.crypter.Encrypt(message)
+        crypto = getToolByName(self, 'leocornus_crypto')
+        return crypto.encrypt(message)
 
     security.declarePrivate('decrypt')
     def decrypt(self, message):
 
-        return self.crypter.Decrypt(message)
+        crypto = getToolByName(self, 'leocornus_crypto')
+        return crypto.decrypt(message)
 
 # implements plugins.
 classImplements(ProxyMultiPlugins,

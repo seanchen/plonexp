@@ -57,10 +57,11 @@ def setupSsouserPlugins(portal, out):
     activatePluginInterfaces(portal, 'ssouser', out)
     # using the default credentials_cookie_auth for challenge and reset.
     #userFolder.plugins.activatePlugin(IChallengePlugin, 'credentials_cookie_auth')
-    userFolder.plugins.activatePlugin(ICredentialsResetPlugin, 'credentials_cookie_auth')
 
     # deactivate other plugin interfaces' implementation.
     # suppose we are working on a Plone site with default acl_users setting.
+    # by default credentials_cookie_auth only has active status for challenge and
+    # extraction plugins we need keep challenge plugin and take off extraction!
     userFolder.plugins.deactivatePlugin(IAuthenticationPlugin, 'session')
     userFolder.plugins.deactivatePlugin(IAuthenticationPlugin, 'source_users')
 

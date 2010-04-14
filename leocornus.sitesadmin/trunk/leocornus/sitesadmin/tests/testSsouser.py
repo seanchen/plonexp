@@ -129,8 +129,8 @@ class SsouserTestCase(SitesAdminTestCase):
 
         found = plugins._getPlugins(ICredentialsResetPlugin)
         self.assertTrue(len(found) == 1)
-        self.failUnless('credentials_cookie_auth' in found)
-        self.failIf('ssouser' in found)
+        self.failUnless('ssouser' in found)
+        self.failIf('credentials_cookie_auth' in found)
         self.failIf('session' in found)
 
         found = plugins._getPlugins(IChallengePlugin)

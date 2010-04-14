@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = open(os.path.join('leocornus/sitesadmin', 'version.txt')).read()
+version = open(os.path.join('leocornus/sitesadmin', 'version.txt')).read().split('\n')[0]
 
 setup(name='leocornus.sitesadmin',
       version=version,

@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = open(os.path.join('iscorpio/plonepm', 'version.txt')).read()
+version = open(os.path.join('iscorpio/plonepm', 'version.txt')).read().split('\n')[0]
 
 setup(name='iscorpio.plonepm',
       version=version,
@@ -10,8 +10,14 @@ setup(name='iscorpio.plonepm',
                        open(os.path.join("docs", "HISTORY.txt")).read(),
       # Get more strings from http://www.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[
+        "Development Status :: 4 - Beta",
+        "Environment :: Web Environment",
         "Framework :: Plone",
+        "Intended Audience :: Information Technology",
+        "License :: OSI Approved :: GNU General Public License (GPL)",
         "Programming Language :: Python",
+        "Programming Language :: Zope",
+        "Topic :: Software Development :: Documentation",
         "Topic :: Software Development :: Libraries :: Python Modules",
         ],
       keywords='Python Plone Zope Project Management',

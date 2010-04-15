@@ -1,10 +1,10 @@
 Changelog
 =========
 
-2.0 - Unreleased
-----------------
+2.0 - Beta
+----------
 
-* Initial release
+* Initial release for version 2.0
 
 * providing a lightweigh version. disable the following type for this release:
 

@@ -26,6 +26,7 @@ from plone.app.layout.viewlets.common import ViewletBase
 
 from interfaces import IPlonepmTimesheet
 from interfaces import ITimesheetForm
+from iscorpio.plonepm.utils import revision2Link
 
 __author__ = "Sean Chen"
 __email__ = "sean.chen@leocorn.com"
@@ -76,6 +77,15 @@ class ChangeLogViewlet(ViewletBase):
         else:
             # suppose this is datetime instance
             return when.strftime("%Y-%m-%d %H:%M")
+
+    def getFormatedDesc(self, desc):
+        """
+        return the vormated description by converting rivision number to
+        href link.
+        """
+
+        obj = aq_inner(self.context)
+        return revision2Link(desc, obj.getXppm_browse_code_url())
 
 # this form is based on formlib
 class BillTimeFormViewlet(PageForm):

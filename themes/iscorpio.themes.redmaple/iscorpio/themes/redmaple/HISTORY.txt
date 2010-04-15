@@ -1,2 +1,8 @@
 
-Release Tracking
+Change Logs
+===========
+
+Release 0.1
+-----------
+
+* basic two column Plone 3 Theme

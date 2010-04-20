@@ -43,4 +43,12 @@
 <!--      permission="zope2.View" -->
 <!--   /> -->
 
+  <browser:viewlet
+     name="classic.footer"
+     layer=".interfaces.ILeocornusClassicTheme"
+     manager="plone.app.layout.viewlets.interfaces.IPortalFooter"
+     template="footer.pt"
+     permission="zope.Public"
+  />
+
 </configure>

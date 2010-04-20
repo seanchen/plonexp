@@ -18,4 +18,12 @@
     <viewlet name="plone.path_bar" />
   </hidden>
 
+  <order manager="plone.portalfooter" akinname="Leocornus Classic Theme" purge="True">
+    <viewlet name="classic.footer"/>
+  </order>
+
+  <hidden manager="plone.portalfooter" skinname="Leocornus Classic Theme" purge="True">
+    <viewlet name="plone.footer"/>
+    <viewlet name="plone.colophon"/>
+  </hidden>
 </object>

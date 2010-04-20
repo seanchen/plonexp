@@ -10,7 +10,7 @@ __email__ = "sean.chen@leocorn.com"
 theFolder = "leocornus/themes/classic"
 
 setup(name='leocornus.themes.classic',
-      version=open(os.path.join(theFolder, "version.txt")).read(),
+      version=open(os.path.join(theFolder, "version.txt")).read().split('\n')[0],
       description="Leocornus classic Plone 3 theme",
       long_description=open(os.path.join(theFolder, "README.txt")).read() +
                        "\n" +

@@ -1,0 +1,18 @@
+<div id="portal-footer" metal:define-macro="classic_footer" i18n:domain="plone">
+
+<p>
+
+  Copyright
+  <acronym title="Copyright">&copy;</acronym>
+  2004 - <span tal:omit-tag=""
+             tal:define="now modules/DateTime/DateTime"
+             tal:content="now/year" />
+  International Customer Service Association
+</p>
+
+<p>
+  Powered by <a href="http://www.leocorn.com">Leocornus Ltd.</a> on 
+  <a href="http://plone.org">Plone<sup>&reg;</sup> CMS</a>
+</p>
+
+</div>

@@ -1,0 +1,44 @@
+<?xml version="1.0"?> 
+<object name="plonexp_private_workflow_policy" meta_type="WorkflowPolicy">
+
+  <property name="title">PloneXP Private Workflow Policy </property>
+
+  <bindings>
+    <default>
+      <bound-workflow workflow_id="plonexp_private_content_workflow" />
+    </default>                                                                
+
+    <type default_chain="true" type_id="Document" />
+    <type default_chain="true" type_id="Event" />
+    <type default_chain="true" type_id="File" />
+    <type default_chain="true" type_id="Image" />
+    <type default_chain="true" type_id="Link" />
+    <type default_chain="true" type_id="News Item" />
+    <type default_chain="true" type_id="Favorite" />
+
+    <type type_id="Folder">
+      <bound-workflow workflow_id="plonexp_private_folder_workflow" />
+    </type>
+    <type type_id="Large Plone Folder">
+      <bound-workflow workflow_id="plonexp_private_folder_workflow" />
+    </type>
+    <type type_id="Topic">
+      <bound-workflow workflow_id="plonexp_private_folder_workflow" />
+    </type>
+
+    <type type_id="PPMProject">
+      <bound-workflow workflow_id="plonexp_private_folder_workflow" />
+    </type>
+
+    <type default_chain="true" type_id="PPMMetadata" />
+    <type default_chain="true" type_id="PPMIteration" />
+    <type default_chain="true" type_id="PPMStory" />
+    <type default_chain="true" type_id="PPMFuncSpec" />
+    <type default_chain="true" type_id="PPMFuncReq" />
+    <type default_chain="true" type_id="PPMSysReq" />
+    <type default_chain="true" type_id="PPMUseCase" />
+    <type default_chain="true" type_id="PPMArtifact" />
+    <type default_chain="true" type_id="PPMResponse" />
+
+  </bindings>
+</object>                                             

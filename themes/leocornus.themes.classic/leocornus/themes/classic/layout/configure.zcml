@@ -32,7 +32,7 @@
      layer=".interfaces.ILeocornusClassicTheme"
      manager="plone.app.layout.viewlets.interfaces.IPortalTop"
      class=".header.GlobalSectionViewlet"
-     permission="zope2.View"
+     permission="zope.Public"
   />
 
 <!--  <browser:viewlet -->

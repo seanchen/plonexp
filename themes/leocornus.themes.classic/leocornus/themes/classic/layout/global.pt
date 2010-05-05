@@ -1,3 +1,47 @@
 <div id="classic-globalnav" class="visualNoPrint">
-  Latest Events: Global Nav Section.
+
+  <!-- classic site actions -->
+  <ul id="classic-siteactions"
+      tal:define="accesskeys python: {'home' : '3', 'help' : '0', 'contact' : '9'};
+                  actionAmount python: len(view.classic_site_actions);"
+      tal:condition="view/classic_site_actions"
+  >
+    <li tal:repeat="saction view/classic_site_actions"
+        tal:attributes="id string:siteaction-${saction/id}"
+    >
+      <tal:block tal:define="index python: view.classic_site_actions.index(saction);"
+      >
+        <a href=""
+           tal:define="title saction/title;
+                       id saction/id;
+                       accesskey python: accesskeys.get(id, '');"
+           tal:content="title"
+           tal:attributes="href saction/url;
+                           title title;
+                           accesskey accesskey;"
+        >
+          classic site action
+        </a>
+        <span tal:condition="python: (index + 1) < actionAmount">|</span>
+      </tal:block>
+    </li>
+  </ul>
+
+  <span style="padding-left: 5px; color: Black">Latest Event: </span>
+  <marquee onmouseover="this.stop()" onmouseout="this.start()"
+           scrolldelay="150" style="width: 250px;"
+  >
+    <tal:block tal:condition="view/latestEvent">
+      <a href="" tal:define="toLocalizedTime nocall:context/@@plone/toLocalizedTime;
+                             event python: view.latestEvent()[0]"
+         tal:attributes="href event/getURL"
+      >
+        <span tal:replace="event/pretty_title_or_id">event title</span> -
+        <span tal:replace="python: toLocalizedTime(event.start)">start date</span>
+      </a>
+    </tal:block>
+    <tal:block tal:condition="not: view/latestEvent">
+      We don't have any new event right now! Please come back later.
+    </tal:block>
+  </marquee>
 </div>

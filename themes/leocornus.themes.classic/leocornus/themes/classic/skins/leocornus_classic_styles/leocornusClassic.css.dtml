@@ -33,6 +33,48 @@
   border-bottom-style: &dtml-borderStyle;;
   line-height: 2.0em;
   color: &dtml-globalFontColor;;
+  font-size: 12px;
+}
+
+#classic-globalnav a {
+  text-decoration: none;
+  color: &dtml-globalFontColor;;
+}
+
+/* classic Site-wide action menu - font size, contact, index, sitemap etc */
+#classic-siteactions {
+    background-color: transparent;
+    white-space: nowrap;
+    list-style-image: none;
+    list-style-type: none;
+    margin: 1px 0 0 0;
+    height: auto;
+    line-height: normal;
+    float: right;
+    padding: 3px 0.5em 3px 0;
+}               
+#classic-siteactions li {
+    display: inline;                   
+}
+#classic-siteactions li a {
+    background-color: transparent;             
+    border: 0px solid &dtml-backgroundColor;;
+    color: &dtml-globalFontColor;;
+    height: auto;      
+    padding: 0.2em;
+    margin-right: 0.2em;
+    text-decoration: none;
+    text-transform: &dtml-textTransform;;
+}
+#classic-siteactions li.selected a {
+    background-color: &dtml-globalBackgroundColor;;
+    color: &dtml-globalFontHoverColor;;
+    border: 0px &dtml-borderStyle; &dtml-globalBorderColor;;
+}
+#classic-siteactions li a:hover {
+    background-color: &dtml-globalBackgroundColor;;
+    color: &dtml-globalFontHoverColor;;
+    border: 0px &dtml-borderStyle; &dtml-globalBorderColor;;
 }
 
 /* left column and right column */

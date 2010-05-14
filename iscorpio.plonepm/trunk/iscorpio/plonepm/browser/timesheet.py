@@ -120,7 +120,8 @@ class BillTimeFormViewlet(PageForm):
         billing time or not.
         """
 
-        mtool = getToolByName(self, 'portal_membership')
+        context = aq_inner(self.context)
+        mtool = getToolByName(context, 'portal_membership')
         return mtool.checkPermission('ModifyPortalContent', self.context)
 
     def developers(self):

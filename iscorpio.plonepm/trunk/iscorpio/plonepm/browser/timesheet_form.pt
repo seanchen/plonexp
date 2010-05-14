@@ -1,4 +1,4 @@
-<tal:timesheet tal:condition="view/allowBillTime">
+<div tal:condition="view/allowBillTime" class="visualNoPrint">
 <h3 i18n:translate="title_bill_time">Time Billing</h3>
 <form action="." 
       tal:attributes="action request/URL;
@@ -66,4 +66,4 @@
     </div>
 
 </form>
-</tal:timesheet>
+</div>

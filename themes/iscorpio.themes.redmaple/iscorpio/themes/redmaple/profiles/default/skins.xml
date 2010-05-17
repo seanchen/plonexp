@@ -7,7 +7,7 @@
           directory="iscorpio.themes.redmaple:skins/iscorpio_redmaple_images"/>
   <object name="iscorpio_redmaple_styles" meta_type="Filesystem Directory View"
           directory="iscorpio.themes.redmaple:skins/iscorpio_redmaple_styles"/>
-  <object name="iscorpio_frog_templates" meta_type="Filesystem Directory View"
+  <object name="iscorpio_redmaple_templates" meta_type="Filesystem Directory View"
           directory="iscorpio.themes.redmaple:skins/iscorpio_redmaple_templates"/>
 
   <skin-path name="iScorpio Themes Redmaple" based-on="Plone Default">

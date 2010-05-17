@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<object>
+
+  <order manager="plone.portalfooter" akinname="iScorpio Themes Redmaple" purge="True">
+    <viewlet name="redmaple.footer"/>
+  </order>
+
+  <hidden manager="plone.portalfooter" skinname="iScorpio Themes Redmaple" purge="True">
+    <viewlet name="plone.footer"/>
+    <viewlet name="plone.colophon"/>
+  </hidden>
+</object>

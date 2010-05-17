@@ -1,0 +1,20 @@
+<configure
+   xmlns="http://namespaces.zope.org/zope"
+   xmlns:browser="http://namespaces.zope.org/browser">
+
+  <!-- Leocornus Classic Theme Zope 3 browser layer -->
+  <interface
+      interface=".interfaces.IIscorpioThemesRedmaple"
+      type="zope.publisher.interfaces.browser.IBrowserSkinType"
+      name="iScorpio Themes Redmaple"
+  />
+
+  <browser:viewlet
+     name="redmaple.footer"
+     layer=".interfaces.IIscorpioThemesRedmaple"
+     manager="plone.app.layout.viewlets.interfaces.IPortalFooter"
+     template="footer.pt"
+     permission="zope.Public"
+  />
+
+</configure>

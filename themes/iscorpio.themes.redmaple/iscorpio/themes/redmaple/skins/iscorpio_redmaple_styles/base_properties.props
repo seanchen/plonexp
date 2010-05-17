@@ -31,7 +31,7 @@ contentViewFontColor:string=#578308
 
 inputFontColor:string=Black
 
-textTransform:string=lowercase
+textTransform:string=none
 
 evenRowBackgroundColor:string=#eef3f5 
 oddRowBackgroundColor:string=transparent

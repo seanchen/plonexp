@@ -1,0 +1,17 @@
+<div id="portal-footer" metal:define-macro="redmaple_footer" i18n:domain="plone">
+
+<p>
+
+  Copyright
+  <acronym title="Copyright">&copy;</acronym>
+  2009 - <span tal:omit-tag=""
+             tal:define="now modules/DateTime/DateTime"
+             tal:content="now/year" />
+  <a href="http://www.leocorn.com">Leocornus Ltd.</a>
+</p>
+
+<p>
+  Powered by <a href="http://plone.org">Plone<sup>&reg;</sup> CMS</a>
+</p>
+
+</div>

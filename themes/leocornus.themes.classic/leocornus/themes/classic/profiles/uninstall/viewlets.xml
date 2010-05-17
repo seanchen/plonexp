@@ -3,4 +3,6 @@
 
   <hidden manager="plone.portaltop" skinname="Leocornus Classic Theme" purge="True" />
 
+  <hidden manager="plone.portalfooter" skinname="Leocornus Classic Theme" purge="True" />
+
 </object>

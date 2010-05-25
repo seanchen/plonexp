@@ -20,6 +20,8 @@ from Products.Archetypes.public import LinesWidget
 from Products.Archetypes.public import MultiSelectionWidget
 from Products.Archetypes.public import TextField
 from Products.Archetypes.public import TextAreaWidget
+from Products.Archetypes.public import BooleanField
+from Products.Archetypes.public import BooleanWidget
 
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.content.base import ATCTContent
@@ -119,6 +121,16 @@ UserAccountSchema = ATCTContent.schema.copy() + Schema((
             description = "Select the content editor that you would like to use."
             ),
         ),
+
+    BooleanField(
+       'visible_ids',
+       languageIndependent = 1,
+       user_property = True,
+       widget = BooleanWidget(
+            label = "Allow editing of Short Names",
+            description = "Determines if Short Names (also known as IDs) are changable when editing items. If Short Names are not displayed, they will be generated automatically."
+            ),
+       ),
 
     LinesField(
         'sites',

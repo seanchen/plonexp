@@ -1,0 +1,151 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plone">
+<body>
+
+<metal:main fill-slot="main">
+  <tal:main-macro metal:define-macro="xpcm_contact_main">
+
+    <div tal:replace="structure provider:plone.abovecontenttitle"/>
+
+    <h1 class="documentFirstHeading">
+      <metal:field use-macro="python:here.widget('title', mode='view')">
+        Title or id
+      </metal:field>
+    </h1>
+
+    <div tal:replace="structure provider:plone.belowcontenttitle" />
+
+    <p class="documentDescription">
+      <metal:field use-macro="python:here.widget('description', mode='view')">
+        Description
+      </metal:field>
+    </p>
+
+    <div tal:replace="structure provider:plone.abovecontentbody" />
+
+    <!-- memo goes first. -->
+    <metal:field use-macro="python:here.widget('xpcm_contact_memo', mode='view')">
+      Memo Text
+    </metal:field>
+
+    <!-- other name, phone, and email -->
+    <h3>Contact Infomation</h3>
+    <table><tbody>
+      <tr valign="top">
+        <!-- names. -->
+        <td>
+          <table class="listing"><tbody>
+            <tr>
+              <th colspan="3">Other Names</th>
+            </tr>
+            <tal:names repeat="aName here/getXpcm_contact_otherNames">
+              <tr tal:define="oddrow repeat/aName/odd;
+                              nameType aName/name_type;
+                              name     aName/name;
+                              nameType python: here.getContactMetadatum(nameType).Title;"
+                  tal:attributes="class python: test(oddrow, 'odd', 'even')"
+              >
+                <td><span tal:replace="nameType"/></td>
+                <td><strong><span tal:replace="name"/></strong></td>
+                <td><span tal:condition="python: aName.has_key('memo')" tal:replace="aName/memo"/></td>
+              </tr>
+            </tal:names>
+          </tbody></table>
+        </td>
+        <!-- phones -->
+        <td>
+          <table class="listing"><tbody>
+            <tr>
+              <th colspan="3">Phones</th>
+            </tr>
+            <tal:phones repeat="aPhone here/getXpcm_contact_phones">
+              <tr tal:define="oddrow repeat/aPhone/odd;
+                              phoneType aPhone/phone_type;
+                              phone     aPhone/phone_number;
+                              phoneType python: here.getContactMetadatum(phoneType).Title;"
+                  tal:attributes="class python: test(oddrow, 'odd', 'even')"
+              >
+                <td><span tal:replace="phoneType"/></td>
+                <td><strong><span tal:replace="phone"/></strong></td>
+                <td><span tal:condition="python: aPhone.has_key('memo')" tal:replace="aPhone/memo"/></td>
+              </tr>
+            </tal:phones>
+          </tbody></table>
+        </td>
+        <!-- email -->
+        <td>
+          <table class="listing"><tbody>
+            <tr>
+              <th colspan="3">Emails</th>
+            </tr>
+            <tal:emails repeat="aEmail here/getXpcm_contact_emails">
+              <tr tal:define="oddrow repeat/aEmail/odd;
+                              emailType aEmail/email_type;
+                              email     aEmail/email;
+                              emailType python: here.getContactMetadatum(emailType).Title"
+                  tal:attributes="class python: test(oddrow, 'odd', 'even')"
+              >
+                <td><span tal:replace="emailType"/></td>
+                <td><strong><span tal:replace="email"/></strong></td>
+                <td><span tal:condition="python: aEmail.has_key('memo')" tal:replace="aEmail/memo"/></td>
+              </tr>
+            </tal:emails>
+          </tbody></table>
+        </td>
+      </tr>
+    </tbody></table>
+
+    <!-- the address. -->
+    <h3>Addresses List</h3>
+    <table class="listing"><tbody>
+      <tr>
+        <th>Address Type</th>
+        <th>Address</th>
+        <th>Memo</th>
+      </tr>
+      <tal:address repeat="address here/getXpcm_contact_addresses">
+        <tr tal:define="oddrow repeat/address/odd;
+                        addressType address/address_type;
+                        addressType python: here.getContactMetadatum(addressType).Title;
+                        theAddress  address/address;
+                        theAddress  python: theAddress + ' ' + address['city'];
+                        theAddress  python: theAddress + ' ' + address['province'];
+                        theAddress  python: theAddress + ' ' + address['postcode'];
+                        theAddress  python: theAddress + ' ' + address['country'];"
+                  tal:attributes="class python: test(oddrow, 'odd', 'even')"
+        >
+          <td><span tal:replace="addressType"/></td>
+          <td><span tal:replace="theAddress"/></td>
+          <td><span tal:condition="python: address.has_key('memo')" tal:replace="address/memo"/></td>
+        </tr>
+      </tal:address>
+    </tbody></table>
+
+    <!-- group -->
+    <br/><strong>Groups:</strong>
+    <tal:group repeat="group here/getXpcm_contact_groups">
+      <span tal:define="theGroup python:here.getContactGroup(group).Title;">
+        <a href=""
+           tal:attributes="href string:${here/aq_parent/absolute_url}?groupId=${group}"
+           tal:content="theGroup">
+          the group title.
+        </a>
+      </span>
+    </tal:group>
+
+    <div metal:use-macro="here/document_relateditems/macros/relatedItems">
+      Show related items if they exist
+    </div>
+
+    <div tal:replace="structure provider:plone.belowcontentbody" />
+
+  </tal:main-macro>
+</metal:main>
+
+</body>
+</html>

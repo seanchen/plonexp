@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!-- registering the portal type to portal factory, so plone will use factory to -->
+<!-- create the object. -->
+<object name="portal_factory" meta_type="Plone Factory Tool">
+  <factorytypes>
+    <type portal_type="XPointAddressBook"/>
+    <type portal_type="XPointContactMetadata"/>
+    <type portal_type="XPointContactGroup"/>
+    <type portal_type="XPointContact"/>
+    <type portal_type="XPointMsgFolder"/>
+    <type portal_type="XPointEMessage"/>
+  </factorytypes>
+</object>

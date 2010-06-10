@@ -1,0 +1,47 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plone">
+<body>
+
+<metal:main fill-slot="main">
+  <tal:main-macro metal:define-macro="xpcm_msgfolder_main">
+
+    <div tal:replace="structure provider:plone.abovecontenttitle"/>
+
+    <h1 class="documentFirstHeading">
+      <metal:field use-macro="python:here.widget('title', mode='view')">
+        Title or id
+      </metal:field>
+    </h1>
+
+    <div tal:replace="structure provider:plone.belowcontenttitle" />
+
+    <p class="documentDescription">
+      <metal:field use-macro="python:here.widget('description', mode='view')">
+        Description
+      </metal:field>
+    </p>
+
+    <div tal:replace="structure provider:plone.abovecontentbody" />
+
+    <tal:messages
+       tal:define="messagesList here/getEMessages">
+      <div tal:condition="messagesList">
+        <h2>Messages List</h2>
+          <tal:block
+             metal:use-macro="here/xpcm_templates/macros/xpcm_messages_list"
+          />
+      </div>
+    </tal:messages>
+
+    <div tal:replace="structure provider:plone.belowcontentbody" />
+
+  </tal:main-macro>
+</metal:main>
+
+</body>
+</html>

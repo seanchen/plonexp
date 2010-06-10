@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!-- plone catalog will create indexes and metadata columns based on the -->
+<!-- dedinition in this xml file. -->
+<object name="portal_catalog" meta_type="Plone Catalog Tool">
+
+  <!-- indexes and columns -->
+<!--   <index name="getXpproject_document_status" meta_type="FieldIndex"> -->
+<!--     <indexed_attr value="getXpproject_document_status"/> -->
+<!--   </index> -->
+
+  <!-- where does the column come from? following this pattern: get[File
+  Name]. field name should be -->
+<!--   <column value="getXpproject_document_status"/> -->
+</object>

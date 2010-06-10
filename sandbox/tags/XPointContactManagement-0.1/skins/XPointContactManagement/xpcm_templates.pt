@@ -1,0 +1,73 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      lang="en"
+      i18n:domain="plone">
+
+<body>
+
+  <!-- ==================================================================== -->
+  <!-- macro for contacts list. this will be used in address book view and  -->
+  <!-- contact group view. -->
+  <!-- param: contactsList -->
+  <!-- ==================================================================== -->
+  <tal:black metal:define-macro="xpcm_contacts_list"
+             tal:define="Batch python: modules['Products.CMFPlone'].Batch;
+                         b_size python: 10;
+                         b_start python: 0;
+                         b_start request/b_start | b_start;
+                         batch python: Batch(contactsList, b_size, int(b_start), orphan=3);">
+    <div metal:use-macro="here/batch_macros/macros/navigation" />
+    <table class="listing" width="98%"><tbody>
+      <tr>
+        <th>Name</th>
+        <th>Phone</th>
+        <th>Email</th>
+      </tr>
+      <!-- one row for each contact. -->
+      <tal:block tal:repeat="contact python: batch">
+        <tr tal:define="oddrow repeat/contact/odd;
+                        url contact/getURL|contact/absolute_url;
+                        contact_type contact/portal_type;
+                        contact_typeinfo python: here.portal_types.getTypeInfo(contact_type);
+                        icon python: portal_url + '/' + contact_typeinfo.getIcon();"
+            tal:attributes="class python: test(oddrow, 'odd', 'even')">
+          <td>
+            <a href="#" tal:attributes="href url">
+              <img src="#" height="16" width="16"
+                   tal:attributes="src icon"/>&nbsp;
+              <span tal:content="contact/Title"/>
+            </a>
+          </td>
+          <!-- phones -->
+          <td>
+            <tal:phones repeat="aPhone contact/getXpcm_contact_phones">
+              <span tal:define="phone     aPhone/phone_number;
+                                phoneType aPhone/phone_type;
+                                phoneType python:here.getContactMetadatum(phoneType).Title;"
+              >
+                <strong><span tal:replace="phoneType"/>:</strong>
+                <span tal:replace="phone"/><br/>
+              </span>
+            </tal:phones>
+          </td>
+          <!-- emails -->
+          <td>
+            <tal:emails repeat="aEmail contact/getXpcm_contact_emails">
+              <span tal:define="emailType aEmail/email_type;
+                                emailType python:here.getContactMetadatum(emailType).Title;
+                                email     aEmail/email;"
+              >
+                <strong><spen tal:replace="emailType"/>:</strong>
+                <span tal:replace="email"/><br/>
+              </span>
+            </tal:emails>
+          </td>
+        </tr>
+      </tal:block>
+    </tbody></table>
+  </tal:black>
+  <!-- ==================================================================== -->
+
+</body>
+</html>

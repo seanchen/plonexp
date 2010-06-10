@@ -1,0 +1,94 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plone">
+<body>
+
+<metal:main fill-slot="main">
+
+  <tal:main-macro metal:define-macro="xpcm_emessage_main">
+
+    <div tal:replace="structure provider:plone.abovecontenttitle"/>
+
+    <h1 class="documentFirstHeading">
+      <metal:field use-macro="python:here.widget('title', mode='view')">
+        Title or id
+      </metal:field>
+    </h1>
+
+    <div tal:replace="structure provider:plone.belowcontenttitle" />
+
+    <p class="documentDescription">
+      <metal:field use-macro="python:here.widget('description', mode='view')">
+        Description
+      </metal:field>
+    </p>
+
+    <div class="formControls">
+      <form method="post" enctype="multipart/form-data"
+            tal:define="errors options/state/getErrors;"
+            tal:attributes="action string:${context/absolute_url}/${template/id}">
+
+        <!-- email receivers -->
+        <div class="field"
+               tal:define="error errors/to | nothing;"
+               tal:attributes="class python:test(error, 'field error', 'field')"
+             >
+          <label for="to">
+            To
+          </label>
+
+          <span class="fieldRequired" title="Required">(Required)</span>
+
+          <div class="formHelp" id="to_help">
+            Please add recipients for this email, using ',' as the separation.
+          </div>
+
+          <div tal:content="error">Validation error output</div>
+
+          <textarea cols="40" rows="18" name="to" id="to"
+                    tal:attributes="value request/to | nothing;"
+                    ></textarea>
+        </div>
+
+        <!-- submit button. -->
+        <input class="standalone" value="Submit" type="submit" name="form.button.send"
+               i18n:domain="plone" i18n:attributes="value"/>
+
+        <!-- cancel button. -->
+        <input class="context" name="form.button.cancel" value="Cancel" type="submit"/>
+
+        <input type="hidden" name="form.submitted" value="1" />
+      </form>
+    </div>
+
+    <br/>
+    <strong>From:</strong><br/>
+    <metal:field use-macro="python:here.widget('xpcm_emessage_from', mode='view')">
+      the email message sender
+    </metal:field>
+    <br/>
+
+    <div tal:replace="structure provider:plone.abovecontentbody" />
+
+    <strong>Email Body:</strong><br/>
+    <metal:field use-macro="python:here.widget('xpcm_emessage_body', mode='view')">
+      the email message preview
+    </metal:field>
+    <br/>
+
+    <strong>Attachment:</strong><br/>
+    <metal:field use-macro="python:here.widget('xpcm_emessage_attachment', mode='view')">
+      email attachment
+    </metal:field>
+
+    <div tal:replace="structure provider:plone.belowcontentbody" />
+
+  </tal:main-macro>
+</metal:main>
+
+</body>
+</html>

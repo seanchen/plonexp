@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+
+<!-- in this xml file, we can set up the workflow for each portal type in the -->
+<!-- product. -->
+<object name="portal_workflow" meta_type="Plone Workflow Tool">
+
+  <bindings>
+    <type type_id="XPointAddressBook">
+      <bound-workflow workflow_id="plone_workflow"/>
+    </type>
+    <type type_id="XPointContact">
+      <bound-workflow workflow_id="plone_workflow"/>
+    </type>
+    <type type_id="XPointContactGroup">
+      <bound-workflow workflow_id="plone_workflow"/>
+    </type>
+    <type type_id="XPointContactMetadata">
+      <bound-workflow workflow_id="plone_workflow"/>
+    </type>
+    <type type_id="XPointEMessage">
+      <bound-workflow workflow_id="plone_workflow"/>
+    </type>
+    <type type_id="XPointMsgFolder">
+      <bound-workflow workflow_id="plone_workflow"/>
+    </type>
+  </bindings>
+</object>

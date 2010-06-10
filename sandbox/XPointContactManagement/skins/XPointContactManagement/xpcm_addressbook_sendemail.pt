@@ -1,0 +1,99 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plone">
+<body>
+
+<!--====================================================================-->
+<!-- This is just a form to send out a quick email. -->
+<!-- 1. The body is plain textarea at this time. It could be a rich  -->
+<!--    text area like RichWidget, but requires more work, so we leave -->
+<!--    it for future update. -->
+<!-- 2. Currently we are using a method in AddressBook to send out -->
+<!--    email.  More elegant way is by using Five and Browser, which -->
+<!--    is used in ... -->
+<!--====================================================================-->
+
+<metal:main fill-slot="main">
+  <tal:main-macro metal:define-macro="xpcm_addressbook_sendemail">
+
+    <div tal:replace="structure provider:plone.abovecontenttitle"/>
+
+    <h1 class="documentFirstHeading">
+      <metal:field use-macro="python:here.widget('title', mode='view')">
+        Title or id
+      </metal:field>
+    </h1>
+
+    <p class="documentDescription">
+      Sending Email to Contacts:
+    </p>
+
+    <div class="formControls">
+      <form method="post" enctype="multipart/form-data"
+            tal:attributes="action string:${context/absolute_url}/addressBookSendEmail">
+        <!-- email receivers -->
+        <div class="field">
+          <label for="to">
+            To
+          </label>
+
+          <div class="formHelp" id="to_help">
+            Please select receivers for this email.
+            Hold CTRL key to select more then one group and CTRL-A will select all.
+          </div>
+
+          <select multiple="multiple" size="6"
+                  name="to:list" id="to">
+            <option tal:repeat="item here/getContactGroups"
+                    tal:attributes="value item/id"
+                    tal:content="item/title"
+            />
+          </select>
+
+        </div>
+
+        <!-- email subject -->
+        <div class="field">
+          <label for="subject">
+            Subject
+          </label>
+
+          <div class="formHelp" id="subject_help">
+            Please enter your subject for this email.
+          </div>
+
+          <input size="60" name="subject" id="subject" type="text"/>
+        </div>
+
+        <!-- email body -->
+        <div class="field">
+          <label for="body">
+            Body
+          </label>
+
+          <div class="formHelp" id="body_help">
+            Please enter your email message below.
+          </div>
+
+          <textarea cols="40" rows="18" name="body" id="body"></textarea>
+        </div>
+
+        <!-- submit button. -->
+        <input class="standalone" value="Submit" type="submit"
+               i18n:domain="plone" i18n:attributes="value"/>
+
+        <!-- cancel button. -->
+        <!-- <input class="standalone" value="Cancel" type="reset"/> -->
+      </form>
+
+    </div>
+
+  </tal:main-macro>
+</metal:main>
+
+</body>
+</html>

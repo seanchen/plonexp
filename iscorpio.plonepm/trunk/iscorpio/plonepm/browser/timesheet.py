@@ -80,7 +80,7 @@ class ChangeLogViewlet(ViewletBase):
 
     def getFormatedDesc(self, desc):
         """
-        return the vormated description by converting rivision number to
+        return the formated description by converting rivision number to
         href link.
         """
 

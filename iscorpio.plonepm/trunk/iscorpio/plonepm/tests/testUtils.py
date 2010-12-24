@@ -18,14 +18,25 @@ class TestRevision2Link(TestCase):
 
     def testRevision2Link(self):
 
+        # testing sourceforge
         description = 'this is a test revision r123'
-        sf_base_url = 'http://sf.base.url/projectname'
+        base_url = 'http://base.url.sf.net/projectname'
 
-        sf_result = "this is a test revision <a href='%s?view=rev&revision=%s'>%s</a>" % \
-                    (sf_base_url, '123', 'r123')
+        result = "this is a test revision <a href='%s?view=rev&revision=%s'>%s</a>" % \
+                 (base_url, '123', 'r123')
 
-        formatedDesc = revision2Link(description, sf_base_url)
-        self.failUnless(formatedDesc == sf_result)
+        formatedDesc = revision2Link(description, base_url)
+        self.failUnless(formatedDesc == result)
+
+        # testing github
+        description = 'this is a test revision r123abced239017fea09372'
+        base_url = 'http://github.com/username/projectname'
+
+        result = "this is a test revision <a href='%s/commit/%s'>%s</a>" % \
+                    (base_url, '123abced239017fea09372', 'r123abced239017fea09372')
+
+        formatedDesc = revision2Link(description, base_url)
+        self.failUnless(formatedDesc == result)
 
 def test_suite():
 

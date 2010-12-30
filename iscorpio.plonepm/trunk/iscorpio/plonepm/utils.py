@@ -13,8 +13,8 @@ __email__ = "sean.chen@leocorn.com"
 # sourceforge.net revision number pattern, it is using subervision
 SF_REVISION_PATTERN = r'(r([0-9]+))'
 # github.com commit id pattern. git using SHA1 as unique id and the
-# first 8 chars are good enough to make it unique.
-GIT_COMMIT_PATTERN = r'(r([0-9a-f]{8,40}))'
+# first 7 chars are good enough to make it unique.
+GIT_COMMIT_PATTERN = r'(r([0-9a-f]{7,40}))'
 
 # supported version control systems (VCS)
 VCS_SF = 'sourceforge'

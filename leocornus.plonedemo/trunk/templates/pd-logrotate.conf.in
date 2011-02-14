@@ -25,6 +25,6 @@ ${buildout:directory}/var/log/instance2*.log {
 ${buildout:directory}/var/log/frontend*.log {
     sharedscripts
     postrotate
-        /bin/kill -USR1 $(cat ${frontend:run-directory}/frontend.pid)
+        /bin/kill -USR1 $(cat ${buildout:directory}/var/frontend.pid)
     endscript
 }

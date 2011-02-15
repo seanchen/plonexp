@@ -26,6 +26,7 @@ socket              = ${pd-settings:mysql-socket}
 [mysqld]
 user                = ${users:mysql}
 port                = ${ports:mysql}
+pid-file            = ${pd-settings:mysql-pid-file}
 socket              = ${pd-settings:mysql-socket}
 basedir             = ${mysql-build:location}
 datadir             = ${pd-settings:mysql-datadir}

@@ -1,0 +1,44 @@
+user ${users:frontend};
+error_log ${buildout:directory}/var/log/frontend-error.log debug;
+worker_processes ${pd-settings:frontend-worker_processes};
+pid ${buildout:directory}/var/frontend.pid;
+daemon off;
+events {
+    worker_connections 1024;
+}
+
+http {
+    upstream zope {
+        server localhost:${ports:instance1} max_fails=3 fail_timeout=30s;
+        server localhost:${ports:instance2} max_fails=3 fail_timeout=30s;
+    } 
+
+    server {
+        listen ${hosts:frontend-ip}:${ports:frontend};
+        server_name ${hosts:frontend-hostname}; 
+        access_log ${buildout:directory}/var/log/frontend-access.log;
+
+        # rules to redirect the reversed ids for root level Plone site:
+        rewrite (.+)/(pd-.+)$ http://$host:$http_port/$2/ last;
+        rewrite (.+)/(pd-.+)/$ http://$host:$http_port/$2/ last;
+
+        # rules to redirect the reversed ids for root level Zope folders:
+        rewrite /sandbox$ http://$host:$http_port/pd-admin/ last;
+        rewrite /sandbox/$ http://$host:$http_port/pd-admin/ last;
+
+        # rule for plone sites in sandbox folder
+        rewrite ^/sandbox/(.*) /VirtualHostBase/http/$host:$http_port/VirtualHostRoot/sandbox/$1 last;
+
+        # rule for plone sites in root folder
+        rewrite ^/([^/]+)/(.*) /VirtualHostBase/http/$host:$http_port/VirtualHostRoot/$1/$2 last;
+        # This rule will add a '/' at the end, so the previous rule could take over. 
+        rewrite ^/([^/]+) http://$host:$http_port/$1/ last;  
+
+        # redirect to homepage
+        rewrite / http://$host:$http_port/pd-admin/ permanent;
+
+        location / {
+            proxy_pass http://zope;
+        }
+    }
+}

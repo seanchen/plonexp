@@ -56,4 +56,6 @@ http {
             proxy_pass http://zope;
         }
     }
+
+    include ${frontend-wp.conf:output};
 }

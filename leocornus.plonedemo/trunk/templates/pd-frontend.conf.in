@@ -3,11 +3,26 @@ error_log ${buildout:directory}/var/log/frontend-error.log debug;
 worker_processes ${pd-settings:frontend-worker_processes};
 pid ${buildout:directory}/var/frontend.pid;
 daemon off;
+
 events {
     worker_connections 1024;
 }
 
 http {
+    include ${nginx-build:location}/conf/mime.types;
+    default_type application/octet-stream;
+    sendfile on;
+
+    # turn on gzip
+    gzip on;
+    gzip_comp_level 6;
+    gzip_proxied any;
+    gzip_vary on;
+    gzip_types text/plain text/css application/x-javascript text/xml application/xml application/xml+rss text/javascript;
+    gzip_buffers 16 8k;
+    # disable gzip for IE 6 and older.
+    gzip_disable .MSIE [1-6].(?!.*SV1).;
+
     upstream zope {
         server localhost:${ports:instance1} max_fails=3 fail_timeout=30s;
         server localhost:${ports:instance2} max_fails=3 fail_timeout=30s;

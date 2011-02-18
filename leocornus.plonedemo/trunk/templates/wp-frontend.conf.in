@@ -1,0 +1,128 @@
+
+    # upload progress module, need nginx_upload_progress module
+    #upload_progress uploadprogress 2m;
+
+    # Nginx Configuration for fastcgi and wordpress
+    server {
+
+        #client_max_body_size 2147483647;
+
+        listen ${hosts:frontend-wp-ip}:${ports:frontend-wp};
+        server_name ${hosts:frontend-wp-hostname};
+        error_log ${buildout:directory}/var/log/frontend-wp-error.log ${pd-settings:frontend-wp-error_log-level};
+        access_log ${buildout:directory}/var/log/frontend-wp-access.log;
+
+        root ${pd-settings:frontend-wp-document-root};
+        index index.php;
+
+        location ~* ^.+\.(html|xml|jpg|jpeg|gif|png|ico|css|zip|tgz|gz|rar|bz2|doc|xls|exe|pdf|ppt|txt|tar|mid|midi|wav|bmp|rtf|js)$ {
+
+            #root ${pd-settings:frontend-wp-document-root};
+
+            rewrite ^/.*(/wp-(content|admin|includes)/.*\.(html|jpg|jpeg|gif|png|ico|css|zip|tgz|gz|rar|bz2|doc|xls|exe|pdf|ppt|txt|tar|mid|midi|wav|bmp|rtf|js))$ $1 last;
+            rewrite ^.*/files/(.*(html|jpg|jpeg|gif|png|ico|css|zip|tgz|gz|rar|bz2|doc|xls|exe|pdf|ppt|txt|tar|mid|midi|wav|bmp|rtf|js))$ /wp-content/blogs.php?file=$1 last;
+            # rewrite rule for wiki attached files.
+            rewrite ^/wiki/index.php/(.*)$ /wiki/index.php?title=$1 last;
+
+            expires 30d;
+            break;
+        }
+
+        location / {
+
+            #root ${pd-settings:frontend-wp-document-root};
+            #index index.php;
+
+            #rewrite for sitemaps
+            rewrite ^(.*/)?sitemap.xml /wp-content/sitemap.php last;
+            #rewite for anyfont
+            rewrite images/(.*)/(.*)\.png$ /wp-content/plugins/anyfont/img.php last;
+            #rewrite for blog files
+            rewrite ^.*/files/(.*) /wp-content/blogs.php?file=$1 last;
+
+            # WordPress pretty URLs
+            if (-f $request_filename) {
+                expires max;
+                break;
+            }
+
+            if (-d $request_filename) {
+                break;
+            }
+
+            # WP Super Cache
+            set $supercache_file '';
+            set $supercache_uri $request_uri;
+
+            if ($request_method = POST) {
+                set $supercache_uri '';
+            }
+
+            # Using pretty permalinks, so bypass the cache for any query string
+            if ($query_string) {
+                set $supercache_uri '';
+            }
+
+            if ($http_cookie ~* "comment_author_|wordpress|wp-postpass_" ) {
+                set $supercache_uri '';
+            }
+
+            # if we haven't bypassed the cache, specify our supercache file
+            if ($supercache_uri ~ ^(.+)$) {
+                set $supercache_file /wp-content/cache/supercache/$http_host/$1index.html;
+            }
+
+            # only rewrite to the supercache file if it actually exists
+            if (-f $document_root$supercache_file) {
+                rewrite ^(.*)$ $supercache_file break;
+            }
+
+            if (!-e $request_filename) {
+                # mediawiki
+                rewrite ^/wiki/index.php/(.*)$ /wiki/index.php?title=$1 last;
+
+                # Wordpress rewrite
+                rewrite ^.+/?(/wp-.*) $1 last;
+                rewrite ^.+/?(/.*\.php)$ $1 last;
+                rewrite ^(.+)$ /index.php?q=$1 last;
+            }
+
+            error_page 404 = /index.php?q=$uri;
+        }
+
+        # special location for upload progress reporting
+        #location ^~ /nup-progress {
+        #    # report uploads tracked in the 'proxied' zone
+        #    report_uploads uploadprogress;
+        #}
+
+        # if the request starts with our frontcontroller, pass it on to fastcgi
+        location ~ \.php$ {
+
+            # for Wordpress admin pages.
+            rewrite ^/.*(/wp-(content|includes|admin)/.*.php)$ $1;
+            # for some php on root level: wp-login.php, wp-comments-post.php
+            rewrite ^/.*(/wp-(login|comments-post|pass).php)$ $1;
+            rewrite ^/((?!bbpress).)*(/xmlrpc.php)$ $2;
+
+            include ${nginx-build:location}/conf/fastcgi_params;
+            # some fastcgi params
+            fastcgi_connect_timeout 60;
+            fastcgi_send_timeout 180;
+            fastcgi_read_timeout 180;
+            fastcgi_buffer_size 128k;
+            fastcgi_buffers 4 256k;
+            fastcgi_busy_buffers_size 256k;
+            fastcgi_temp_file_write_size 256k;
+            fastcgi_intercept_errors on;
+
+            fastcgi_pass ${hosts:php-fpm}:${ports:php-fpm};
+            fastcgi_param SCRIPT_FILENAME ${pd-settings:frontend-wp-document-root}$fastcgi_script_name;
+            fastcgi_param PATH_INFO $fastcgi_script_name;
+            fastcgi_param APPLICATION_ENV ${pd-settings:frontend-wp-APPLICATION_ENV};
+
+            # track uploads in the 'uploadprogress' zone
+            # uploads expires 30s after they finish.
+            #track_uploads uploadprogress 30s;
+        }
+    }

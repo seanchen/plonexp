@@ -9,6 +9,10 @@
 
         listen ${hosts:frontend-wp-ip}:${ports:frontend-wp};
         server_name ${hosts:frontend-wp-hostname};
+        # necessary if using a multi-site plugin
+        # this is for Wordpress 3.x and multidomain plugin.
+        server_name_in_redirect off;
+
         error_log ${buildout:directory}/var/log/frontend-wp-error.log ${pd-settings:frontend-wp-error_log-level};
         access_log ${buildout:directory}/var/log/frontend-wp-access.log;
 
@@ -19,10 +23,10 @@
 
             #root ${pd-settings:frontend-wp-document-root};
 
+            # rewrite the static resource files.
             rewrite ^/.*(/wp-(content|admin|includes)/.*\.(html|jpg|jpeg|gif|png|ico|css|zip|tgz|gz|rar|bz2|doc|xls|exe|pdf|ppt|txt|tar|mid|midi|wav|bmp|rtf|js))$ $1 last;
-            rewrite ^.*/files/(.*(html|jpg|jpeg|gif|png|ico|css|zip|tgz|gz|rar|bz2|doc|xls|exe|pdf|ppt|txt|tar|mid|midi|wav|bmp|rtf|js))$ /wp-content/blogs.php?file=$1 last;
-            # rewrite rule for wiki attached files.
-            rewrite ^/wiki/index.php/(.*)$ /wiki/index.php?title=$1 last;
+            # need multisite upload handler for this
+            rewrite ^.*/files/(.*)$ /wp-includes/ms-files.php?file=$1 last;
 
             expires 30d;
             break;
@@ -30,64 +34,59 @@
 
         location / {
 
-            #root ${pd-settings:frontend-wp-document-root};
-            #index index.php;
+            try_files $uri $uri/ /index.php?$args;
+        }
 
-            #rewrite for sitemaps
-            rewrite ^(.*/)?sitemap.xml /wp-content/sitemap.php last;
-            #rewite for anyfont
-            rewrite images/(.*)/(.*)\.png$ /wp-content/plugins/anyfont/img.php last;
-            #rewrite for blog files
-            rewrite ^.*/files/(.*) /wp-content/blogs.php?file=$1 last;
+        #root ${pd-settings:frontend-wp-document-root};
+        #index index.php;
 
-            # WordPress pretty URLs
-            if (-f $request_filename) {
-                expires max;
-                break;
-            }
+        # rewrite for sitemaps
+        rewrite ^(.*/)?sitemap.xml /wp-content/sitemap.php last;
+        # rewite for anyfont
+        rewrite images/(.*)/(.*)\.png$ /wp-content/plugins/anyfont/img.php last;
+        # rewrite for blog files
+        #rewrite ^.*/files/(.*) /wp-content/blogs.php?file=$1 last;
+        rewrite ^.*/files/(.*)$ /wp-includes/ms-files.php?file=$1 last;
 
-            if (-d $request_filename) {
-                break;
-            }
+        # WordPress pretty URLs
 
-            # WP Super Cache
-            set $supercache_file '';
-            set $supercache_uri $request_uri;
+        if (-d $request_filename) {
+            break;
+        }
 
-            if ($request_method = POST) {
-                set $supercache_uri '';
-            }
+        # WP Super Cache
+        set $supercache_file '';
+        set $supercache_uri $request_uri;
 
-            # Using pretty permalinks, so bypass the cache for any query string
-            if ($query_string) {
-                set $supercache_uri '';
-            }
+        if ($request_method = POST) {
+            set $supercache_uri '';
+        }
 
-            if ($http_cookie ~* "comment_author_|wordpress|wp-postpass_" ) {
-                set $supercache_uri '';
-            }
+        # Using pretty permalinks, so bypass the cache for any query string
+        if ($query_string) {
+            set $supercache_uri '';
+        }
 
-            # if we haven't bypassed the cache, specify our supercache file
-            if ($supercache_uri ~ ^(.+)$) {
-                set $supercache_file /wp-content/cache/supercache/$http_host/$1index.html;
-            }
+        if ($http_cookie ~* "comment_author_|wordpress|wp-postpass_" ) {
+            set $supercache_uri '';
+        }
 
-            # only rewrite to the supercache file if it actually exists
-            if (-f $document_root$supercache_file) {
-                rewrite ^(.*)$ $supercache_file break;
-            }
+        # if we haven't bypassed the cache, specify our supercache file
+        if ($supercache_uri ~ ^(.+)$) {
+            set $supercache_file /wp-content/cache/supercache/$http_host/$1index.html;
+        }
 
-            if (!-e $request_filename) {
-                # mediawiki
-                rewrite ^/wiki/index.php/(.*)$ /wiki/index.php?title=$1 last;
+        # only rewrite to the supercache file if it actually exists
+        if (-f $document_root$supercache_file) {
+            rewrite ^(.*)$ $supercache_file break;
+        }
 
-                # Wordpress rewrite
-                rewrite ^.+/?(/wp-.*) $1 last;
-                rewrite ^.+/?(/.*\.php)$ $1 last;
-                rewrite ^(.+)$ /index.php?q=$1 last;
-            }
+        if (!-e $request_filename) {
 
-            error_page 404 = /index.php?q=$uri;
+            # Wordpress rewrite
+            rewrite ^.+?(/wp-.*) $1 last;
+            rewrite ^.+?(/.*\.php)$ $1 last;
+            #rewrite ^ /index.php last;
         }
 
         # special location for upload progress reporting

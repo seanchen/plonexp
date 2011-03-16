@@ -6,8 +6,6 @@ miscellaneous set up steps that are not handled by GS import/export
 handlers.
 """
 
-from StringIO import StringIO
-
 from Products.CMFCore.utils import getToolByName
 from Products.CMFEditions.setuphandlers import DEFAULT_POLICIES
 
@@ -23,7 +21,7 @@ def importVarious(context):
     """
 
     if context.readDataFile('plonepm_various.txt') is None:
-        # 
+        # skipping ...
         return
 
     portal = context.getSite()

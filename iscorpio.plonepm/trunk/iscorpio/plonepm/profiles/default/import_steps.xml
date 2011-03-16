@@ -6,7 +6,7 @@
      version="20100331-01"
      handler="iscorpio.plonepm.setuphandlers.importVarious"
      title="PlonePM: import various steps">
-    Various import various steps.
+    Various import steps.
   </import-step>
 
 </import-steps>
